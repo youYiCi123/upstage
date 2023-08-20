@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import Cookies from 'js-cookie'
 export function login(username:string, password:string,code:string,uuid:string) {
   return request({
-    url: '/admin/login',
+    url: '/upstage-service/upstage/login',
     method: 'post',
     data: {
       username,
@@ -15,21 +15,21 @@ export function login(username:string, password:string,code:string,uuid:string) 
 
 export function getInfo() {
   return request({
-    url: '/admin/info',
+    url: '/upstage-service/upstage/info',
     method: 'get',
   })
 }
 //验证码
 export function getCodeImg() {
   return request({
-    url: '/admin/code',
+    url: '/upstage-service/upstage/code',
     method: 'get'
   })
 }
 
 export function logout() {
   return request({
-    url: '/admin/logout',
+    url: '/upstage-service/upstage/logout',
     method: 'post'
   })
 }
@@ -46,7 +46,7 @@ return arr
 
 export function fetchList(params:any) {
   return request({
-    url: '/admin/list',
+    url: '/upstage-service/upstage/list',
     method: 'get',
     params: params
   })
@@ -54,7 +54,7 @@ export function fetchList(params:any) {
 
 export function createAdmin(data:any) {
   return request({
-    url: '/admin/register',
+    url: '/upstage-service/upstage/register',
     method: 'post',
     data: data
   })

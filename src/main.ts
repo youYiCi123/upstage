@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router'
 import pinia from '@/store/index'
 
+// 添加全局CSS样式
+import '@/styles/index.scss' // global css
+
 // 添加路由卫士
 import '@/permission' // permission control
 

@@ -30,13 +30,15 @@ export const useUserStore = defineStore('userStore', {
     },
     async Login(userInfo: LoginuserMode) {
       try {
+        debugger
         const asretname = userInfo.username as string
         const username = asretname.trim()
         const password = userInfo.password as string
         const response = await login(username, password, userInfo.code, userInfo.uuid)
         const data = response.data
+        console.log('data: ',data)
         const tokenStr = data.tokenHead + data.token
-        setToken(tokenStr)
+        let str=setToken(tokenStr)
         this.setToken(tokenStr)
         return 1
       } catch (error) {
