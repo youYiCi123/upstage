@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import Cookies from 'js-cookie'
 export function login(username:string, password:string,code:string,uuid:string) {
   return request({
-    url: '/upstage-service/upstage/login',
+    url: '/upstage-service/admin/login',
     method: 'post',
     data: {
       username,
@@ -15,21 +15,21 @@ export function login(username:string, password:string,code:string,uuid:string) 
 
 export function getInfo() {
   return request({
-    url: '/upstage-service/upstage/info',
+    url: '/upstage-service/admin/info',
     method: 'get',
   })
 }
 //验证码
 export function getCodeImg() {
   return request({
-    url: '/upstage-service/upstage/code',
+    url: '/upstage-service/admin/code',
     method: 'get'
   })
 }
 
 export function logout() {
   return request({
-    url: '/upstage-service/upstage/logout',
+    url: '/upstage-service/admin/logout',
     method: 'post'
   })
 }
@@ -46,7 +46,7 @@ return arr
 
 export function fetchList(params:any) {
   return request({
-    url: '/upstage-service/upstage/list',
+    url: '/upstage-service/admin/list',
     method: 'get',
     params: params
   })
@@ -54,7 +54,7 @@ export function fetchList(params:any) {
 
 export function createAdmin(data:any) {
   return request({
-    url: '/upstage-service/upstage/register',
+    url: '/upstage-service/admin/register',
     method: 'post',
     data: data
   })
@@ -62,7 +62,7 @@ export function createAdmin(data:any) {
 
 export function updateAdmin(id:number, data:any) {
   return request({
-    url: '/admin/update/' + id,
+    url: '/upstage-service/admin/update/' + id,
     method: 'post',
     data: data
   })
@@ -70,7 +70,7 @@ export function updateAdmin(id:number, data:any) {
 
 export function updateStatus(id:number, params:any) {
   return request({
-    url: '/admin/updateStatus/' + id,
+    url: '/upstage-service/admin/updateStatus/' + id,
     method: 'post',
     params: params
   })
@@ -78,14 +78,14 @@ export function updateStatus(id:number, params:any) {
 
 export function deleteAdmin(id:number) {
   return request({
-    url: '/admin/delete/' + id,
+    url: '/upstage-service/admin/delete/' + id,
     method: 'post'
   })
 }
 
 export function handleBatchDelete(data:any) {
   return request({
-    url: '/admin/deleteBatch',
+    url: '/upstage-service/admin/deleteBatch',
     method: 'post',
     data: data
   })
@@ -93,14 +93,14 @@ export function handleBatchDelete(data:any) {
 
 export function getRoleByAdmin(id:number) {
   return request({
-    url: '/admin/role/' + id,
+    url: '/upstage-service/admin/role/' + id,
     method: 'get'
   })
 }
 
 export function getUserInfoById(id:number) {
   return request({
-    url: '/admin/' + id,
+    url: '/upstage-service/admin/' + id,
     method: 'get'
   })
 }
@@ -108,7 +108,7 @@ export function getUserInfoById(id:number) {
 
 export function allocRole(data:any) {
   return request({
-    url: '/admin/role/update',
+    url: '/upstage-service/admin/role/update',
     method: 'post',
     data: data
   })

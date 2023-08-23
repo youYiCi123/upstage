@@ -38,6 +38,31 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     name: "ums",
     meta: { title: "权限", icon: "icon-user" },
     children: [
+      {
+        path: "admin",
+        name: "admin",
+        component: () => import("@/views/ums/admin/index.vue"),
+        meta: { title: "用户列表", icon: "icon-24gf-portraitMaleInfo3"},
+      },
+      {
+        path: "role",
+        name: "role",
+        component: () => import("@/views/ums/role/index.vue"),
+        meta: { title: "角色列表", icon: "icon-edit-role"},
+      },
+      {
+        path: 'allocMenu',
+        name: 'allocMenu',
+        component: () => import('@/views/ums/role/allocMenu.vue'),
+        meta: { title: '分配菜单',hidden: true },
+      },
+      {
+        path: 'allocResource',
+        name: 'allocResource',
+        component: () => import('@/views/ums/role/allocResource.vue'),
+        meta: {title: '分配资源',hidden: true},
+        
+      }
     ],
   },
 ];

@@ -11,7 +11,7 @@ export function validateURL(textval: string) {
 }
 // 问题选项
 export function validateTelephone(rule:any,value: string,callback:any) { 
-  const reg = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/
+    const reg = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/
   if(!reg.test(value)){
     callback(new Error('请输入正确的手机号'))
   }else{
