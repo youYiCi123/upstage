@@ -139,7 +139,12 @@ function handleSave() {
       });
       router.back();
     })
-  })
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消分配'
+    });
+  });
 }
 function handleClear() {
   allResourceCate.value.forEach(item => {

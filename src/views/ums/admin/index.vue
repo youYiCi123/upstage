@@ -141,7 +141,7 @@ import { RoleMode } from "@/mode/UserInfo/RoleMode";
 import { UserTableMode } from "@/mode/UserInfo/UserInfoMode";
 import { fetchList, createAdmin, updateAdmin, updateStatus, deleteAdmin, getRoleByAdmin, allocRole, handleBatchDelete } from '@/api/login';
 import { fetchAllRoleList } from '@/api/role';
-import { importUserExcel, downloadExcel } from "@/api/exportExcel";
+import { importUserExcel } from "@/api/exportExcel";
 import dayjs from "dayjs";
 import { validateTelephone, validateEmail } from '@/utils/validate';
 
@@ -288,7 +288,12 @@ function handleDelete(row: UserTableMode) {
       });
       getList();
     });
-  });
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消删除'
+    });
+  });;
 }
 function handleUpdate(row: UserTableMode) {
   dialogVisible.value = true;
@@ -407,7 +412,12 @@ function batchDelete() {
       });
       getList();
     })
-  })
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消删除'
+    });
+  });
 }
 
 function getRoleListByAdmin(adminId: number) {

@@ -50,7 +50,7 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作"  align="center">
+        <el-table-column label="操作" align="center">
           <template #default="scope">
             <el-button size="small" type="primary" @click="handleSelectMenu(scope.row)">分配菜单
             </el-button>
@@ -185,6 +185,11 @@ function handleDelete(row: RoleMode) {
       });
       getList();
     });
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消删除'
+    });
   });
 }
 function handleUpdate(row: RoleMode) {
@@ -227,7 +232,7 @@ function handleDialogConfirm() {
 function handleSelectMenu(row: RoleMode) {
   router.push({ path: '/ums/allocMenu', query: { roleId: row.id } })
 }
-function handleSelectResource(row : RoleMode){
+function handleSelectResource(row: RoleMode) {
   router.push({ path: '/ums/allocResource', query: { roleId: row.id } })
 }
 function getList() {

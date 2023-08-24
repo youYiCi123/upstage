@@ -75,7 +75,12 @@ function handleSave() {
       });
       router.back();
     })
-  })
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消分配'
+    });
+  });
 }
 function handleClear() {
   tree.value.setCheckedKeys([]);

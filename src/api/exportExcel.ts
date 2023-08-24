@@ -7,10 +7,3 @@ export function importUserExcel(data: any) {
     data: data,
   });
 }
-export function downloadExcel() {
-  return request({
-    url: "/upstage-service/excel/download",
-    method: "get",
-    responseType: 'blob',
-  });
-}

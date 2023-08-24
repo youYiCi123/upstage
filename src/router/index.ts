@@ -65,6 +65,39 @@ export const asyncRouterMap: RouteRecordRaw[] = [
       }
     ],
   },
+  {
+    path: "/pms",
+    component: markRaw(Layout),
+    redirect: "/pms/productAttr",
+    name: "pms",
+    meta: { title: "商品", icon: "icon-user" },
+    children:[
+      {
+        path: 'productAttr',
+        name: 'productAttr',
+        component: () => import('@/views/pms/productAttr/index.vue'),
+        meta: {title: '商品类型', icon: 'product-attr'}
+      },
+      {
+        path: 'productAttrList',
+        name: 'productAttrList',
+        component: () => import('@/views/pms/productAttr/productAttrList.vue'),
+        meta: {title: '商品属性列表',hidden: true}
+      },
+      {
+        path: 'addProductAttr',
+        name: 'addProductAttr',
+        component: () => import('@/views/pms/productAttr/addProductAttr.vue'),
+        meta: {title: '添加商品属性',hidden: true},
+      },      
+      {
+        path: 'updateProductAttr',
+        name: 'updateProductAttr',
+        component: () => import('@/views/pms/productAttr/updateProductAttr.vue'),
+        meta: {title: '修改商品属性',hidden: true},
+      },
+    ]
+  }
 ];
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
