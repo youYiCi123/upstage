@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(params:any) {
   return request({
-    url:'/upstage-service/productAttribute/category/list',
+    url:'/prod-service/productAttribute/category/list',
     method:'get',
     params:params
   })
@@ -10,7 +10,7 @@ export function fetchList(params:any) {
 
 export function createProductAttrCate(data:any) {
     return request({
-      url:'/upstage-service/productAttribute/category/create',
+      url:'/prod-service/productAttribute/category/create',
       method:'post',
       data:data
     })
@@ -18,21 +18,21 @@ export function createProductAttrCate(data:any) {
   
   export function deleteProductAttrCate(id:any) {
     return request({
-      url:'/upstage-service/productAttribute/category/delete/'+id,
+      url:'/prod-service/productAttribute/category/delete/'+id,
       method:'get'
     })
   }
   
   export function updateProductAttrCate(id:any,data:any) {
     return request({
-      url:'/upstage-service/productAttribute/category/update/'+id,
+      url:'/prod-service/productAttribute/category/update/'+id,
       method:'post',
       data:data
     })
   }
   export function fetchListWithAttr() {
     return request({
-      url:'/upstage-service/productAttribute/category/list/withAttr',
+      url:'/prod-service/productAttribute/category/list/withAttr',
       method:'get'
     })
   }

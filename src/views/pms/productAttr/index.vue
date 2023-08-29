@@ -92,7 +92,7 @@ function getList() {
     listLoading.value = false;
     list.value = response.data.list;
     total.value = response.data.total;
-  });
+  }).catch(()=>{});
 }
 function addProductAttrCate() {
   dialogVisible.value = true;
@@ -112,7 +112,7 @@ function handleDelete(row: ProductAttrCateMode) {
         duration: 1000
       });
       getList();
-    });
+    }).catch(()=>{});
   }).catch(() => {
     ElMessage({
       type: 'info',

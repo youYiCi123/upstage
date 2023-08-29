@@ -98,7 +98,7 @@ function getList() {
     listLoading.value = false;
     list.value = response.data.list;
     total.value = response.data.total;
-  });
+  }).catch(()=>{});
 }
 
 function addProductAttr() {
@@ -152,7 +152,7 @@ function handleDeleteProductAttr(ids:any) {
         duration: 1000
       });
       getList();
-    });
+    }).catch(()=>{});
   }).catch(()=>{ElMessage({
       type: 'info',
       message: '取消删除'

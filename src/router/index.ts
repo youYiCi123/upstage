@@ -96,6 +96,43 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         component: () => import('@/views/pms/productAttr/updateProductAttr.vue'),
         meta: {title: '修改商品属性',hidden: true},
       },
+      {
+        path: 'productCate',
+        name: 'productCate',
+        component: () => import('@/views/pms/productCate/index.vue'),
+        meta: {title: '商品分类', icon: 'product-cate'}
+      },
+      {
+        path: 'addProductCate',
+        name: 'addProductCate',
+        component: () => import('@/views/pms/productCate/add.vue'),
+        meta: {title: '添加商品分类',hidden: true},
+      },
+      {
+        path: 'updateProductCate',
+        name: 'updateProductCate',
+        component: () => import('@/views/pms/productCate/update.vue'),
+        meta: {title: '修改商品分类',hidden: true},
+      },
+      {
+        path: 'brand',
+        name: 'brand',
+        component: () => import('@/views/pms/brand/index.vue'),
+        meta: {title: '品牌管理', icon: 'product-brand'}
+      },
+      {
+        path: 'addBrand',
+        name: 'addBrand',
+        component: () => import('@/views/pms/brand/add.vue'),
+        meta: {title: '添加品牌',hidden: true},
+        
+      },
+      {
+        path: 'updateBrand',
+        name: 'updateBrand',
+        component: () => import('@/views/pms/brand/update.vue'),
+        meta: {title: '编辑品牌',hidden: true},
+      }
     ]
   }
 ];

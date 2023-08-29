@@ -70,7 +70,7 @@ import { selectCommonMode } from "@/mode/common/Option";
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { fetchList } from '@/api/productAttrCate'
 import { createProductAttr, getProductAttr, updateProductAttr } from '@/api/productAttr'
-let productAttr = reactive({
+const productAttr = reactive({
   filterType: 0,
   handAddStatus: 0,
   inputList: '',
@@ -116,7 +116,7 @@ function getContentInfo() {
       productAttr.sort = response.data.sort
       productAttr.inputType = response.data.inputType;
       inputListFormat.value = response.data.inputList.replace(/,/g, '\n');
-    });
+    }).catch(()=>{});
   } else {
     resetProductAttr()
   }
@@ -132,7 +132,7 @@ function getCateList() {
   let listQuery = { pageNum: 1, pageSize: 100 };
   fetchList(listQuery).then(response => {
     productAttrCateList.value = response.data.list;
-  });
+  }).catch(()=>{});
 }
 function resetProductAttr() {
   productAttr.productAttributeCategoryId = Number(route.query.cid);
@@ -166,7 +166,7 @@ function onSubmit(formEl: FormInstance | undefined) {
             });
             resetProductAttr();
             router.back();
-          });
+          }).catch(()=>{});
         }
       })
     } else {

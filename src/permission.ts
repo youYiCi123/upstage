@@ -8,6 +8,7 @@ import { useUserStore } from "@/store/modules/userStore";
 import { usePermissionStore } from "@/store/modules/permissionStore";
 const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
+
   const UserStore = useUserStore(pinia);
   const PermissionStore = usePermissionStore(pinia);
   NProgress.start()
