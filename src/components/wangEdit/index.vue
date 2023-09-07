@@ -1,19 +1,15 @@
 <template>
-    <div ref="editorRef" :class="styleSize == '1' ? 'editor  styleSize' : 'editor'" />
+    <div ref="editorRef" />
 </template>
 <script setup lang="ts">
 import E from 'wangeditor';
 import { getStsToken } from '@/api/oss'
-import { ref, defineProps, defineEmits, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 const props = defineProps({
     content: {
         type: String,
         default: ''
-    },
-    styleSize: {
-        type: String,
-        default: ''
-    },
+    }
 })
 const editorRef = ref();
 const emit = defineEmits(['change'])
@@ -74,10 +70,6 @@ onMounted(() => {
     }
     editor.create()
     setTimeout(() => {//子组件onMounted比父组件onMounted先执行
-        if (props.styleSize == '1') {
-            let eds = document.getElementsByClassName('w-e-text-container') as HTMLCollectionOf<HTMLElement>
-            eds[0].style.cssText = eds[0].style.cssText + 'height: 530px;' + 'width:1030px;'
-        }
         editor.txt.html(props.content)  //从父组件传递过来
     }, 250)
 })
@@ -89,10 +81,5 @@ onMounted(() => {
 .editor {
     margin: 0px;
     text-align: left;
-}
-
-.styleSize {
-    width: 1030px;
-    height: 500px;
 }
 </style>

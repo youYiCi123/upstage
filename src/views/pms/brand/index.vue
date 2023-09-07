@@ -56,10 +56,10 @@
         <el-table-column label="相关" width="220" align="center">
           <template #default="scope">
             <span>商品：</span>
-            <el-button size="small" type="text" @click="getProductList(scope.row)">100
+            <el-button size="small" type="primary" link @click="getProductList(scope.row)">100
             </el-button>
             <span>评价：</span>
-            <el-button size="small" type="text" @click="getProductCommentList(scope.row)">1000
+            <el-button size="small" type="primary" link @click="getProductCommentList(scope.row)">1000
             </el-button>
           </template>
         </el-table-column>

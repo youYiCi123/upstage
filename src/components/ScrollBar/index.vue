@@ -18,15 +18,20 @@ function handleScroll(e: any) {
   const $containerHeight = $container.offsetHeight
   const $wrapper = scrollWrapper.value
   const $wrapperHeight = $wrapper.offsetHeight
-
+  // console.log("eventDelta",eventDelta)
+  // console.log("$containerHeight",$containerHeight)
+  // console.log("delta",delta)  
+  // console.log("$wrapperHeight",$wrapperHeight)
   if (eventDelta > 0) {
     top = Math.min(0, top + eventDelta)
   } else {
     if ($containerHeight - delta < $wrapperHeight) {
       if (top < -($wrapperHeight - $containerHeight + delta)) {
+        console.log("top1",top)
         top = top
       } else {
         top = Math.max(top + eventDelta, $containerHeight - $wrapperHeight - delta)
+        console.log("top2",top)
       }
     } else {
       top = 0

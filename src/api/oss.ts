@@ -5,3 +5,10 @@ export function policy() {
     method:'get', 
   })
 }
+
+export function getStsToken() {
+  return request({
+    url:'/prod-service/aliyun/oss/getStsToken',
+    method:'get',
+  })
+}

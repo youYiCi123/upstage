@@ -73,6 +73,12 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     meta: { title: "商品", icon: "icon-user" },
     children:[
       {
+        path: 'addProduct',
+        name: 'addProduct',
+        component: () => import('@/views/pms/product/add.vue'),
+        meta: {title: '添加商品', icon: 'product-add'}
+      },
+      {
         path: 'productAttr',
         name: 'productAttr',
         component: () => import('@/views/pms/productAttr/index.vue'),
