@@ -16,6 +16,13 @@
           <el-form-item label="输入搜索：">
             <el-input v-model="listQuery.keyword" class="input-width" placeholder="帐号/姓名" clearable></el-input>
           </el-form-item>
+          <!-- todo -->
+          <el-form-item label="部门分类：">
+            <el-select v-model="listQuery.depId" placeholder="请选择部门" clearable>
+              <el-option v-for="item in allDepList" :key="item.id" :label="item.depName" :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
       </div>
     </el-card>
@@ -39,21 +46,19 @@
         <el-table-column label="姓名" width="130" align="center">
           <template #default="scope">{{ scope.row.nickName }}</template>
         </el-table-column>
+        <el-table-column label="部门" width="130" align="center">
+          <template #default="scope">{{ scope.row.depName }}</template>
+        </el-table-column>
         <el-table-column label="帐号" width="130" align="center">
           <template #default="scope">{{ scope.row.username }}</template>
         </el-table-column>
         <el-table-column label="职责" width="220" align="center">
           <template #default="scope">
-            <el-tag :type="scope.row.duty === '部门经理' ? 'warning' : 'success'">{{ scope.row.duty }}</el-tag>
+            <el-tag :type="scope.row.duty.search('负责人') == '-1' ? 'warning' : 'success'">{{ scope.row.duty }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="邮箱" width="170" align="center">
           <template #default="scope">{{ scope.row.email }}</template>
-        </el-table-column>
-        <el-table-column label="添加时间" width="160" align="center">
-          <template #default="scope">
-            <span v-html="timeFormat(scope.row.createTime)"></span>
-          </template>
         </el-table-column>
         <el-table-column label="是否启用" width="120" align="center">
           <template #default="scope">
@@ -62,6 +67,12 @@
             </el-switch>
           </template>
         </el-table-column>
+        <el-table-column label="添加时间" width="160" align="center">
+          <template #default="scope">
+            <span v-html="timeFormat(scope.row.createTime)"></span>
+          </template>
+        </el-table-column>
+
         <el-table-column label="操作" width="250" align="center" fixed="right">
           <template #default="scope">
             <el-button size="small" type="primary" @click="handleSelectRole(scope.row)">分配角色
@@ -95,8 +106,17 @@
         <el-form-item label="邮箱：" prop="email">
           <el-input v-model="admin.email" style="width: 250px"></el-input>
         </el-form-item>
+        <el-form-item label="部门：">
+          <el-select v-model="admin.depId" placeholder="请选择" size="small" style="width:250px">
+            <el-option v-for="item in allDepList" :key="item.id" :label="item.depName" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="职责：">
           <el-input v-model="admin.duty" style="width: 250px"></el-input>
+        </el-form-item>
+        <el-form-item label="地址：">
+          <el-input v-model="admin.address" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="帐号：">
           <el-input v-model="admin.username" style="width: 250px"></el-input>
@@ -141,6 +161,7 @@ import { RoleMode } from "@/mode/UserInfo/RoleMode";
 import { UserTableMode } from "@/mode/UserInfo/UserInfoMode";
 import { fetchList, createAdmin, updateAdmin, updateStatus, deleteAdmin, getRoleByAdmin, allocRole, handleBatchDelete } from '@/api/login';
 import { fetchAllRoleList } from '@/api/role';
+import { getDepIdToName } from "@/api/dep"
 import { importUserExcel } from "@/api/exportExcel";
 import dayjs from "dayjs";
 import { validateTelephone, validateEmail } from '@/utils/validate';
@@ -149,6 +170,7 @@ const list = ref<UserTableMode[]>([])
 const total = ref(0);
 let listQuery = reactive({
   keyword: '',
+  depId: null,
 });
 const listLoading = ref(false);
 const dialogVisible = ref(false);
@@ -159,10 +181,13 @@ const admin = reactive({
   password: '',
   nickName: '',
   email: '',
+  depId: null,
   duty: '',
+  address: '',
   note: '',
   status: 1
 })
+const allDepList = ref<any[]>([])
 const isEdit = ref(false);
 const allocDialogVisible = ref(false);
 const headers = { "Content-Type": "multipart/form-data;charset=UTF-8" };
@@ -304,10 +329,20 @@ function handleUpdate(row: UserTableMode) {
   admin.password = row.password
   admin.nickName = row.nickName
   admin.email = row.email
+  admin.depId = row.depId
+  admin.address = row.address
   admin.duty = row.duty
   admin.note = row.note
   admin.status = row.status
 }
+function getDepSelector() {
+  getDepIdToName().then(response => {
+    allDepList.value = response.data
+  })
+}
+
+getDepSelector()
+
 const adminForm = ref<FormInstance>();
 function handleDialogConfirm(formEl: FormInstance | undefined) {
   ElMessageBox.confirm('是否要确认?', '提示', {
@@ -380,7 +415,7 @@ function handleSelectRole(row: UserTableMode) {
 
 function getList() {
   listLoading.value = true;
-  fetchList({ keyword: listQuery.keyword, pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
+  fetchList({ keyword: listQuery.keyword,depId: listQuery.depId, pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
     listLoading.value = false;
     list.value = response.data.list;
     total.value = response.data.total;

@@ -26,7 +26,7 @@ export interface UserTableMode{
       icon:string;
       email:string;
       nickName:string;
-      depId:string;
+      depId:any;
       depName:string;
       duty:string;
       phoneNumber:string;

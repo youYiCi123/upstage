@@ -6,7 +6,7 @@
       <!-- <i class="el-icon-plus"></i> -->
       <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
     </el-upload>
-    <el-dialog :visible.sync="dialogVisible">
+    <el-dialog v-model="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
   </div>

@@ -51,10 +51,10 @@
           <el-input v-model="productAttrCate.name" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <template #footer>
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click.native.prevent="handleConfirm(productAttrCatForm)">确 定</el-button>
-      </span>
+      </template>
     </el-dialog>
   </div>
 </template>
