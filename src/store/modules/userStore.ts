@@ -30,7 +30,6 @@ export const useUserStore = defineStore('userStore', {
     },
     async Login(userInfo: LoginuserMode) {
       try {
-        debugger
         const asretname = userInfo.username as string
         const username = asretname.trim()
         const password = userInfo.password as string

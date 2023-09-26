@@ -4,7 +4,8 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
-
+declare module 'simple-uploader.js'
+declare module 'spark-md5'
 //静态资源
 declare module '*.svg'
 declare module '*.png'

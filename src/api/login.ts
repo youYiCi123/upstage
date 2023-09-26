@@ -114,3 +114,10 @@ export function allocRole(data:any) {
   })
 }
 
+export function getUserFileBrief() {
+  return request({
+    url: '/upstage-service/admin/getUserFileBrief',
+    method: 'get'
+  })
+}
+

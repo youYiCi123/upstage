@@ -131,7 +131,7 @@
 import { fetchList as fetchMemberLevelList } from '@/api/memberLevel'
 import { ProdInfo } from "@/mode/Prod/Prod";
 import { ElMessage } from 'element-plus';
-import { ref, reactive, PropType, watch, computed } from "vue";
+import { PropType, computed } from "vue";
 
 const props = defineProps({
   prodDetail: {

@@ -71,6 +71,21 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/fold',
+    name: 'fold',
+    component: Layout,
+    meta: { title: '文件', icon: 'ums' },
+    redirect: '/fold/files',
+    children: [
+      {
+        path: 'files',
+        name: 'files',
+        component: () => import('@/views/files/allFiles.vue'),
+        meta: { title: '所有文件', icon: "product-list" }
+      }
+    ]
+  },
+  {
     path: "/pms",
     component: markRaw(Layout),
     redirect: "/pms/product",
