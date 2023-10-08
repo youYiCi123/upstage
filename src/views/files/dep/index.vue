@@ -46,6 +46,12 @@
                             <rename-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
                         </div>
                         <div class="menuItem" >
+                            <copy-button @loadFileList="getList" size="small" :is-dep=true :round-flag=true :item="rightClickItem"/>
+                        </div>
+                        <div class="menuItem" >
+                            <transfer-button @loadFileList="getList" size="small" :is-dep=true :round-flag=true :item="rightClickItem"/>
+                        </div>
+                        <div class="menuItem" >
                             <delete-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
                         </div>
                     </ul>
@@ -61,6 +67,8 @@ import { getFolderTree, list } from '@/api/file';
 import DownloadButton from '@/components/buttons/download-button/index.vue'
 import RenameButton from '@/components/buttons/rename-button/index.vue'
 import DeleteButton from '@/components/buttons/delete-button/index.vue'
+import CopyButton from '@/components/buttons/copy-button/index.vue'
+import TransferButton from '@/components/buttons/transfer-button/index.vue'
 import panUtil from '@/utils/fileUtil'
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
@@ -87,7 +95,7 @@ const position = ref({
 const closeMenu = () => {
     menuVisible.value = false
 }
-const rightClickItem = ref<any>('')
+const rightClickItem = ref<any>(null)
 watch(menuVisible, () => {
     if (menuVisible.value) {
         document.body.addEventListener('click', closeMenu)

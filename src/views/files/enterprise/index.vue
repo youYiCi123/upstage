@@ -36,20 +36,24 @@
                     <el-image-viewer :initial-index="imgIndex" v-if="showViewer" @close="() => { showViewer = false }"
                         :url-list="imgUrl" />
                     <!-- 右键菜单部分 -->
+                    <!-- 右键菜单部分 -->
                     <ul v-show="menuVisible"
                         :style="{ left: position.left + 'px', top: position.top + 'px', display: (menuVisible ? 'block' : 'none') }"
                         class="contextmenu">
-                        <div class="menuItem">
-                            复制Vue代码
+                        <div class="menuItem" >
+                            <download-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
                         </div>
                         <div class="menuItem" >
-                            复制SVG
+                            <rename-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
                         </div>
                         <div class="menuItem" >
-                            下载SVG
+                            <copy-button @loadFileList="getList" size="small" :is-dep=false :round-flag=true :item="rightClickItem"/>
                         </div>
-                        <div class="menuItem">
-                            下载PNG
+                        <div class="menuItem" >
+                            <transfer-button @loadFileList="getList" size="small" :is-dep=false :round-flag=true :item="rightClickItem"/>
+                        </div>
+                        <div class="menuItem" >
+                            <delete-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
                         </div>
                     </ul>
                 </div>
@@ -84,7 +88,7 @@ const position = ref({
   top: 0,
   left: 0
 })
-const rightClickItem = ref('')
+const rightClickItem = ref<any>(null)
 const closeMenu = () => {
     menuVisible.value = false
 }
@@ -269,7 +273,7 @@ function init() {
         if (fileStore.parentId == 1) {
             let firstItem = {
                 id: 1,
-                name: "企业文件"
+                name: "公共文件"
             }
             breadcrumbStore.clear()
             breadcrumbStore.addItem(firstItem)
@@ -288,6 +292,7 @@ function openMenu(e:MouseEvent, item:any) {
   menuVisible.value = true
   position.value.top = e.pageY
   position.value.left = e.pageX
+  rightClickItem.value = item
 }
 </script>
 <style scoped>

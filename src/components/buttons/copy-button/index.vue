@@ -10,7 +10,7 @@
             <div class="tree-content">
                 <el-tree class="tree" :data="treeData" empty-text="暂无文件夹数据" highlight-current ref="tree">
                     <template class="custom-tree-node"   #default="{ node, data }">
-                        <i class="iconfont  icon-folder-open"
+                        <i class="iconfont  icon-folder"
                             style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
                         <span>{{ node.label }}</span>
                     </template>
@@ -28,11 +28,16 @@
 import { ref} from 'vue'
 import { ElMessage,ElTree} from 'element-plus';
 import {copy,getFolderTree} from '../../../api/file'
+import panUtil from '@/utils/fileUtil'
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
 const fileStore = useFileStore(pinia);
 
 const props = defineProps({
+    isDep: {
+        type: Boolean,
+        default: false
+    },
     roundFlag: {
         type: Boolean,
         default: false
@@ -100,7 +105,7 @@ function resetTreeData() {
     treeData.value = new Array()
 }
 function loadTreeData() {
-    getFolderTree().then((res:any)=>{
+    getFolderTree({ fileRootId: props.isDep?panUtil.fileFold.DEP:panUtil.fileFold.ENTERPRISE }).then((res:any)=>{
         treeData.value = res.data
     }).catch((res:any)=>{
         ElMessage.error(res.message)

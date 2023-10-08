@@ -5,12 +5,12 @@
         </el-button>
         <el-button v-if="circleFlag" icon="el-icon-position" :size="size" circle @click="transferFile">
         </el-button>
-        <el-dialog title="移动文件" :visible.sync="treeDialogVisible" @open="loadTreeData" @closed="resetTreeData" width="30%"
+        <el-dialog title="移动文件"  v-model="treeDialogVisible" @open="loadTreeData" @closed="resetTreeData" width="30%"
             :append-to-body=true :modal-append-to-body=false :center=true>
             <div class="tree-content">
                 <el-tree class="tree" :data="treeData" empty-text="暂无文件夹数据" highlight-current ref="tree">
                     <template class="custom-tree-node"  #default="{ node, data }">
-                        <i class="iconfont  icon-folder-open"
+                        <i class="iconfont  icon-folder"
                             style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
                         <span>{{ node.label }}</span>
                     </template>
@@ -28,11 +28,16 @@
 import { ref } from 'vue'
 import { transfer, getFolderTree } from '../../../api/file'
 import { ElMessage,ElTree } from 'element-plus';
+import panUtil from '@/utils/fileUtil'
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
 const fileStore = useFileStore(pinia);
 
 const props = defineProps({
+    isDep: {
+        type: Boolean,
+        default: false
+    },
     roundFlag: {
         type: Boolean,
         default: false
@@ -103,7 +108,7 @@ function resetTreeData() {
 }
 
 function loadTreeData() {
-    getFolderTree().then((res)=>{
+    getFolderTree({ fileRootId: props.isDep?panUtil.fileFold.DEP:panUtil.fileFold.ENTERPRISE }).then((res)=>{
         treeData.value = res.data
     }).catch((res)=>{
         ElMessage.error(res.message)

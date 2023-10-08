@@ -63,7 +63,7 @@ function downloadFile() {
     }
 }
 function doDownload(item: any) {
-    let url = panUtil.getUrlPrefix() + '/file/download?fileId=' + item.fileId + '&authorization=' + getToken(),
+    let url = panUtil.getUrlPrefix() + '/file/download?fileId=' + item.fileId ,
         filename = item.filename,
         link = document.createElement('a')
     link.style.display = 'none'
