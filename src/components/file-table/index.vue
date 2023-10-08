@@ -1,58 +1,68 @@
 <template>
-    <div class="pan-main-file-list-content">
-        <el-table v-loading="tableLoading" ref="fileTable" :data="fileList" :height="tableHeight" tooltip-effect="dark"
-            style="width: 100%" @selection-change="handleSelectionChange" @cell-mouse-enter="showOperation"
-            @cell-mouse-leave="hiddenOperation">
-            <el-table-column type="selection" width="55">
-            </el-table-column>
-            <el-table-column label="文件名" prop="filename" sortable show-overflow-tooltip min-width="750">
-                <template #default="scope">
-                    <div @click="clickFilename(scope.row)" class="file-name-content">
-                        <i :class="getFileFontElement(scope.row.fileType)"
-                            style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
-                        <span style="cursor:pointer;">{{ scope.row.filename }}</span>
-                    </div>
-                    <div class="file-operation-content">
-                        <el-tooltip class="item" effect="light" content="下载" placement="top">
-                            <download-button size="small" :circle-flag=true :item="scope.row" />
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="light" content="重命名" placement="top">
-                            <rename-button size="small" :circle-flag=true :item="scope.row" />
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="light" content="删除" placement="top">
-                            <delete-button size="small" :circle-flag=true :item="scope.row" />
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="light" content="复制到" placement="top">
-                            <copy-button size="small" :circle-flag=true :item="scope.row" />
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="light" content="移动到" placement="top">
-                            <transfer-button size="small" :circle-flag=true :item="scope.row" />
-                        </el-tooltip>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column v-if="searchFlag" prop="parentFilename" label="位置" min-width="120" align="center">
-                <template #default="scope">
-                    <el-link @click="goInFolder(scope.row.parentId)" type="primary">{{ scope.row.parentFilename }}</el-link>
-                </template>
-            </el-table-column>
-            <el-table-column prop="fileSizeDesc" sortable label="大小" min-width="120" align="center">
-            </el-table-column>
-            <el-table-column prop="creatName" label="创建人" min-width="120" align="center">
-            </el-table-column>
-            <el-table-column prop="updateTime" sortable align="center" label="修改日期" min-width="240">
-            </el-table-column>
-        </el-table>
+    <div class="app-container">
+        <div class="table-container">
+            <el-table v-loading="tableLoading" ref="fileTable" :data="fileList" stripe tooltip-effect="dark"
+                style="width: 100%" @selection-change="handleSelectionChange" @cell-mouse-enter="showOperation"
+                @cell-mouse-leave="hiddenOperation">
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column label="文件名" prop="filename" sortable show-overflow-tooltip width="750">
+                    <template #default="scope">
+                        <div @click="clickFilename(scope.row)" class="file-name-content">
+                            <i :class="getFileFontElement(scope.row.fileType)"
+                                style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
+                            <span style="cursor:pointer;">{{ scope.row.filename }}</span>
+                        </div>
+                        <div class="file-operation-content">
+                            <el-tooltip class="item" effect="light" content="下载" placement="top">
+                                <download-button @loadFileList="getList" size="small" :circle-flag=true :item="scope.row" />
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="light" content="重命名" placement="top">
+                                <rename-button @loadFileList="getList" size="small" :circle-flag=true :item="scope.row" />
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="light" content="删除" placement="top">
+                                <delete-button @loadFileList="getList" size="small" :circle-flag=true :item="scope.row" />
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="light" content="复制到" placement="top">
+                                <copy-button @loadFileList="getList" size="small" :circle-flag=true :item="scope.row" />
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="light" content="移动到" placement="top">
+                                <transfer-button @loadFileList="getList" size="small" :circle-flag=true :item="scope.row" />
+                            </el-tooltip>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column v-if="searchFlag" prop="parentFilename" label="位置" min-width="120" align="center">
+                    <template #default="scope">
+                        <el-link @click="goInFolder(scope.row.parentId)" type="primary">{{ scope.row.parentFilename
+                        }}</el-link>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="fileSizeDesc" sortable label="大小" width="120" align="center">
+                </el-table-column>
+                <el-table-column prop="creatName" label="创建人" width="120" align="center">
+                </el-table-column>
+                <el-table-column prop="updateTime" sortable align="center" label="修改日期" width="240">
+                </el-table-column>
+            </el-table>
 
-        <el-image-viewer class="el-image-viewer" :initial-index="imgIndex" v-if="showViewer" :on-close="closeShowViewer"
-            :url-list="imgUrl" />
+            <el-image-viewer class="el-image-viewer" :initial-index="imgIndex" v-if="showViewer" :on-close="closeShowViewer"
+                :url-list="imgUrl" />
+        </div>
+        <div class="pagination-container">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                :layout="paginationData.layout" :current-page.sync="paginationData.currentPage"
+                :page-size="paginationData.pageSize" :page-sizes="paginationData.pageSizes" :total="total">
+            </el-pagination>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted,computed } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'; //vue3路由跳转
-import { ElMessage,ElImageViewer } from 'element-plus';
+import { ElMessage, ElImageViewer } from 'element-plus';
+import { usePagination } from "@/hooks/usePagination";
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
 import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
@@ -64,24 +74,32 @@ import DeleteButton from '../buttons/delete-button/index.vue'
 import RenameButton from '../buttons/rename-button/index.vue'
 import CopyButton from '../buttons/copy-button/index.vue'
 import TransferButton from '../buttons/transfer-button/index.vue'
-import {getBreadcrumbs} from '../../api/file'
+import { getBreadcrumbs, filesForTable } from '../../api/file'
 import panUtil from '../../utils/fileUtil'
+const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 const router = useRouter();
-const tableHeight = ref(window.innerHeight - 200);
 const showViewer = ref(false);
 const imgUrl = ref<any[]>([]);
 const imgIndex = ref(0);
 
-function handleSelectionChange(multipleSelection:any) {
+const fileList = ref<any[]>([]) //文件列表
+const total = ref(0);
+const tableLoading = ref(false);
+const searchFlag = ref(false); //搜索标识，用于是否显示文件位置消息
+
+function handleSelectionChange(multipleSelection: any) {
     fileStore.setMultipleSelection(multipleSelection)
 }
-function showOperation(row:any, column:any, cell:any, event:any) {
+
+function showOperation(row: any, column: any, cell: any, event: any) {
     panUtil.showOperation(cell)
 }
-function hiddenOperation(row:any, column:any, cell:any, event:any) {
+
+function hiddenOperation(row: any, column: any, cell: any, event: any) {
     panUtil.hiddenOperation(cell)
 }
-function clickFilename(row:any) {
+
+function clickFilename(row: any) {
     switch (row.fileType) {
         case 0:
             goInFolder(row.fileId)
@@ -110,36 +128,39 @@ function clickFilename(row:any) {
             break
     }
 }
-function goInFolder(fileId:any) {
+
+function goInFolder(fileId: any) {
     getBreadcrumbs({
         fileId: fileId
-    }).then((res:any)=>{
+    }).then((res: any) => {
         breadcrumbStore.clear()
         breadcrumbStore.reset(res.data)
-        fileStore.setSearchFlag(false)
         fileStore.setFileParentId(fileId)
-        fileStore.loadFileList()
-    }).catch((res:any)=>{
+        getList()
+    }).catch((res: any) => {
         ElMessage.error(res.message)
     })
 }
-function showOffice(row:any) {
+
+function showOffice(row: any) {
     openNewPage('/preview/office/' + row.fileId + '/' + row.filename, 'PreviewOffice', {
         fileId: row.fileId,
     })
 }
-function showIframe(row:any) {
+
+function showIframe(row: any) {
     openNewPage('/preview/iframe/' + row.fileId, 'PreviewIframe', {
         fileId: row.fileId
     })
 }
-function showImg(row:any) {
+
+function showImg(row: any) {
     imgUrl.value = new Array()
     let t = 0
-    for (let i = 0, iLength = fileStore.fileList.length; i < iLength; ++i) {
-        if (fileStore.fileList[i].fileType === 7) {
-            imgUrl.value.push(panUtil.getPreviewUrl(fileStore.fileList[i].fileId))
-            if (fileStore.fileList[i].fileId === row.fileId) {
+    for (let i = 0, iLength = fileList.value.length; i < iLength; ++i) {
+        if (fileList.value[i].fileType === 7) {
+            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId))
+            if (fileList.value[i].fileId === row.fileId) {
                 imgIndex.value = t
             }
             t++;
@@ -147,24 +168,28 @@ function showImg(row:any) {
     }
     showViewer.value = true
 }
-function showMusic(row:any) {
+
+function showMusic(row: any) {
     openNewPage('/preview/music/' + row.parentId + '/' + row.fileId, 'PreviewMusic', {
         parentId: row.parentId,
         fileId: row.fileId
     })
 }
-function showVideo(row:any) {
+
+function showVideo(row: any) {
     openNewPage('/preview/video/' + row.parentId + '/' + row.fileId, 'PreviewVideo', {
         fileId: row.fileId,
         parentId: row.parentId
     })
 }
-function showCode(row:any) {
+
+function showCode(row: any) {
     openNewPage('/preview/code/' + row.fileId, 'PreviewCode', {
         fileId: row.fileId
     })
 }
-function openNewPage(path:any, name:any, params:any) {
+
+function openNewPage(path: any, name: any, params: any) {
     const { href } = router.resolve({
         path: path,
         name: name,
@@ -172,26 +197,26 @@ function openNewPage(path:any, name:any, params:any) {
     })
     window.open(href, '_blank')
 }
-function getFileFontElement(type:any) {
+function getFileFontElement(type: any) {
     return panUtil.getFileFontElement(type)
 }
 function closeShowViewer() {
     showViewer.value = false
 }
-const searchFlag = computed(() => {
-   return fileStore.searchFlag;
-})
-const tableLoading = computed(() => {
-   return fileStore.tableLoading;
-})
 
-const fileList = computed(() => {
-   return fileStore.fileList;
-})
+function getList() {
+    tableLoading.value = true;
+    filesForTable({parentId: fileStore.parentId,fileTypes: fileStore.fileTypes, 
+        pageSize: paginationData.pageSize, pageNum: paginationData.currentPage
+    }).then(response => {
+        tableLoading.value = false;
+        fileList.value = response.data.list;
+        total.value = response.data.total;
+    });
+}
 
-onMounted(() => {
-    fileStore.setMultipleSelection(new Array())
-})
+watch([() => paginationData.currentPage, () => paginationData.pageSize], getList, { immediate: true })
+
 </script>
 
 <style>

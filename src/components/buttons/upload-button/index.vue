@@ -7,7 +7,7 @@
             <i class="el-icon-upload" />
         </el-button>
         <div>
-            <el-dialog title="文件上传" :visible.sync="uploadDialogVisible" width="30%" :modal="false" :append-to-body="true"
+            <el-dialog title="文件上传" v-model="uploadDialogVisible" width="30%" :modal="false" :append-to-body="true"
                 @opened="rebindUploader" center>
                 <div class="upload-content" id="upload-content">
                     <div class="drag-content">
@@ -41,6 +41,10 @@ const taskStore = useTaskStore(pinia);
 const fileStore = useFileStore(pinia);
 
 const props = defineProps({
+    isDep: {
+        type: Boolean,
+        default: false
+    },
     roundFlag: {
         type: Boolean,
         default: false
@@ -54,6 +58,8 @@ const props = defineProps({
         default: ''
     }
 })
+const emit = defineEmits(['loadFileList'])
+
 const uploadDialogVisible = ref(false);
 
 const assignFlag = ref(false);
@@ -127,6 +133,7 @@ function filesAdded(files: any, fileList: any, event: any) {
     // 插件在调用该方法之前会自动过滤选择的文件 去除正在上传的文件 新添加的文件就是第一个参数files
     uploadDialogVisible.value = false
     try {
+        const parentId=props.isDep?fileStore.parentDepId:fileStore.parentId
         files.forEach((f: any) => {
             f.pause()
             if (f.size > panUtil.getMaxFileSize()) {
@@ -142,7 +149,7 @@ function filesAdded(files: any, fileList: any, event: any) {
                 timeRemaining: panUtil.translateTime(Number.POSITIVE_INFINITY),
                 speed: panUtil.translateSpeed(f.averageSpeed),
                 percentage: 0,
-                parentId: new String(fileStore.parentId)
+                parentId: new String(parentId)
             }
             // 添加
             taskStore.add(taskItem)
@@ -151,13 +158,13 @@ function filesAdded(files: any, fileList: any, event: any) {
                 secUpload({
                     filename: f.name,
                     identifier: md5,
-                    parentId: fileStore.parentId
+                    parentId: parentId
                 }).then((res)=>{
                     if (res.code === 200) {
                         ElMessage.success('文件：' + f.name + ' 上传完成')
                         f.cancel()
                         taskStore.remove(f.name)
-                        fileStore.loadFileList()
+                        emit('loadFileList')
                         if (uploader.files.length === 0) {
                             taskStore.updateViewFlag(false)
                         }
@@ -271,7 +278,7 @@ function doMerge(file: any) {
         ElMessage.success('文件：' + file.name + ' 上传完成')
         uploader.removeFile(file)
         taskStore.remove(file.name)
-        fileStore.loadFileList()
+        emit('loadFileList')
         if (uploader.files.length === 0) {
             taskStore.updateViewFlag(false)
         }

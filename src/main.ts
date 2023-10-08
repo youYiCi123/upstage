@@ -6,6 +6,9 @@ import pinia from '@/store/index'
 // 添加全局CSS样式
 import '@/styles/index.scss' // global css
 
+//添加iconfont
+import '@/iconfont/iconfont.css'
+
 // 添加路由卫士
 import '@/permission' // permission control
 

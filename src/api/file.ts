@@ -1,9 +1,17 @@
 import request from "@/utils/request";
 
 
-export function list(params: any) {
+export function filesForTable(params: any) {
     return request({
-      url: "/files",
+      url: "/file-service/filesForTable",
+      params: params,
+      method: 'get'
+    });
+  }
+
+  export function list(params: any) {
+    return request({
+      url: "/file-service/files",
       params: params,
       method: 'get'
     });
@@ -11,7 +19,7 @@ export function list(params: any) {
 
   export function createFolder(data: any) {
     return request({
-        url: '/file/folder',
+        url: '/file-service/file/folder',
         data: data,
         method: 'post'
     });
@@ -19,7 +27,7 @@ export function list(params: any) {
 
   export function update(data: any) {
     return request({
-        url: '/file',
+        url: '/file-service/file',
         data: data,
         method: 'put'
     });
@@ -27,22 +35,23 @@ export function list(params: any) {
 
   export function deleteFiles(data: any) {
     return request({
-        url: '/file',
+        url: '/file-service/file',
         data: data,
         method: 'delete'
     })
   }
 
-  export function getFolderTree() {
+  export function getFolderTree(params: any) {
     return request({
-        url: '/file/folder/tree',
+        url: '/file-service/file/folder/tree',
+        params: params,
         method: 'get'
     })
   }
 
   export function transfer(data: any) {
     return request({
-        url: '/file/transfer',
+        url: '/file-service/file/transfer',
         data: data,
         method: 'post'
     })
@@ -50,7 +59,7 @@ export function list(params: any) {
 
   export function copy(data: any) {
     return request({
-        url: '/file/copy',
+        url: '/file-service/file/copy',
         data: data,
         method: 'post'
     })
@@ -58,7 +67,7 @@ export function list(params: any) {
 
   export function search(params: any) {
     return request({
-        url: '/file/search',
+        url: '/file-service/file/search',
         params: params,
         method: 'get'
     })
@@ -66,7 +75,7 @@ export function list(params: any) {
 
   export function getBreadcrumbs(params: any) {
     return request({
-        url: '/file/breadcrumbs',
+        url: '/file-service/file/breadcrumbs',
         params: params,
         method: 'get'
     })
@@ -74,7 +83,7 @@ export function list(params: any) {
 
   export function detail(params: any) {
     return request({
-        url: '/file',
+        url: '/file-service/file',
         params: params,
         method: 'get'
     })
@@ -82,7 +91,7 @@ export function list(params: any) {
 
   export function secUpload(data: any) {
     return request({
-        url: '/file/sec-upload',
+        url: '/file-service/file/sec-upload',
         data: data,
         method: 'post'
     })
@@ -90,93 +99,93 @@ export function list(params: any) {
 
   export function merge(data: any) {
     return request({
-        url: '/file/merge',
+        url: '/file-service/file/merge',
         data: data,
         method: 'post'
     })
   }
 
-// let fileService = {
+
 //     list: function (params:any, resolve:any, reject:any) {
 //        request({
-//             url: '/files',
+//             url: '/file-service/files',
 //             params: params,
 //             method: 'get'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     createFolder: function (data:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file/folder',
+//             url: '/file-service/file/folder',
 //             data: data,
 //             method: 'post'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     update: function (data:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file',
+//             url: '/file-service/file',
 //             data: data,
 //             method: 'put'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     delete: function (data:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file',
+//             url: '/file-service/file',
 //             data: data,
 //             method: 'delete'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     getFolderTree: function (resolve:any, reject:any) {
 //        request({
-//             url: '/file/folder/tree',
+//             url: '/file-service/file/folder/tree',
 //             params: {},
 //             method: 'get'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     transfer: function (data:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file/transfer',
+//             url: '/file-service/file/transfer',
 //             data: data,
 //             method: 'post'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     copy: function (data:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file/copy',
+//             url: '/file-service/file/copy',
 //             data: data,
 //             method: 'post'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     search: function (params:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file/search',
+//             url: '/file-service/file/search',
 //             params: params,
 //             method: 'get'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     getBreadcrumbs: function (params:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file/breadcrumbs',
+//             url: '/file-service/file/breadcrumbs',
 //             params: params,
 //             method: 'get'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     detail: function (params:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file',
+//             url: '/file-service/file',
 //             params: params,
 //             method: 'get'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     secUpload: function (data:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file/sec-upload',
+//             url: '/file-service/file/sec-upload',
 //             data: data,
 //             method: 'post'
 //         }).then(res => resolve(res)).catch(err => reject(err))
 //     },
 //     merge: function (data:any, resolve:any, reject:any) {
 //        request({
-//             url: '/file/merge',
+//             url: '/file-service/file/merge',
 //             data: data,
 //             method: 'post'
 //         }).then(res => resolve(res)).catch(err => reject(err))

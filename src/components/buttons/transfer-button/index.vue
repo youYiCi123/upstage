@@ -50,7 +50,7 @@ const props = defineProps({
         default: null,
     },
 })
-
+const emit = defineEmits(['loadFileList'])
 const treeData = ref<any[]>([]);
 const treeDialogVisible = ref(false);
 const loading = ref(false);
@@ -80,7 +80,7 @@ function doTransferFile(targetParentId: any) {
         loading.value = false
         treeDialogVisible.value = false
         ElMessage.success('文件移动成功')
-        fileStore.loadFileList()
+        emit('loadFileList')
     }).catch((res:any)=>{
         loading.value = false
         ElMessage.error(res.message)

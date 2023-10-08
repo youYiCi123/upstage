@@ -34,6 +34,7 @@ const props = defineProps({
         default: null,
     },
 })
+const emit = defineEmits(['loadFileList'])
 
 function deleteFile() {
     if (props.item) {
@@ -58,11 +59,11 @@ function doDeleteFile(fileIds: any) {
             fileIds: fileIds
         }).then(()=>{
             ElMessage.success('删除成功')
-            fileStore.loadFileList()
+            emit('loadFileList')
         }).catch((res:any)=>{
             ElMessage.error(res.message)
         })
-    })
+    }).catch(()=>{})
 }
 </script>
 

@@ -75,14 +75,20 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     name: 'fold',
     component: Layout,
     meta: { title: '文件', icon: 'ums' },
-    redirect: '/fold/files',
+    redirect: '/fold/enterpriseFiles',
     children: [
       {
-        path: 'files',
-        name: 'files',
-        component: () => import('@/views/files/allFiles.vue'),
-        meta: { title: '所有文件', icon: "product-list" }
-      }
+        path: 'enterpriseFiles',
+        name: 'enterpriseFiles',
+        component: () => import('@/views/files/enterprise/index.vue'),
+        meta: { title: '企业文件', icon: "product-list" }
+      },
+      {
+        path: 'depFiles',
+        name: 'depFiles',
+        component: () => import('@/views/files/dep/index.vue'),
+        meta: { title: '部门文件', icon: "product-list" }
+      },
     ]
   },
   {

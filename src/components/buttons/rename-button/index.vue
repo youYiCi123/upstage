@@ -7,7 +7,7 @@
             <i class="el-icon-edit" />
         </el-button>
         <el-dialog title="文件重命名" v-model="renameDialogVisible" width="30%" @opened="focusInput()"
-            @closed="resetForm()" :append-to-body=true :modal-append-to-body=false :center=true>
+             :append-to-body=true :modal-append-to-body=false :center=true>
             <div>
                 <el-form label-width="100px" :rules="renameRules" ref="renameForm" :model="renameFormData" status-icon
                     @submit.native.prevent>
@@ -52,7 +52,7 @@ const props = defineProps({
         default: null,
     },
 })
-
+const emit = defineEmits(['loadFileList'])
 const renameForm = ref<FormInstance>();
 /** 验证规则 */
 const renameRules: FormRules = {
@@ -104,7 +104,7 @@ function doRenameFile(formEl: FormInstance | undefined) {
                 loading.value = false
                 renameDialogVisible.value = false
                 ElMessage.success('重命名成功')
-                fileStore.loadFileList()
+                emit('loadFileList')
             }).catch((res:any)=>{
                 ElMessage.error(res.message)
                 loading.value = false
@@ -117,9 +117,6 @@ function focusInput() {
     filenameRef.value.focus()
 }
 
-function resetForm() {
-    filenameRef.value.resetFields()
-}
 
 </script>
 

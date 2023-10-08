@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted } from "vue";
+import { onMounted } from "vue";
 import FileButtonGroup from '@/components/file-button-group/index.vue'
 import Search from '@/components/file-search/index.vue'
 import FileTable from '@/components/file-table/index.vue'
@@ -21,17 +21,14 @@ const breadcrumbStore = useBreadcrumbStore(pinia);
 
 const buttonArray = ['upload', 'createFolder', 'download', 'delete', 'rename', 'share', 'copy', 'transfer']
 function init() {
-    if (!fileStore.searchFlag) {
-        let firstItem = {
-            id: fileStore.defaultParentId,
-            name: fileStore.defaultParentFilename
-        }
-        breadcrumbStore.clear()
-        breadcrumbStore.addItem(firstItem)
-        fileStore.refreshFileParentId()
-        fileStore.setFileTypes('-1')
-        fileStore.loadFileList()
+    let firstItem = {
+        id: fileStore.defaultParentId,
+        name: fileStore.defaultParentFilename
     }
+    breadcrumbStore.clear()
+    breadcrumbStore.addItem(firstItem)
+    fileStore.refreshFileParentId()
+    fileStore.setFileTypes('-1')
 }
 onMounted(() => {
     init()

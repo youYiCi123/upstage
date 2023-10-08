@@ -1,0 +1,416 @@
+<template>
+    <div class="file-page-container">
+        <el-container>
+            <el-aside width="300px" class="folder-aside">
+                <el-input v-model="foldName" :prefix-icon="Search" placeholder="请输入文件夹名称"
+                    style="margin-bottom: 20px;"></el-input>
+                <el-tree class="filter-tree" ref="treeRef" default-expand-all node-key="id"
+                    :current-node-key="currentLivingId" highlight-current :props="defaultProps" :data="foldData"
+                    :filter-node-method="filterNode" @node-click="handleNodeClick">
+                    <template #default="{ node, data }">
+                        <i class="iconfont  icon-folder" style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
+                        <span>{{ node.label }}</span>
+                    </template>
+                </el-tree>
+            </el-aside>
+            <div class="file-container">
+                <el-card :body-style="{ padding: '13px' }">
+                    <div class="operation-card">
+                        <div class="breadcrumb-content">
+                            <el-breadcrumb separator-class="el-icon-arrow-right" style="display: inline-block;">
+                                <el-breadcrumb-item v-for="(item, index) in breadcrumbStore.breadCrumbs" :key="index">
+                                    <a class="breadcrumb-item-a" @click="goToThis(item.id)" href="#">{{ item.name }}</a>
+                                </el-breadcrumb-item>
+                            </el-breadcrumb>
+                        </div>
+                        <upload-button @loadFileList="getList" :is-dep=false size="default" :round-flag=true />
+                        <create-folder-button @loadFileList="getList" :is-dep=false size="default" :round-flag=true />
+                    </div>
+                </el-card>
+                <div class="file-list bigImg" @contextmenu.prevent="openOutSideMenu($event)">
+                    <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
+                        @contextmenu.prevent.stop="openMenu($event,item)">
+                        <el-image :src="analysisType(item.fileType)" class="img" fit="fill"></el-image>
+                        <div class="file-name">{{ item.filename }}</div>
+                    </div>
+                    <el-image-viewer :initial-index="imgIndex" v-if="showViewer" @close="() => { showViewer = false }"
+                        :url-list="imgUrl" />
+                    <!-- 右键菜单部分 -->
+                    <ul v-show="menuVisible"
+                        :style="{ left: position.left + 'px', top: position.top + 'px', display: (menuVisible ? 'block' : 'none') }"
+                        class="contextmenu">
+                        <div class="menuItem">
+                            复制Vue代码
+                        </div>
+                        <div class="menuItem" >
+                            复制SVG
+                        </div>
+                        <div class="menuItem" >
+                            下载SVG
+                        </div>
+                        <div class="menuItem">
+                            下载PNG
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </el-container>
+    </div>
+</template>
+<script setup lang="ts">
+import { ref, onMounted, watch } from 'vue';
+import { Search } from '@element-plus/icons-vue'
+import { getFolderTree, list } from '@/api/file';
+import panUtil from '@/utils/fileUtil'
+import pinia from '@/store/index'
+import { useFileStore } from "@/store/modules/fileStore";
+import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
+const fileStore = useFileStore(pinia);
+const breadcrumbStore = useBreadcrumbStore(pinia);
+import UploadButton from '@/components/buttons/upload-button/index.vue'
+import CreateFolderButton from '@/components/buttons/create-folder-button/index.vue'
+//用户搜索文件夹名称
+const foldName = ref('')
+const treeRef = ref()
+const currentLivingId = ref<any>(null)
+//图片
+const showViewer = ref(false);
+const imgUrl = ref<any[]>([]);
+const imgIndex = ref(0);
+
+//右键菜单
+const menuVisible = ref(false)
+const position = ref({
+  top: 0,
+  left: 0
+})
+const rightClickItem = ref('')
+const closeMenu = () => {
+    menuVisible.value = false
+}
+watch(menuVisible, () => {
+  if (menuVisible.value) {
+    document.body.addEventListener('click', closeMenu)
+  } else {
+    document.body.removeEventListener('click', closeMenu)
+  }
+})
+
+interface Tree {
+    [key: string]: any
+}
+
+const defaultProps = {
+    children: 'children',
+    label: 'label',
+}
+
+//搜索时树节点过滤
+watch(foldName, (val) => {
+    treeRef.value!.filter(val)
+})
+
+const filterNode = (value: string, data: Tree) => {
+    if (!value) return true
+    return data.label.includes(value)
+}
+//文件树
+const foldData = ref<Tree[]>([])
+//文件列表
+const fileList = ref<any[]>([])
+//获取文件树
+function getFoldTree() {
+    getFolderTree({ fileRootId: panUtil.fileFold.ENTERPRISE }).then(response => {
+        foldData.value = response.data
+        if (fileStore.parentId !== 1) {
+            currentLivingId.value = fileStore.parentId
+        } else {
+            currentLivingId.value = response.data[0].id
+        }
+    })
+}
+getFoldTree()
+
+//获取文件
+function getList() {
+    list({ pageType: panUtil.fileFold.ENTERPRISE, parentId: fileStore.parentId, fileTypes: fileStore.fileTypes }).then(response => {
+        fileList.value = response.data
+    });
+}
+getList()
+
+//0 文件夹 3 excel 4 word 5 pdf 7 图片
+function analysisType(type: any) {
+    let tagStr = ''
+    switch (type) {
+        case 0:
+            tagStr = require('@/assets/images/file-img/fold.png')
+            break
+        case 3:
+            tagStr = require('@/assets/images/file-img/excel.png')
+            break
+        case 4:
+            tagStr = require('@/assets/images/file-img/word.png')
+            break
+        case 5:
+            tagStr = require('@/assets/images/file-img/pdf.png')
+            break
+        case 6:
+            tagStr = require('@/assets/images/file-img/txt.png')
+            break
+        case 7:
+            tagStr = require('@/assets/images/file-img/img.png')
+            break
+        case 8:
+            tagStr = require('@/assets/images/file-img/music.png')
+            break
+        case 9:
+            tagStr = require('@/assets/images/file-img/video.png')
+            break
+        case 10:
+            tagStr = require('@/assets/images/file-img/pptx.png')
+            break
+        default:
+            break
+    }
+    return tagStr
+}
+
+//点击el-tree
+function handleNodeClick(item: any, data: any) {
+    //加载文件
+    list({ pageType: panUtil.fileFold.ENTERPRISE, parentId: item.id, fileTypes: fileStore.fileTypes }).then(response => {
+        fileList.value = response.data
+    });
+    fileStore.setFileParentId(item.id)
+    breadcrumbStore.breadCrumbs = [];
+    /*临时变量nodeData储存被点击节点的node信息，判断如果此节点有父节点，
+    那么将相关信息添加到面包屑的首位，并将父节点赋值给临时节点，继续判断该节点是否有父节点*/
+    let nodeData = data;
+    while (nodeData.parent != null) {
+        breadcrumbStore.breadCrumbs.unshift({ 'name': nodeData.data.label, 'id': nodeData.data.id });
+        nodeData = nodeData.parent;
+    }
+}
+//面包屑点击
+function goToThis(id: any) {
+    if (id !== '-1') {
+        let newBreadCrumbs = new Array()
+        breadcrumbStore.breadCrumbs.some(item => {
+            newBreadCrumbs.push(item)
+            if (item.id == id) {
+                return true
+            }
+        })
+        breadcrumbStore.reset(newBreadCrumbs)
+        fileStore.setFileParentId(id)
+        // 设置树节点当前选中的key
+        currentLivingId.value = id
+        // 重点: 设置树节点渲染
+        treeRef.value.setCurrentKey(id)
+        // 加载文件
+        list({ pageType: panUtil.fileFold.ENTERPRISE, parentId: id, fileTypes: fileStore.fileTypes }).then(response => {
+            fileList.value = response.data
+        });
+    }
+}
+
+//点击查看文件
+function viewFile(item: any) {
+    switch (item.fileType) {
+        case 0:
+            goInFolder(item)
+            break
+        case 7:
+            showImg(item)
+            break
+    }
+}
+
+//文件夹操作
+function goInFolder(item: any) {
+    fileStore.setFileParentId(item.fileId)
+    //加载文件
+    list({ pageType: panUtil.fileFold.ENTERPRISE, parentId: item.fileId, fileTypes: fileStore.fileTypes }).then(response => {
+        fileList.value = response.data
+    });
+    //面包屑
+    let breadItem = {
+        id: item.fileId,
+        name: item.filename
+    }
+    breadcrumbStore.addItem(breadItem)
+    //el-tree设置选中
+    currentLivingId.value = item.fileId
+}
+
+function showImg(row: any) {
+    imgUrl.value = new Array()
+    let t = 0
+    for (let i = 0, iLength = fileList.value.length; i < iLength; ++i) {
+        if (fileList.value[i].fileType === 7) {
+            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId))
+            console.log(imgUrl.value)
+            if (fileList.value[i].fileId === row.fileId) {
+                imgIndex.value = t
+            }
+            t++;
+        }
+    }
+    showViewer.value = true
+}
+
+function closeShowViewer() {
+    showViewer.value = false
+}
+
+function init() {
+    if (!breadcrumbStore.ExpandFlag) {
+        if (fileStore.parentId == 1) {
+            let firstItem = {
+                id: 1,
+                name: "企业文件"
+            }
+            breadcrumbStore.clear()
+            breadcrumbStore.addItem(firstItem)
+            breadcrumbStore.resetFlag()
+        }
+    }
+}
+onMounted(() => {
+    init()
+})
+
+function openOutSideMenu(e: any) {
+    alert('asd')
+}
+function openMenu(e:MouseEvent, item:any) {
+  menuVisible.value = true
+  position.value.top = e.pageY
+  position.value.left = e.pageX
+}
+</script>
+<style scoped>
+.breadcrumb-content {
+    width: 100%;
+    padding: 10px 0 0 25px;
+}
+
+.breadcrumb-item-a {
+    cursor: pointer !important;
+    color: #409EFF !important;
+}
+
+.file-page-container .folder-aside {
+    width: 300px;
+    height: calc(100vh - 91px);
+    border-right: 1px solid #ddd;
+    margin: 0;
+    -webkit-box-shadow: 1px 0 6px rgba(0, 21, 41, .35);
+    box-shadow: 1px 0 6px rgba(0, 21, 41, .35);
+}
+
+aside {
+    background: #fff;
+    padding: 8px 24px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.file-page-container .file-container {
+    padding: 0 10px;
+    width: 100%;
+}
+
+.file-page-container .file-container .operation-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.file-page-container .file-container .bigImg {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+.file-page-container .file-container .file-list {
+    height: calc(100vh - 91px);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    padding-left: 10px;
+    overflow: scroll;
+}
+
+.file-page-container .file-container .bigImg .item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding: 5px;
+    height: 150px;
+    width: 130px;
+}
+
+.file-page-container .file-container .bigImg .item:hover {
+    background-color: #eee
+}
+
+.file-page-container .file-container .bigImg .item .img {
+    width: 120px;
+    height: 120px;
+}
+
+.el-image__inner {
+    vertical-align: top;
+}
+
+.file-page-container .file-container .bigImg .item .file-name {
+    text-align: center;
+    font-size: 14px;
+    color: #606266;
+    height: 20px;
+    overflow: hidden;
+    width: 120px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.contextmenu {
+    position: absolute;
+    padding: 5px 0;
+    margin: 0;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    -webkit-box-shadow: 2px 2px 8px 0 hsla(0,0%,58.8%,.2);
+    box-shadow: 2px 2px 8px 0 hsla(0,0%,58.8%,.2);
+    list-style: none;
+    font-size: 14px;
+    white-space: nowrap;
+    cursor: pointer;
+    z-index: 2800;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.contextmenu .menuItem {
+    padding: 10px 0;
+    text-align: center;
+    width: 150px;
+    color: #606266;
+    line-height: 1;
+}
+.contextmenu .menuItem:hover {
+    background: rgb(64, 158, 255);
+}
+</style>

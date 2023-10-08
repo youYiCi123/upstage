@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import {ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { getUserFileBrief } from '@/api/login'
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
@@ -36,11 +36,12 @@ const classObj = computed(() => {
   }
 });
 onMounted(() => {
-  getUserFileBrief().then((res:any)=>{
-    fileStore.setFileParentId(res.data.rootFileId)
-    fileStore.setFileDefaultParentId(res.data.rootFileId)
-    fileStore.setDefaultParentFilename(res.data.rootFilename)
-  }).catch((res:any)=>{
+  getUserFileBrief().then((res: any) => {
+    //部门文件
+    fileStore.setFileDepParentId(res.data.rootFileId)
+    fileStore.setFileDefaultDepParentId(res.data.rootFileId)
+    fileStore.setDefaultParentDepFilename(res.data.rootFilename)
+  }).catch((res: any) => {
     ElMessage.error(res.message)
   })
 })

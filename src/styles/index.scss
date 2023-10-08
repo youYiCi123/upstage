@@ -4,6 +4,9 @@
 @import './element-ui.scss';
 @import './sidebar.scss';
 
+body::-webkit-scrollbar {
+  display: none;
+  }
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -74,6 +77,10 @@ a:hover {
 
 .app-container {
   padding: 20px;
+}
+
+.file-page-container{
+  padding: 10px;
 }
 
 //搜索栏样式

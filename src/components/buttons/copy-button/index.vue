@@ -50,6 +50,7 @@ const props = defineProps({
         default: null,
     },
 })
+const emit = defineEmits(['loadFileList'])
 
 const treeDialogVisible = ref(false);
 const treeData = ref<any[]>([]);
@@ -79,7 +80,7 @@ function doCopyFile(targetParentId:any) {
         loading.value = false
         treeDialogVisible.value = false
         ElMessage.success('文件复制成功')
-        fileStore.loadFileList()
+        emit('loadFileList')
     }).catch((res:any)=>{
         loading.value = false
         ElMessage.error(res.message)

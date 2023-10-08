@@ -1,15 +1,14 @@
 <template>
     <div class="pan-main-operating-content">
         <div class="pan-main-button-content">
-            <upload-button v-if="uploadButtonFlag" size="medium" :round-flag=true />
-            <create-folder-button v-if="createFolderButtonFlag" size="medium" :round-flag=true />
-            <download-button v-if="downloadButtonFlag" size="medium" :round-flag=true />
-            <delete-button v-if="deleteButtonFlag" size="medium" :round-flag=true />
-            <rename-button v-if="renameButtonFlag" size="medium" :round-flag=true />
-            <copy-button v-if="copyButtonFlag" size="medium" :round-flag=true />
-            <transfer-button v-if="transferButtonFlag" size="medium" :round-flag=true />
+            <upload-button v-if="uploadButtonFlag" size="default" :round-flag=true />
+            <create-folder-button v-if="createFolderButtonFlag" size="default" :round-flag=true />
+            <download-button v-if="downloadButtonFlag" size="default" :round-flag=true />
+            <delete-button v-if="deleteButtonFlag" size="default" :round-flag=true />
+            <rename-button v-if="renameButtonFlag" size="default" :round-flag=true />
+            <copy-button v-if="copyButtonFlag" size="default" :round-flag=true />
+            <transfer-button v-if="transferButtonFlag" size="default" :round-flag=true />
         </div>
-
     </div>
 </template>
 

@@ -12,14 +12,14 @@
                 <el-form label-width="100px" :rules="createFolderRules" ref="createFolderRef" :model="createFolderForm"
                     status-icon @submit.native.prevent>
                     <el-form-item label="文件夹名称" prop="folderName">
-                        <el-input type="text" ref="folderName" @keyup.enter.native="doCreateFolder"
+                        <el-input type="text" ref="folderName" @keyup.enter.native="doCreateFolder(createFolderRef)"
                             v-model="createFolderForm.folderName" autocomplete="off" />
                     </el-form-item>
                 </el-form>
             </div>
             <template #footer>
                 <el-button @click="createFolderDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="doCreateFolder" :loading="loading">确 定</el-button>
+                <el-button type="primary" @click="doCreateFolder(createFolderRef)" :loading="loading">确 定</el-button>
             </template>
         </el-dialog>
     </div>
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { createFolder } from '../../../api/file'
-import { ref } from 'vue'
+import { ref,reactive } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from 'element-plus';
 import pinia from '@/store/index'
@@ -35,6 +35,10 @@ import { useFileStore } from "@/store/modules/fileStore";
 const fileStore = useFileStore(pinia);
 
 const props = defineProps({
+    isDep: {
+        type: Boolean,
+        default: false
+    },
     roundFlag: {
         type: Boolean,
         default: false
@@ -48,6 +52,8 @@ const props = defineProps({
         default: ''
     }
 })
+const emit = defineEmits(['loadFileList'])
+
 const createFolderRef = ref<FormInstance>();
 /** 验证规则 */
 const createFolderRules: FormRules = {
@@ -60,9 +66,9 @@ const createFolderDialogVisible = ref(false);
 
 const loading = ref(false);
 
-const createFolderForm = {
+const createFolderForm = reactive({
     folderName: ''
-}
+})
 const folderName = ref();
 
 function focusInput() {
@@ -78,13 +84,14 @@ function doCreateFolder(formEl: FormInstance | undefined) {
         if (valid) {
             loading.value = true
             createFolder({
-                parentId: fileStore.parentId,
+                pageType:props.isDep,
+                parentId: props.isDep?fileStore.parentDepId:fileStore.parentId,
                 folderName: createFolderForm.folderName
             }).then(() => {
                 loading.value = false
                 createFolderDialogVisible.value = false
                 ElMessage.success('新建成功')
-                fileStore.loadFileList()
+                emit('loadFileList')
             }).catch((res: any) => {
                 ElMessage.error(res.message)
                 loading.value = false
