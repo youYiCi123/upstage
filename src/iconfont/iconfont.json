@@ -6,6 +6,167 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9881673",
+      "name": "KHCFDC_WORD",
+      "font_class": "WORD",
+      "unicode": "e6eb",
+      "unicode_decimal": 59115
+    },
+    {
+      "icon_id": "622431",
+      "name": "pdf",
+      "font_class": "pdf1",
+      "unicode": "e740",
+      "unicode_decimal": 59200
+    },
+    {
+      "icon_id": "924549",
+      "name": "text",
+      "font_class": "text",
+      "unicode": "e959",
+      "unicode_decimal": 59737
+    },
+    {
+      "icon_id": "4766847",
+      "name": "folder-open",
+      "font_class": "folder-open",
+      "unicode": "e7d1",
+      "unicode_decimal": 59345
+    },
+    {
+      "icon_id": "6403469",
+      "name": "image",
+      "font_class": "image",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "8765262",
+      "name": "ppt",
+      "font_class": "ppt",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "11132427",
+      "name": "video",
+      "font_class": "video",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "24816508",
+      "name": "excel",
+      "font_class": "excel",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "1977835",
+      "name": "部门职能工作审核",
+      "font_class": "bumenzhinenggongzuoshenhe",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "1409640",
+      "name": "14权限管理",
+      "font_class": "quanxianguanli",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "7594875",
+      "name": "24gf-folderOpen",
+      "font_class": "24gf-folderOpen",
+      "unicode": "eac5",
+      "unicode_decimal": 60101
+    },
+    {
+      "icon_id": "763159",
+      "name": "部门管理",
+      "font_class": "suyaniconchanpinleibufenzuodaohangbufen87",
+      "unicode": "e730",
+      "unicode_decimal": 59184
+    },
+    {
+      "icon_id": "1876354",
+      "name": "我的企业",
+      "font_class": "wodeqiye",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
+      "icon_id": "11882898",
+      "name": "bg-upload",
+      "font_class": "bg-upload",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "421115",
+      "name": "组织部门",
+      "font_class": "zuzhibumen",
+      "unicode": "e68b",
+      "unicode_decimal": 59019
+    },
+    {
+      "icon_id": "3590945",
+      "name": "角色管理",
+      "font_class": "jiaoseguanli",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "2170932",
+      "name": "首页-首页",
+      "font_class": "shouye-shouye",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "32925145",
+      "name": "隐藏",
+      "font_class": "icon-mianxing_fuzhi_bukejian",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "32925154",
+      "name": "可见",
+      "font_class": "icon-mianxing_fuzhi_kejian",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "32925166",
+      "name": "密码",
+      "font_class": "icon-mianxing_fuzhi_mima",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "32925176",
+      "name": "用户",
+      "font_class": "icon-mianxing_fuzhi_yonghu",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "32925189",
+      "name": "设置",
+      "font_class": "icon-mianxing_fuzhi_shezhi",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "33019595",
+      "name": "客户管理",
+      "font_class": "kehuguanli",
+      "unicode": "e714",
+      "unicode_decimal": 59156
+    },
+    {
       "icon_id": "109744",
       "name": "folder",
       "font_class": "folder",

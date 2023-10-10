@@ -17,7 +17,7 @@
                 <el-card :body-style="{ padding: '13px' }">
                     <div class="operation-card">
                         <div class="breadcrumb-content">
-                            <el-breadcrumb separator-class="el-icon-arrow-right" style="display: inline-block;">
+                            <el-breadcrumb :separator-icon="ArrowRight" style="display: inline-block;">
                                 <el-breadcrumb-item v-for="(item, index) in breadcrumbStore.depBreadCrumbs" :key="index">
                                     <a class="breadcrumb-item-a" @click="goToThis(item.id)" href="#">{{ item.name }}</a>
                                 </el-breadcrumb-item>
@@ -27,7 +27,7 @@
                         <create-folder-button @loadFileList="getList" :is-dep=true size="default" :round-flag=true />
                     </div>
                 </el-card>
-                <div class="file-list bigImg" @contextmenu.prevent="openOutSideMenu($event)">
+                <div :class="isImg?'file-list bigImg':'file-list col'"  @contextmenu.prevent="openOutSideMenu($event)">
                     <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
                         @contextmenu.prevent.stop="openMenu($event, item)">
                         <el-image :src="analysisType(item.fileType)" class="img" fit="fill"></el-image>
@@ -35,7 +35,7 @@
                     </div>
                     <el-image-viewer :initial-index="imgIndex" v-if="showViewer" @close="() => { showViewer = false }"
                         :url-list="imgUrl" />
-                    <!-- 右键菜单部分 -->
+                    <!-- item右键菜单 -->
                     <ul v-show="menuVisible"
                         :style="{ left: position.left + 'px', top: position.top + 'px', display: (menuVisible ? 'block' : 'none') }"
                         class="contextmenu">
@@ -55,6 +55,17 @@
                             <delete-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
                         </div>
                     </ul>
+                    <!-- 外部右键菜单 -->
+                    <ul v-show="outsideMenuVisible"
+                        :style="{ left: position.left + 'px', top: position.top + 'px', display: (outsideMenuVisible ? 'block' : 'none') }"
+                        class="contextmenu">
+                        <div class="menuItem" @click="toListMode">
+                            列表模式 
+                        </div>
+                        <div class="menuItem" @click="toImgMode">
+                            图标模式 
+                        </div>
+                    </ul>
                 </div>
             </div>
         </el-container>
@@ -63,6 +74,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { Search } from '@element-plus/icons-vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 import { getFolderTree, list } from '@/api/file';
 import DownloadButton from '@/components/buttons/download-button/index.vue'
 import RenameButton from '@/components/buttons/rename-button/index.vue'
@@ -86,8 +98,9 @@ const showViewer = ref(false);
 const imgUrl = ref<any[]>([]);
 const imgIndex = ref(0);
 
-//右键菜单
+//右键菜单 
 const menuVisible = ref(false)
+const outsideMenuVisible = ref(false)
 const position = ref({
     top: 0,
     left: 0
@@ -103,6 +116,19 @@ watch(menuVisible, () => {
         document.body.removeEventListener('click', closeMenu)
     }
 })
+//外部右键菜单
+const closeOutsideMenu = () => {
+    outsideMenuVisible.value = false
+}
+watch(outsideMenuVisible, () => {
+    if (outsideMenuVisible.value) {
+        document.body.addEventListener('click', closeOutsideMenu)
+    } else {
+        document.body.removeEventListener('click', closeOutsideMenu)
+    }
+})
+//文件呈现方式，true大图标；false列表
+const isImg = ref(true)
 
 interface Tree {
     [key: string]: any
@@ -276,6 +302,13 @@ function closeShowViewer() {
     showViewer.value = false
 }
 
+function toListMode(){
+    isImg.value=false
+}
+function toImgMode(){
+    isImg.value=true
+}
+
 function init() {
     if (!breadcrumbStore.depExpandFlag) {
         if (fileStore.parentDepId == fileStore.defaultParentDepId) {
@@ -294,7 +327,9 @@ onMounted(() => {
 })
 
 function openOutSideMenu(e: any) {
-    alert('asd')
+    outsideMenuVisible.value = true
+    position.value.top = e.pageY
+    position.value.left = e.pageX
 }
 function openMenu(e: any, item: any) {
     menuVisible.value = true
@@ -350,6 +385,43 @@ aside {
     flex-direction: row;
 }
 
+.file-page-container .file-container .col{
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.file-page-container .file-container .col .item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    padding: 10px;
+    height: 55px;
+    width: 270px;
+}
+.file-page-container .file-container .col .item .img{
+    width: 35px;
+    height: 35px;
+}
+
+.file-page-container .file-container .col .item .file-name {
+    text-align: left;
+    line-height: 35px;
+    font-size: 14px;
+    color: #606266;
+    height: 35px;
+    overflow: hidden;
+    width: 215px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-left: 10px;
+    cursor: default;
+}
 .file-page-container .file-container .file-list {
     height: calc(100vh - 91px);
     display: -webkit-box;
@@ -376,6 +448,10 @@ aside {
 }
 
 .file-page-container .file-container .bigImg .item:hover {
+    background-color: #eee
+}
+
+.file-page-container .file-container .col .item:hover {
     background-color: #eee
 }
 

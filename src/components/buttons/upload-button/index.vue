@@ -12,7 +12,7 @@
                 <div class="upload-content" id="upload-content">
                     <div class="drag-content">
                         <div class="drag-icon-content">
-                            <i class="el-icon-upload drag-icon"></i>
+                            <i class="iconfont icon-bg-upload" style="color: #b5bbb6;font-size: 70px;"></i>
                         </div>
                         <div class="drag-text-content">
                             <el-link :underline="false" type="info">将文件拖到此处,或</el-link>

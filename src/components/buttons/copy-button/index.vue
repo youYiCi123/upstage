@@ -79,6 +79,7 @@ function doCopyFile(targetParentId:any) {
         fileIds = fileIdArr.join('__,__')
     }
     copy({
+        pageType:props.isDep?panUtil.fileFold.DEP:panUtil.fileFold.ENTERPRISE,
         fileIds: fileIds,
         targetParentId: targetParentId
     }).then(()=>{

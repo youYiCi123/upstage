@@ -24,7 +24,7 @@ export const constantRouterMap: RouteRecordRaw[] = [
         path: "home",
         name: "home",
         component: () => import("@/views/home/index.vue"),
-        meta: { title: "首页", icon: "iconfont icon-shouyefill" },
+        meta: { title: "首页", icon: "iconfont icon-shouye-shouye" },
       },
     ],
   },
@@ -88,6 +88,18 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         name: 'depFiles',
         component: () => import('@/views/files/dep/index.vue'),
         meta: { title: '部门文件', icon: "product-list" }
+      },
+      {
+        path: 'verifyEnterprise',
+        name: 'verifyEnterprise',
+        component: () => import('@/views/files/verifyEnterprise/index.vue'),
+        meta: { title: '企业审核', icon: "product-list" }
+      },
+      {
+        path: 'verifyDep',
+        name: 'verifyDep',
+        component: () => import('@/views/files/verifyDep/index.vue'),
+        meta: { title: '部门审核', icon: "product-list" }
       },
     ]
   },
