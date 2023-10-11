@@ -52,6 +52,15 @@ export function fetchList(params:any) {
   })
 }
 
+export function changePassword(data:any) {
+  return request({
+    url: '/upstage-service/admin/updatePassword',
+    method: 'post',
+    data: data
+  })
+}
+
+
 export function createAdmin(data:any) {
   return request({
     url: '/upstage-service/admin/register',

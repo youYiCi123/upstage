@@ -16,6 +16,12 @@
                     <el-form-item label="输入搜索：">
                         <el-input v-model="listQuery.keyword" class="input-width" placeholder="文件名称" clearable></el-input>
                     </el-form-item>
+                    <el-form-item label="文件类型">
+                        <el-select v-model="listQuery.fileType" clearable placeholder="请选择">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
                 </el-form>
             </div>
         </el-card>
@@ -79,7 +85,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { ElMessage, ElMessageBox } from 'element-plus';
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 import panUtil from '@/utils/fileUtil';
-import { filesForTable, handleBatchDelete,deleteFile,handleBatchPass,passFile } from '@/api/file'
+import { filesForTable, handleBatchDelete, deleteFile, handleBatchPass, passFile } from '@/api/file'
 import { useRouter } from 'vue-router'; //vue3路由跳转
 const router = useRouter();
 const showViewer = ref(false);
@@ -92,14 +98,69 @@ const multipleSelectionId = ref<number[]>([])
 
 let listQuery = reactive({
     keyword: '',
+    fileType:''
 });
+
+const options = [
+  {
+    value: '3',
+    label: 'Excel',
+  },
+  {
+    value: '4',
+    label: 'Word',
+  },
+  {
+    value: '5',
+    label: 'Pdf',
+  },
+  {
+    value: '6',
+    label: 'TXT',
+  },
+  {
+    value: '10',
+    label: 'PPT',
+  },
+  {
+    value: '7',
+    label: '图片',
+  },
+  {
+    value: '8',
+    label: '音频',
+  },
+  {
+    value: '9',
+    label: '视频',
+  },
+
+  {
+    value: '11',
+    label: '源码文件',
+  },
+  {
+    value: '1',
+    label: '普通文件',
+  },
+  {
+    value: '2',
+    label: '压缩文件',
+  },
+
+  {
+    value: '12',
+    label: 'CSV',
+  }
+]
+
 const fileList = ref<any[]>([]) //文件列表
 const total = ref(0);
 const tableLoading = ref(false);
 
 function getList() {
     tableLoading.value = true;
-    filesForTable({ pageType: panUtil.fileFold.DEP, keyword: listQuery.keyword, pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
+    filesForTable({ pageType: panUtil.fileFold.DEP, keyword: listQuery.keyword, fileType:listQuery.fileType,pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
         tableLoading.value = false;
         fileList.value = response.data.list;
         total.value = response.data.total;
@@ -158,8 +219,10 @@ function showMusic(row: any) {
     })
 }
 
+//视频播放
 function showVideo(row: any) {
-    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId, 'PreviewVideo', {
+    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.DEP, 'PreviewVideo', {
+        pageType: panUtil.fileFold.DEP,
         fileId: row.fileId,
         parentId: row.parentId
     })
@@ -210,52 +273,52 @@ function getFileFontElement(type: any) {
 }
 
 function handleSelectionChange(val: any[]) {
-  multipleSelection.value = val;
-  multipleSelectionId.value = [];
-  multipleSelection.value.forEach(t => multipleSelectionId.value.push(t.fileId))
+    multipleSelection.value = val;
+    multipleSelectionId.value = [];
+    multipleSelection.value.forEach(t => multipleSelectionId.value.push(t.fileId))
 }
 
 
 function batchPass() {
-  ElMessageBox.confirm('是否确认批量通过?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    handleBatchPass(multipleSelectionId.value).then(response => {
-      ElMessage({
-        type: 'success',
-        message: '审核成功!'
-      });
-      getList();
-    })
-  }).catch(() => {
-    ElMessage({
-      type: 'info',
-      message: '取消审核'
+    ElMessageBox.confirm('是否确认批量通过?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        handleBatchPass(multipleSelectionId.value).then(response => {
+            ElMessage({
+                type: 'success',
+                message: '审核成功!'
+            });
+            getList();
+        })
+    }).catch(() => {
+        ElMessage({
+            type: 'info',
+            message: '取消审核'
+        });
     });
-  });
 }
 
 function batchDelete() {
-  ElMessageBox.confirm('是否要确认?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    handleBatchDelete(multipleSelectionId.value).then(response => {
-      ElMessage({
-        type: 'success',
-        message: '删除成功!'
-      });
-      getList();
-    })
-  }).catch(() => {
-    ElMessage({
-      type: 'info',
-      message: '取消删除'
+    ElMessageBox.confirm('是否要确认?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        handleBatchDelete(multipleSelectionId.value).then(response => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功!'
+            });
+            getList();
+        })
+    }).catch(() => {
+        ElMessage({
+            type: 'info',
+            message: '取消删除'
+        });
     });
-  });
 }
 
 function handleDelete(row: any) {

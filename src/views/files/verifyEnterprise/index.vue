@@ -16,6 +16,12 @@
                     <el-form-item label="输入搜索：">
                         <el-input v-model="listQuery.keyword" class="input-width" placeholder="文件名称" clearable></el-input>
                     </el-form-item>
+                    <el-form-item label="文件类型">
+                        <el-select v-model="listQuery.fileType" clearable placeholder="请选择">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
                 </el-form>
             </div>
         </el-card>
@@ -92,14 +98,69 @@ const multipleSelectionId = ref<number[]>([])
 
 let listQuery = reactive({
     keyword: '',
+    fileType:''
 });
+
+const options = [
+  {
+    value: '3',
+    label: 'Excel',
+  },
+  {
+    value: '4',
+    label: 'Word',
+  },
+  {
+    value: '5',
+    label: 'Pdf',
+  },
+  {
+    value: '6',
+    label: 'TXT',
+  },
+  {
+    value: '10',
+    label: 'PPT',
+  },
+  {
+    value: '7',
+    label: '图片',
+  },
+  {
+    value: '8',
+    label: '音频',
+  },
+  {
+    value: '9',
+    label: '视频',
+  },
+
+  {
+    value: '11',
+    label: '源码文件',
+  },
+  {
+    value: '1',
+    label: '普通文件',
+  },
+  {
+    value: '2',
+    label: '压缩文件',
+  },
+
+  {
+    value: '12',
+    label: 'CSV',
+  }
+]
+
 const fileList = ref<any[]>([]) //文件列表
 const total = ref(0);
 const tableLoading = ref(false);
 
 function getList() {
     tableLoading.value = true;
-    filesForTable({ pageType: panUtil.fileFold.ENTERPRISE, keyword: listQuery.keyword, pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
+    filesForTable({ pageType: panUtil.fileFold.ENTERPRISE, keyword: listQuery.keyword,fileType:listQuery.fileType,pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
         tableLoading.value = false;
         fileList.value = response.data.list;
         total.value = response.data.total;
@@ -158,8 +219,10 @@ function showMusic(row: any) {
     })
 }
 
+//视频播放
 function showVideo(row: any) {
-    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId, 'PreviewVideo', {
+    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.ENTERPRISE, 'PreviewVideo', {
+        pageType: panUtil.fileFold.ENTERPRISE,
         fileId: row.fileId,
         parentId: row.parentId
     })
