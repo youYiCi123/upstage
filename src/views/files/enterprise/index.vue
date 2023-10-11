@@ -27,7 +27,7 @@
                         <create-folder-button @loadFileList="getList" :is-dep=false size="default" :round-flag=true />
                     </div>
                 </el-card>
-                <div :class="isImg?'file-list bigImg':'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
+                <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
                     <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
                         @contextmenu.prevent.stop="openMenu($event, item)">
                         <el-image :src="analysisType(item.fileType)" class="img" fit="fill"></el-image>
@@ -79,6 +79,8 @@ import { Search } from '@element-plus/icons-vue'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { getFolderTree, list } from '@/api/file';
 import panUtil from '@/utils/fileUtil'
+import { useRouter } from 'vue-router'; //vue3路由跳转
+const router = useRouter();
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
 import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
@@ -253,8 +255,16 @@ function viewFile(item: any) {
         case 0:
             goInFolder(item)
             break
+        case 3:
+        case 4:
+        case 10:
+            showOffice(item)
+            break
         case 7:
             showImg(item)
+            break
+        case 9:
+            showVideo(item)
             break
     }
 }
@@ -274,6 +284,32 @@ function goInFolder(item: any) {
     breadcrumbStore.addItem(breadItem)
     //el-tree设置选中
     currentLivingId.value = item.fileId
+}
+
+//office预览
+function showOffice(row: any) {
+    openNewPage('/preview/office/' + row.fileId + '/' + row.filename, 'PreviewOffice', {
+        fileId: row.fileId,
+        filename: row.filename,
+    })
+}
+
+//视频播放
+function showVideo(row: any) {
+    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId+'/'+panUtil.fileFold.ENTERPRISE, 'PreviewVideo', {
+        pageType:panUtil.fileFold.ENTERPRISE,
+        fileId: row.fileId,
+        parentId: row.parentId
+    })
+}
+
+function openNewPage(path: any, name: any, params: any) {
+    const { href } = router.resolve({
+        path: path,
+        name: name,
+        params: params
+    })
+    window.open(href, '_blank')
 }
 
 function showImg(row: any) {
@@ -313,11 +349,11 @@ onMounted(() => {
     init()
 })
 
-function toListMode(){
-    isImg.value=false
+function toListMode() {
+    isImg.value = false
 }
-function toImgMode(){
-    isImg.value=true
+function toImgMode() {
+    isImg.value = true
 }
 
 function openOutSideMenu(e: any) {
@@ -499,4 +535,5 @@ aside {
 
 .contextmenu .menuItem:hover {
     background: rgb(64, 158, 255);
-}</style>
+}
+</style>

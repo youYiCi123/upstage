@@ -146,7 +146,8 @@ function clickFilename(row: any) {
 function showOffice(row: any) {
     openNewPage('/preview/office/' + row.fileId + '/' + row.filename, 'PreviewOffice', {
         fileId: row.fileId,
-    })
+        filename: row.filename,
+    })  
 }
 
 function showMusic(row: any) {

@@ -270,6 +270,7 @@ function doMerge(file: any) {
         timeRemaining: panUtil.translateTime(file.timeRemaining())
     })
     merge({
+        pageType:props.isDep?panUtil.fileFold.DEP:panUtil.fileFold.ENTERPRISE,
         filename: uploadTaskItem.filename,
         identifier: uploadTaskItem.target.uniqueIdentifier,
         parentId: uploadTaskItem.parentId,

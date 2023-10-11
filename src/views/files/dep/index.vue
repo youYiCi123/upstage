@@ -27,7 +27,7 @@
                         <create-folder-button @loadFileList="getList" :is-dep=true size="default" :round-flag=true />
                     </div>
                 </el-card>
-                <div :class="isImg?'file-list bigImg':'file-list col'"  @contextmenu.prevent="openOutSideMenu($event)">
+                <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
                     <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
                         @contextmenu.prevent.stop="openMenu($event, item)">
                         <el-image :src="analysisType(item.fileType)" class="img" fit="fill"></el-image>
@@ -39,20 +39,22 @@
                     <ul v-show="menuVisible"
                         :style="{ left: position.left + 'px', top: position.top + 'px', display: (menuVisible ? 'block' : 'none') }"
                         class="contextmenu">
-                        <div class="menuItem" >
-                            <download-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
+                        <div class="menuItem">
+                            <download-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
-                        <div class="menuItem" >
-                            <rename-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
+                        <div class="menuItem">
+                            <rename-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
-                        <div class="menuItem" >
-                            <copy-button @loadFileList="getList" size="small" :is-dep=true :round-flag=true :item="rightClickItem"/>
+                        <div class="menuItem">
+                            <copy-button @loadFileList="getList" size="small" :is-dep=true :round-flag=true
+                                :item="rightClickItem" />
                         </div>
-                        <div class="menuItem" >
-                            <transfer-button @loadFileList="getList" size="small" :is-dep=true :round-flag=true :item="rightClickItem"/>
+                        <div class="menuItem">
+                            <transfer-button @loadFileList="getList" size="small" :is-dep=true :round-flag=true
+                                :item="rightClickItem" />
                         </div>
-                        <div class="menuItem" >
-                            <delete-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem"/>
+                        <div class="menuItem">
+                            <delete-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
                     </ul>
                     <!-- 外部右键菜单 -->
@@ -60,10 +62,10 @@
                         :style="{ left: position.left + 'px', top: position.top + 'px', display: (outsideMenuVisible ? 'block' : 'none') }"
                         class="contextmenu">
                         <div class="menuItem" @click="toListMode">
-                            列表模式 
+                            列表模式
                         </div>
                         <div class="menuItem" @click="toImgMode">
-                            图标模式 
+                            图标模式
                         </div>
                     </ul>
                 </div>
@@ -82,6 +84,8 @@ import DeleteButton from '@/components/buttons/delete-button/index.vue'
 import CopyButton from '@/components/buttons/copy-button/index.vue'
 import TransferButton from '@/components/buttons/transfer-button/index.vue'
 import panUtil from '@/utils/fileUtil'
+import { useRouter } from 'vue-router'; //vue3路由跳转
+const router = useRouter();
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
 import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
@@ -165,8 +169,8 @@ function getFoldTree() {
 }
 getFoldTree()
 
-function rename(rightClickItem:any){
-    console.log("rightClickItem",rightClickItem)
+function rename(rightClickItem: any) {
+    console.log("rightClickItem", rightClickItem)
 }
 
 //获取文件
@@ -259,8 +263,16 @@ function viewFile(item: any) {
         case 0:
             goInFolder(item)
             break
+        case 3:
+        case 4:
+        case 10:
+            showOffice(item)
+            break
         case 7:
             showImg(item)
+            break
+        case 9:
+            showVideo(item)
             break
     }
 }
@@ -280,6 +292,33 @@ function goInFolder(item: any) {
     breadcrumbStore.addDepItem(breadItem)
     //el-tree设置选中
     currentLivingId.value = item.fileId
+}
+
+//office预览
+function showOffice(row: any) {
+    openNewPage('/preview/office/' + row.fileId + '/' + row.filename, 'PreviewOffice', {
+        fileId: row.fileId,
+        filename: row.filename,
+    })
+}
+
+//视频播放
+function showVideo(row: any) {
+    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId+'/'+panUtil.fileFold.DEP, 'PreviewVideo', {
+        pageType:panUtil.fileFold.DEP,
+        fileId: row.fileId,
+        parentId: row.parentId
+    })
+}
+
+
+function openNewPage(path: any, name: any, params: any) {
+    const { href } = router.resolve({
+        path: path,
+        name: name,
+        params: params
+    })
+    window.open(href, '_blank')
 }
 
 function showImg(row: any) {
@@ -302,11 +341,11 @@ function closeShowViewer() {
     showViewer.value = false
 }
 
-function toListMode(){
-    isImg.value=false
+function toListMode() {
+    isImg.value = false
 }
-function toImgMode(){
-    isImg.value=true
+function toImgMode() {
+    isImg.value = true
 }
 
 function init() {
@@ -385,7 +424,7 @@ aside {
     flex-direction: row;
 }
 
-.file-page-container .file-container .col{
+.file-page-container .file-container .col {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
@@ -404,7 +443,8 @@ aside {
     height: 55px;
     width: 270px;
 }
-.file-page-container .file-container .col .item .img{
+
+.file-page-container .file-container .col .item .img {
     width: 35px;
     height: 35px;
 }
@@ -422,6 +462,7 @@ aside {
     padding-left: 10px;
     cursor: default;
 }
+
 .file-page-container .file-container .file-list {
     height: calc(100vh - 91px);
     display: -webkit-box;

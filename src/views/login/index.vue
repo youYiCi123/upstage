@@ -6,7 +6,7 @@
         <el-form-item prop="username">
           <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="请输入用户名">
             <template #prefix>
-              <i class="iconfont icon-user"></i>
+              <i class="iconfont icon-icon-mianxing_fuzhi_yonghu"></i>
             </template>
           </el-input>
         </el-form-item>
@@ -14,12 +14,12 @@
           <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin(loginFormRef)"
             v-model="loginForm.password" autoComplete="on" placeholder="请输入密码">
             <template #prefix>
-              <i class="iconfont icon-mima"></i>
+              <i class="iconfont icon-icon-mianxing_fuzhi_mima"></i>
             </template>
             <template #suffix>
               <div @click="showPwd">
-                <i v-if="pwdType == 'password'" class="iconfont icon-bukejian"></i>
-                <i v-else class="iconfont icon-a-32Akejian"></i>
+                <i v-if="pwdType == 'password'" class="iconfont icon-icon-mianxing_fuzhi_bukejian"></i>
+                <i v-else class="iconfont icon-icon-mianxing_fuzhi_kejian"></i>
               </div>
             </template>
           </el-input>
@@ -28,7 +28,7 @@
           <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码" style="width: 63%"
             @keyup.enter.native="handleLogin(loginFormRef)">
             <template #prefix>
-              <i class="iconfont icon-yanzhengyanzhengma"></i>
+              <i class="iconfont icon-yanzhengma"></i>
             </template>
           </el-input>
           <div class="login-code">

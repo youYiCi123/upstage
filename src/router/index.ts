@@ -191,6 +191,18 @@ export const asyncRouterMap: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/preview/office/:fileId/:filename',
+    name: 'PreviewOffice',
+    component: () => import('@/views/files/preview/office/index.vue'),
+    meta: { title: 'office预览', hidden: true  }
+  },
+  {
+    path: '/preview/video/:parentId/:fileId/:pageType',
+    name: 'PreviewVideo',
+    component: () => import('@/views/files/preview/video/index.vue'),
+    meta: { title: '视频观看', hidden: true  }
+  },
 ];
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
