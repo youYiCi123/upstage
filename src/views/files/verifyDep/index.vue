@@ -151,7 +151,8 @@ function showOffice(row: any) {
 }
 
 function showMusic(row: any) {
-    openNewPage('/preview/music/' + row.parentId + '/' + row.fileId, 'PreviewMusic', {
+    openNewPage('/preview/music/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.ENTERPRISE, 'PreviewMusic', {
+        pageType: panUtil.fileFold.ENTERPRISE,
         parentId: row.parentId,
         fileId: row.fileId
     })

@@ -156,6 +156,7 @@ function filesAdded(files: any, fileList: any, event: any) {
             MD5(f.file, (e: any, md5: any) => {
                 f['uniqueIdentifier'] = md5
                 secUpload({
+                    pageType:props.isDep?panUtil.fileFold.DEP:panUtil.fileFold.ENTERPRISE,
                     filename: f.name,
                     identifier: md5,
                     parentId: parentId

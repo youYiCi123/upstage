@@ -41,7 +41,6 @@ const videoShowPath = ref('')
 const videoList = ref<any[]>([]);
 
 function init() {
-    console.log('1de',route.params)
     list({
         pageType:route.params.pageType,
         parentId: route.params.parentId,
@@ -115,6 +114,38 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
+
+.player-block {
+    background: #101010;
+    padding: 15px 0 20px;
+    margin: 0 0 30px;
+}
+
+.content {
+    width: 100%;
+    max-width: 1740px;
+    margin: 0 auto;
+}
+
+.player-box-main {
+    position: relative;
+    overflow: hidden;
+}
+
+.MacPlayer {
+    background: #000000;
+    font-size: 14px;
+    color: #F6F6F6;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+}
+
 .pan-video-content {
     width: 100%;
     margin-top: 22px;

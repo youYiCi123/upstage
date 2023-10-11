@@ -33,11 +33,11 @@ export function updateStatus(id:number, params:number) {
   })
 }
 
-export function deleteRole(data:any) {
+export function deleteRole(params:any) {
   return request({
     url:'/upstage-service/role/delete',
     method:'post',
-    data:data
+    params:params
   })
 }
 

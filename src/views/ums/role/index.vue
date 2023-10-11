@@ -174,11 +174,7 @@ function handleDelete(row: RoleMode) {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    let ids = [];
-    ids.push(row.id);
-    // let params = new URLSearchParams();
-    // params.append("ids", ids);
-    deleteRole(ids).then(response => {
+    deleteRole({id:row.id}).then(response => {
       ElMessage({
         type: 'success',
         message: '删除成功!'

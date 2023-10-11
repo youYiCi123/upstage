@@ -260,8 +260,15 @@ function viewFile(item: any) {
         case 10:
             showOffice(item)
             break
+        case 5:
+        case 6:
+            showIframe(item)
+            break
         case 7:
             showImg(item)
+            break
+        case 8:
+            showMusic(item)
             break
         case 9:
             showVideo(item)
@@ -294,14 +301,29 @@ function showOffice(row: any) {
     })
 }
 
+function showIframe(row: any) {
+    openNewPage('/preview/iframe/' + row.fileId, 'PreviewIframe', {
+        fileId: row.fileId
+    })
+}
+
 //视频播放
 function showVideo(row: any) {
-    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId+'/'+panUtil.fileFold.ENTERPRISE, 'PreviewVideo', {
-        pageType:panUtil.fileFold.ENTERPRISE,
+    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.ENTERPRISE, 'PreviewVideo', {
+        pageType: panUtil.fileFold.ENTERPRISE,
         fileId: row.fileId,
         parentId: row.parentId
     })
 }
+
+function showMusic(row: any) {
+    openNewPage('/preview/music/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.ENTERPRISE, 'PreviewMusic', {
+        pageType: panUtil.fileFold.ENTERPRISE,
+        parentId: row.parentId,
+        fileId: row.fileId
+    })
+}
+
 
 function openNewPage(path: any, name: any, params: any) {
     const { href } = router.resolve({
