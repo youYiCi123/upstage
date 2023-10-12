@@ -5,8 +5,8 @@
                 <p class="music-name">{{ musicName }}</p>
             </div>
             <el-divider></el-divider>
-            <el-row>
-                <el-col :span="18">
+            <el-row :gutter="15" justify="center">
+                <el-col :span="14">
                     <div class="record-img-content">
                         <img class="record-img" src="@/assets/images/record.png">
                     </div>
@@ -15,11 +15,11 @@
                         <audio id="r_pan_music_player" :src="musicShowPath" autoplay="true" controls="true" />
                     </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="3">
                     <div class="music-list-content">
                         <el-menu class="music-list" :default-active="activeIndex" @select="selectMusic">
                             <el-menu-item v-for="(item, index) in musicList" :key="index" :index="item.fileId">
-                                <i class="iconfont  icon-AUDIO"></i>
+                                <i class="iconfont icon-music-full"></i>
                                 <span slot="title">{{ item.filename }}</span>
                             </el-menu-item>
                         </el-menu>
@@ -129,7 +129,7 @@ onMounted(() => {
 }
 
 .pan-music-content .music-name-content .music-name {
-    color: #409EFF;
+    color: #4b4646;
     font-size: 35px;
     font-weight: bold;
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
@@ -138,13 +138,44 @@ onMounted(() => {
 .pan-music-content .record-img-content {
     display: inline-block;
     width: 100%;
-    height: 100%;
     margin-top: 80px;
     text-align: center;
 }
 
 .pan-music-content .record-img-content .record-img {
     width: 300px;
+    animation: nq 15s linear infinite;
+}
+
+
+@keyframes nq {
+    0% {
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+    }
+}
+
+::-webkit-scrollbar { width: 0; height: 0; color: transparent; }
+
+
+.el-menu-item {
+    color: #000000;
+}
+
+.el-menu-item.is-active {
+    background: #25252b; 
+    color: #ffffff;
 }
 
 .pan-music-content .music-content {

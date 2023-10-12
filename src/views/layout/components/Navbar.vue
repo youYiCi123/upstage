@@ -43,10 +43,10 @@
         </el-form-item>
       </el-form>
     </div>
-    <span slot="footer" class="dialog-footer">
+    <template #footer>
       <el-button @click="changePasswordDialogVisible = false">取 消</el-button>
       <el-button type="primary" @click="doChangePassword(changePasswordFormRef)">确 定</el-button>
-    </span>
+    </template>
   </el-dialog>
 </template>
 

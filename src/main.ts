@@ -6,6 +6,8 @@ import pinia from '@/store/index'
 // 添加全局CSS样式
 import '@/styles/index.scss' // global css
 
+//引入新字体
+import '@/assets/font/font.scss';
 //添加iconfont
 import '@/iconfont/iconfont.css'
 

@@ -5,14 +5,14 @@
                 <p class="video-name">{{ videoName }}</p>
             </div>
             <el-divider></el-divider>
-            <el-row>
-                <el-col :span="18">
+            <el-row :gutter="15" justify="center">
+                <el-col :span="14">
                     <!--视频播放容器-->
                     <div class="video-content">
                         <video id="r_pan_video_player" :src="videoShowPath" autoplay="true" controls="true" />
                     </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="3">
                     <div class="video-list-content">
                         <el-menu class="video-list" :default-active="activeIndex" @select="selectVideo">
                             <el-menu-item v-for="(item, index) in videoList" :key="index" :index="item.fileId">
@@ -115,38 +115,8 @@ onMounted(() => {
 
 <style scoped>
 
-
-.player-block {
-    background: #101010;
-    padding: 15px 0 20px;
-    margin: 0 0 30px;
-}
-
-.content {
-    width: 100%;
-    max-width: 1740px;
-    margin: 0 auto;
-}
-
-.player-box-main {
-    position: relative;
-    overflow: hidden;
-}
-
-.MacPlayer {
-    background: #000000;
-    font-size: 14px;
-    color: #F6F6F6;
-    margin: 0px;
-    padding: 0px;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    min-height: 100px;
-}
-
 .pan-video-content {
+    height: 100%;
     width: 100%;
     margin-top: 22px;
     display: block;
@@ -155,12 +125,13 @@ onMounted(() => {
 .pan-video-content .video-name-content {
     display: block;
     width: 100%;
+    height: 100%;
     text-align: center;
     padding: 10px 0 0 0;
 }
 
 .pan-video-content .video-name-content .video-name {
-    color: #409EFF;
+    color: #25252b;
     font-size: 35px;
     font-weight: bold;
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
@@ -190,11 +161,21 @@ onMounted(() => {
 }
 
 .pan-video-content .video-list-content .video-list {
+    background: #25252b;
     width: 100%;
     height: 100%;
     overflow: scroll;
 }
 
+::-webkit-scrollbar { width: 0; height: 0; color: transparent; }
+.el-menu-item {
+    color: #a7a5a5;
+}
+
+.el-menu-item.is-active {
+    background: #000000;
+    color: #ffffff;
+}
 .pan-video-content .video-list i {
     margin-right: 15px;
 }

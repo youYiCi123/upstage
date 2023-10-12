@@ -112,7 +112,7 @@ let panUtil = {
         tagStr = "iconfont  icon-image";
         break;
       case 8:
-        tagStr = "iconfont  icon-AUDIO";
+        tagStr = "iconfont icon-music-full";
         break;
       case 9:
         tagStr = "iconfont  icon-video";

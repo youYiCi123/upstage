@@ -47,8 +47,8 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="parentFilename" label="文件位置" min-width="140" align="center">
-                    <template #default="scope">
+                <el-table-column prop="parentFilename" label="文件夹名称" min-width="140" align="center">
+                    <template #default="scope"> 
                         <el-link type="primary">{{ scope.row.parentFilename
                         }}</el-link>
                     </template>
