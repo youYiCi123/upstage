@@ -42,19 +42,19 @@
                         <div class="menuItem">
                             <download-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
-                        <div class="menuItem">
-                            <rename-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
+                        <div v-if="userStore.roles.findIndex(item=>item=='超级管理员')!=-1" class="menuItem">
+                            <rename-button  @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
-                        <div class="menuItem">
-                            <copy-button @loadFileList="getList" size="small" :is-dep=false :round-flag=true
+                        <div v-if="userStore.roles.findIndex(item=>item=='超级管理员')!=-1" class="menuItem">
+                            <copy-button  @loadFileList="getList" size="small" :is-dep=false :round-flag=true
                                 :item="rightClickItem" />
                         </div>
-                        <div class="menuItem">
-                            <transfer-button @loadFileList="getList" size="small" :is-dep=false :round-flag=true
+                        <div v-if="userStore.roles.findIndex(item=>item=='超级管理员')!=-1" class="menuItem">
+                            <transfer-button  @loadFileList="getList" size="small" :is-dep=false :round-flag=true
                                 :item="rightClickItem" />
                         </div>
-                        <div class="menuItem">
-                            <delete-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
+                        <div v-if="userStore.roles.findIndex(item=>item=='超级管理员')!=-1" class="menuItem">
+                            <delete-button  @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
                     </ul>
                     <!-- 外部右键菜单 -->
@@ -83,8 +83,10 @@ import { useRouter } from 'vue-router'; //vue3路由跳转
 const router = useRouter();
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
+import { useUserStore } from "@/store/modules/userStore";
 import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
 const fileStore = useFileStore(pinia);
+const userStore = useUserStore(pinia);
 const breadcrumbStore = useBreadcrumbStore(pinia);
 import UploadButton from '@/components/buttons/upload-button/index.vue'
 import CreateFolderButton from '@/components/buttons/create-folder-button/index.vue'
@@ -302,9 +304,8 @@ function showOffice(row: any) {
 }
 
 function showIframe(row: any) {
-    openNewPage('/preview/iframe/' + row.fileId, 'PreviewIframe', {
-        fileId: row.fileId
-    })
+    const pdfUrl = panUtil.getPreviewUrl(row.fileId)  // pdf路径
+    window.open(pdfUrl)
 }
 
 //视频播放

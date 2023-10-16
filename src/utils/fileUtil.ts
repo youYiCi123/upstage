@@ -1,8 +1,10 @@
 import { getToken } from "./auth";
 let panUtil = {
   fileFold: {
-    ENTERPRISE: 1,//企业文件树
-    DEP:2//部门文件树
+    ENTERPRISE: 1,//企业页面
+    DEP:2,//部门页面
+    ENTERPRISEBYVERIFY:3,//企业文件审核页面
+    DEPVERIFY:4,//部门文件审核页面
   },
   fileStatus: {
     PARSING: {

@@ -16,8 +16,6 @@ const showPath = ref('');
 function init() {
     let fileId = route.params.fileId;
     let filename = route.params.filename;
-    console.log('fileId',fileId)
-    console.log('fileName',filename)
     //使用kkfileview预览文档
     var url = panUtil.getPreviewUrl(fileId) + '&fullfilename=' + filename;
     showPath.value = 'http://127.0.0.1:8012/onlinePreview?url=' + encodeURIComponent(Base64.encode(url));

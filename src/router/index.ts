@@ -198,12 +198,6 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     meta: { title: 'office预览', hidden: true  }
   },
   {
-    path: '/preview/iframe/:fileId',
-    name: 'PreviewIframe',
-    component: () => import('@/views/files/preview/iframe/index.vue'),
-    meta: { title: '在线预览', hidden: true  }
-  },
-  {
     path: '/preview/music/:parentId/:fileId/:pageType',
     name: 'PreviewMusic',
     component: () => import('@/views/files/preview/music/index.vue'),

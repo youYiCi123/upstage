@@ -212,8 +212,8 @@ function showOffice(row: any) {
 }
 
 function showMusic(row: any) {
-    openNewPage('/preview/music/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.ENTERPRISE, 'PreviewMusic', {
-        pageType: panUtil.fileFold.ENTERPRISE,
+    openNewPage('/preview/music/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.DEPVERIFY, 'PreviewMusic', {
+        pageType: panUtil.fileFold.DEPVERIFY,
         parentId: row.parentId,
         fileId: row.fileId
     })
@@ -221,17 +221,16 @@ function showMusic(row: any) {
 
 //视频播放
 function showVideo(row: any) {
-    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.DEP, 'PreviewVideo', {
-        pageType: panUtil.fileFold.DEP,
+    openNewPage('/preview/video/' + row.parentId + '/' + row.fileId + '/' + panUtil.fileFold.DEPVERIFY, 'PreviewVideo', {
+        pageType: panUtil.fileFold.DEPVERIFY,
         fileId: row.fileId,
         parentId: row.parentId
     })
 }
 
 function showIframe(row: any) {
-    openNewPage('/preview/iframe/' + row.fileId, 'PreviewIframe', {
-        fileId: row.fileId
-    })
+    const pdfUrl = panUtil.getPreviewUrl(row.fileId)  // pdf路径
+    window.open(pdfUrl)
 }
 
 function showCode(row: any) {
