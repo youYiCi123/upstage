@@ -341,7 +341,6 @@ function showImg(row: any) {
     for (let i = 0, iLength = fileList.value.length; i < iLength; ++i) {
         if (fileList.value[i].fileType === 7) {
             imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId))
-            console.log(imgUrl.value)
             if (fileList.value[i].fileId === row.fileId) {
                 imgIndex.value = t
             }
