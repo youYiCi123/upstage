@@ -40,6 +40,9 @@
                         :style="{ left: position.left + 'px', top: position.top + 'px', display: (menuVisible ? 'block' : 'none') }"
                         class="contextmenu">
                         <div class="menuItem">
+                            <file-info-button :round-flag=true size="small" :item="rightClickItem" />
+                        </div>
+                        <div class="menuItem">
                             <download-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
                         <div v-if="userStore.roles.findIndex(item=>item=='超级管理员')!=-1" class="menuItem">

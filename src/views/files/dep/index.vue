@@ -40,6 +40,9 @@
                         :style="{ left: position.left + 'px', top: position.top + 'px', display: (menuVisible ? 'block' : 'none') }"
                         class="contextmenu">
                         <div class="menuItem">
+                            <file-info-button :round-flag=true size="small" :item="rightClickItem" />
+                        </div>
+                        <div class="menuItem">
                             <download-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
                         <div v-if="userStore.roles.findIndex(item=>item=='部门负责人')!=-1" class="menuItem">
@@ -83,6 +86,7 @@ import RenameButton from '@/components/buttons/rename-button/index.vue'
 import DeleteButton from '@/components/buttons/delete-button/index.vue'
 import CopyButton from '@/components/buttons/copy-button/index.vue'
 import TransferButton from '@/components/buttons/transfer-button/index.vue'
+import FileInfoButton from '@/components/buttons/fileInfo-button/index.vue'
 import panUtil from '@/utils/fileUtil'
 import { useRouter } from 'vue-router'; //vue3路由跳转
 const router = useRouter();
