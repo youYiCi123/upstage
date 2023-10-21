@@ -3,8 +3,12 @@ import App from './App.vue'
 import router from './router'
 import pinia from '@/store/index'
 
+
 // 添加全局CSS样式
 import '@/styles/index.scss' // global css
+
+//引入semantic-ui-css样式
+import '@/styles/semantic.css'
 
 //引入新字体
 import '@/assets/font/font.scss';

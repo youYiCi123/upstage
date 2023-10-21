@@ -45,6 +45,9 @@
                         <div class="menuItem">
                             <download-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
+                        <div class="menuItem">
+                            <comment-button :round-flag=true size="small" :item="rightClickItem" />
+                        </div>
                         <div v-if="userStore.roles.findIndex(item=>item=='部门负责人')!=-1" class="menuItem">
                             <rename-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
@@ -81,6 +84,7 @@ import { ref, onMounted, watch } from 'vue';
 import { Search } from '@element-plus/icons-vue'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { getFolderTree, list } from '@/api/file';
+import CommentButton from '@/components/buttons/comment-button/index.vue'
 import DownloadButton from '@/components/buttons/download-button/index.vue'
 import RenameButton from '@/components/buttons/rename-button/index.vue'
 import DeleteButton from '@/components/buttons/delete-button/index.vue'

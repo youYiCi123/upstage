@@ -8,6 +8,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Breadcrumb: typeof import('./src/components/Breadcrumb/index.vue')['default']
+    Comment: typeof import('./src/components/comment/Comment.vue')['default']
+    CommentButton: typeof import('./src/components/buttons/comment-button/index.vue')['default']
+    CommentForm: typeof import('./src/components/comment/CommentForm.vue')['default']
     CopyButton: typeof import('./src/components/buttons/copy-button/index.vue')['default']
     CreateFolderButton: typeof import('./src/components/buttons/create-folder-button/index.vue')['default']
     DeleteButton: typeof import('./src/components/buttons/delete-button/index.vue')['default']
@@ -28,6 +31,7 @@ declare module 'vue' {
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDivider: typeof import('element-plus/es')['ElDivider']
+    ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
