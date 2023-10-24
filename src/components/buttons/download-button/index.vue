@@ -34,7 +34,6 @@ import { useFileStore } from "@/store/modules/fileStore";
 const fileStore = useFileStore(pinia);
 
 import panUtil from '../../../utils/fileUtil'
-import { getToken } from '../../../utils/auth'
 
 const waterMarkDialogVisible = ref(false);
 const waterMarkFormData = reactive({
@@ -75,7 +74,11 @@ const props = defineProps({
 const loading = ref(false);
 
 function showDialog(){
-    waterMarkDialogVisible.value=true;
+    if(props.item.waterMaterFlag==1){//添加水印
+      waterMarkDialogVisible.value=true;
+    }else{//不需要
+        doDownload(props.item,waterMarkFormData.waterMark)
+    }
 }
 
 function downloadFile(formEl: FormInstance | undefined) {

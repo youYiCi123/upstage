@@ -15,3 +15,11 @@ export function submitComment(data:any) {
 		data: data
 	})
 }
+
+//删除评论
+export function deleteCommentById(id: any) {
+	return request({
+	  url: "/file-service/comment/delete/" + id,
+	  method: "post",
+	});
+  }

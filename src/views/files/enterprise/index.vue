@@ -45,6 +45,9 @@
                         <div class="menuItem">
                             <download-button @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>
+                        <div class="menuItem">
+                            <comment-button :round-flag=true size="small" :item="rightClickItem" />
+                        </div>
                         <div v-if="userStore.roles.findIndex(item=>item=='超级管理员')!=-1" class="menuItem">
                             <rename-button  @loadFileList="getList" :round-flag=true size="small" :item="rightClickItem" />
                         </div>

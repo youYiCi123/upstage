@@ -74,6 +74,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollBar: typeof import('./src/components/ScrollBar/index.vue')['default']
+    SetButton: typeof import('./src/components/buttons/set-button/index.vue')['default']
     SingleUpload: typeof import('./src/components/newUpload/singleUpload.vue')['default']
     TransferButton: typeof import('./src/components/buttons/transfer-button/index.vue')['default']
     UploadButton: typeof import('./src/components/buttons/upload-button/index.vue')['default']

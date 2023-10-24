@@ -1,6 +1,6 @@
 <template>
 	<div class="ui bottom teal attached segment threaded comments">
-		<CommentForm :parentCommentId="parentCommentId" :fileId="props.fileId" v-if="parentCommentId === -1" @getCommentList="getList" />
+		<CommentForm :parentCommentId="parentCommentId" :fileId="props.fileId" v-if="parentCommentId === -1" @getCommentList="getList" @setParentCommentId="resetParentCommentId"/>
 		<h3 class="ui dividing header">Comments | 共 {{ total }} 条评论</h3>
 		<h3 class="ui header" v-if="total === 0">快来抢沙发！</h3>
 		<div class="comment" v-for="comment in commentList" :key="comment.id">
@@ -14,6 +14,7 @@
 				<div class="metadata">
 					<strong class="date"><span v-html="timeFormat(comment.createTime)"></span></strong>
 				</div>
+				<el-button size="small" type="danger" @click="deleteComment(comment.id)" v-if="comment.mimeComment">删除</el-button>
 				<el-button size="small" type="primary" @click="setReply(comment.id)">回复</el-button>
 				<div class="text" v-html="comment.content"></div>
 			</div>
@@ -30,31 +31,32 @@
 						<div class="metadata">
 							<strong class="date"><span v-html="timeFormat(comment.createTime)"></span></strong>
 						</div>
+						<el-button size="small" type="danger" @click="deleteComment(comment.id)" v-if="reply.mimeComment">删除</el-button>
 						<el-button size="small" type="primary" @click="setReply(reply.id)">回复</el-button>
 						<div class="text">
 							<a :href="`#comment-${reply.parentCommentId}`">@{{ reply.parentCommentNickname }}</a>
 							<div v-html="reply.content"></div>
 						</div>
 					</div>
-					<CommentForm :parentCommentId="parentCommentId" :fileId="props.fileId" v-if="parentCommentId === reply.id" @getCommentList="getList" />
+					<CommentForm :parentCommentId="parentCommentId" :fileId="props.fileId" v-if="parentCommentId === reply.id" @getCommentList="getList" @setParentCommentId="resetParentCommentId"/>
 				</div>
 			</div>
 			<div class="border"></div>
-			<CommentForm :parentCommentId="parentCommentId" :fileId="props.fileId" v-if="parentCommentId === comment.id" @getCommentList="getList" />
+			<CommentForm :parentCommentId="parentCommentId" :fileId="props.fileId" v-if="parentCommentId === comment.id" @getCommentList="getList" @setParentCommentId="resetParentCommentId"/>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, watch, computed } from 'vue'
-import { ElNotification } from 'element-plus';
+import { ElNotification,ElMessage, ElMessageBox } from 'element-plus';
 import CommentForm from "./CommentForm.vue";
 import dayjs from "dayjs";
 import sanitizeHtml from 'sanitize-html'
 import tvMapper from '@/plugins/tvMapper.json'
 import aruMapper from '@/plugins/aruMapper.json'
 import paopaoMapper from '@/plugins/paopaoMapper.json'
-import { getCommentListByQuery } from "@/api/comment";
+import { getCommentListByQuery,deleteCommentById } from "@/api/comment";
 
 const parentCommentId = ref(-1);
 const commentList = ref<any[]>([])
@@ -82,6 +84,27 @@ function setReply(id: any) {
 	parentCommentId.value = id
 }
 
+function deleteComment(id: any){
+	ElMessageBox.confirm('是否要删除该评论?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    deleteCommentById(id).then(response => {
+      ElMessage({
+        type: 'success',
+        message: '删除成功!'
+      });
+      getList();
+    });
+  }).catch(err => {
+    console.log(err)
+  });
+}
+
+function resetParentCommentId(){
+	parentCommentId.value = -1;
+}
 getList()
 function getList() {
 	getCommentListByQuery({

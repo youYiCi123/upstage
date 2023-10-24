@@ -24,19 +24,33 @@ export function createFolder(data: any) {
   });
 }
 
-export function update(data: any) {
+/**
+ * 文件基础设置（水印）
+ */
+export function saveSet(data: any) {
   return request({
-    url: "/file-service/file",
+    url: "/file-service/file/saveSet",
     data: data,
-    method: "put",
+    method: "post",
+  });
+}
+
+/**
+ * 修改文件名
+ */
+export function updateFilename(data: any) {
+  return request({
+    url: "/file-service/file/updateFilename",
+    data: data,
+    method: "post",
   });
 }
 
 export function deleteFiles(data: any) {
   return request({
-    url: "/file-service/file",
+    url: "/file-service/file/delete",
     data: data,
-    method: "delete",
+    method: "post",
   });
 }
 

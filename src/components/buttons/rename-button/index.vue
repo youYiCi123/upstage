@@ -29,7 +29,7 @@
 import { ref, reactive } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from 'element-plus';
-import {update} from '../../../api/file'
+import {updateFilename} from '../../../api/file'
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
 const fileStore = useFileStore(pinia);
@@ -67,7 +67,6 @@ const renameFormData = reactive({
     fileId: '',
     filename: ''
 })
-
 const renameDialogVisible = ref(false);
 const loading = ref(false);
 
@@ -97,7 +96,7 @@ function doRenameFile(formEl: FormInstance | undefined) {
     formEl.validate((valid) => {
         if (valid) {
             loading.value = true
-            update({
+            updateFilename({
                 fileId: renameFormData.fileId,
                 newFilename: renameFormData.filename
             }).then(()=>{

@@ -3,7 +3,7 @@
 	<div class="form">
 		<h3>
 			发表评论
-			<el-button class="m-small" size="small" type="primary" @click="setParentCommentId()"
+			<el-button class="m-small" size="small" type="primary" @click="resetParentCommentId()"
 				v-show="parentCommentId !== -1">取消回复</el-button>
 		</h3>
 		<el-form :inline="true" :model="commentForm" ref="formRef" size="small">
@@ -96,14 +96,14 @@ const commentForm = reactive({
 	content: ''
 })
 
-const emit = defineEmits(['getCommentList'])
+const emit = defineEmits(['getCommentList','setParentCommentId'])
 
 onMounted(() => {
 	textarea.value = document.querySelector('.el-form textarea')
 })
 
-function setParentCommentId() {
-	parentCommentId.value = -1
+function resetParentCommentId() {
+	emit('setParentCommentId')
 }
 
 function showEmojiBox() {
@@ -150,8 +150,8 @@ function submitCommentForm() {
 				title: '评论成功',
 				type: 'success'
 			})
-			// commentForm.parentCommentId = -1
 			commentForm.content = ''
+			emit('setParentCommentId')
 			emit('getCommentList')
 		} else {
 			ElNotification({
