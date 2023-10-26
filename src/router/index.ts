@@ -104,6 +104,39 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/business',
+    name: 'business',
+    component: Layout,
+    meta: { title: '业务', icon: 'ums' },
+    redirect: '/business/news',
+    children: [
+      {
+        path: "news",
+        name: "news",
+        component: () => import("@/views/business/news/newsList/index.vue"),
+        meta: { title: "新闻列表", icon: "icon-24gf-portraitMaleInfo3"},
+      },
+      {
+        path: "newsInfo",
+        name: "newsInfo",
+        component: () => import("@/views/business/news/newsInfo/index.vue"),
+        meta: { title: "新闻列表",hidden: true,},
+      },
+      {
+        name: "newsContentAdd",
+        path: 'newsContentAdd',
+        component: () => import('@/views/business/news/newsAdd/index.vue'),
+        meta: { title: "新闻添加",hidden: true,},
+      },
+      {
+        name: "newsContentUpdate",
+        path: 'newsContentUpdate',
+        component: () => import('@/views/business/news/newsUpdate/index.vue'),
+        meta: { title: "新闻修改",hidden: true,},
+      },
+    ]
+  },
+  {
     path: "/pms",
     component: markRaw(Layout),
     redirect: "/pms/product",

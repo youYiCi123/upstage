@@ -13,6 +13,7 @@ declare module 'vue' {
     CommentForm: typeof import('./src/components/comment/CommentForm.vue')['default']
     CopyButton: typeof import('./src/components/buttons/copy-button/index.vue')['default']
     CreateFolderButton: typeof import('./src/components/buttons/create-folder-button/index.vue')['default']
+    DateTimeRangePicker: typeof import('./src/components/Time/DateTimeRangePicker.vue')['default']
     DeleteButton: typeof import('./src/components/buttons/delete-button/index.vue')['default']
     DownloadButton: typeof import('./src/components/buttons/download-button/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
