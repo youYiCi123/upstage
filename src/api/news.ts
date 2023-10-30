@@ -31,11 +31,10 @@ export function updateNewsContent(data:any) {
   })
 }
 
-export function getNews(params:any) {
+export function getDashboard() {
   return request({
-    url: '/business-service/news/getNews',
-    method: 'get',
-    params: params
+    url: '/business-service/news/getDashboard',
+    method: 'get'
   })
 }
 
@@ -58,7 +57,7 @@ export function updateNews(id:any,data:any) {
 //查询某部门信息信息
 export function getNewsInfo(id:any) {
   return request({
-    url:'/business-service/news/getNews/'+id,
+    url:'/business-service/news//queryNewsContent/'+id,
     method:'get',
   })
 }

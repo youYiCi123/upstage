@@ -71,6 +71,8 @@ declare module 'vue' {
     FileTable: typeof import('./src/components/file-table/index.vue')['default']
     Hamburger: typeof import('./src/components/Hamburger/index.vue')['default']
     MultiUpload: typeof import('./src/components/newUpload/multiUpload.vue')['default']
+    NewsBasicTop: typeof import('./src/components/HomeCard/newsBasicTop.vue')['default']
+    NewsCard: typeof import('./src/components/HomeCard/newsCard.vue')['default']
     RenameButton: typeof import('./src/components/buttons/rename-button/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

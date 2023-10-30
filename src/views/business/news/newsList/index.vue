@@ -101,11 +101,11 @@ const multipleSelectionId = ref<number[]>([])
 
 const options =[
   {
-    value: '0',
+    value: '1',
     label: '通知',
   },
   {
-    value: '1',
+    value: '2',
     label: '公告',
   },
 ]
@@ -188,7 +188,7 @@ function batchDelete() {
     })
 }
 function handleSelectNews(row: NewsTable) {
-    router.push({ path: '/info/newsInfo', query: { id: row.id } });
+    router.push({ path: '/business/newsInfo', query: { id: row.id } });
 }
 
 

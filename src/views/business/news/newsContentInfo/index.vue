@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item label="新闻类型：">
         <el-radio-group v-model="newsContentParam.newsType">
-          <el-radio :label="0">通知</el-radio>
-          <el-radio :label="1">公告</el-radio>
+          <el-radio :label="'1'">通知</el-radio>
+          <el-radio :label="'2'">公告</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="新闻内容：">
@@ -49,7 +49,10 @@ const router = useRouter();
 function doSubmit() {
   newsContentParam.newsId = route.query.id as unknown as number
   if (props.isEdit) {
-    updateNewsContent(newsContentParam).then(res => {
+    updateNewsContent({id:newsContentParam.newsId, 
+      theme: newsContentParam.theme, newsType: newsContentParam.newsType,
+      content: newsContentParam.content
+    }).then(res => {
       ElNotification({
         title: '修改成功',
         type: 'success',
