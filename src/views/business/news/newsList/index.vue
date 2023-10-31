@@ -40,11 +40,16 @@
                 @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column label="新闻标题" align="center">
+                <el-table-column label="公告标题" align="center">
                     <template #default="scope">
-                        <div @click="handleSelectNews(scope.row)" class="file-name-content">
-                            <el-tag type="success" style="cursor:pointer;">{{ scope.row.theme }}</el-tag>
-                        </div>
+                        <div @click="handleSelectNews(scope.row)" class="file-name-content">{{ scope.row.theme }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="公告类型"  width="130" align="center">
+                    <template #default="scope">
+                        <el-tag :type="scope.row.newsType== '1' ? 'warning' : 'success'" style="cursor:pointer;">
+                            <span v-html="newsTypeFormat(scope.row.newsType)"></span>
+                        </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="编辑人" width="130" align="center">
@@ -60,9 +65,9 @@
                         <el-button size="small" type="danger" @click="handleDelete(scope.row)">删除
                         </el-button>
                         <el-button size="small" type="warning" @click="handleContentUpdate(scope.row)">
-                            编辑内容
+                            编辑
                         </el-button>
-                        <el-button size="small" type="primary" @click="handleSelectNews(scope.row)">详情
+                        <el-button size="small" type="primary" @click="handleSelectNews(scope.row)">查阅
                         </el-button>
                     </template>
                 </el-table-column>
@@ -128,6 +133,13 @@ function timeFormat(time: string) {
     }
     let date = new Date(time);
     return dayjs(date).format("YYYY-MM-DD HH:mm:ss")
+}
+function newsTypeFormat(newsType: number) {
+    if (newsType==1) {
+        return '通知'
+    }else{
+        return '公告'
+    }
 }
 
 function getList() {

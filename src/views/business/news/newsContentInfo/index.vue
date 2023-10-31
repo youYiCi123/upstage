@@ -1,6 +1,6 @@
 <template>
   <div style="margin-top: 50px">
-    <el-form :model="newsContentParam" label-width="120px" style="width: 82%" size="default">
+    <el-form :model="newsContentParam" label-width="120px" style="width: 75%" size="default">
       <el-form-item label="新闻标题：">
         <el-input v-model="newsContentParam.theme" placeholder="请输入新闻标题"></el-input>
       </el-form-item>

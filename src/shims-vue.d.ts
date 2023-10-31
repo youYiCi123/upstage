@@ -6,6 +6,8 @@ declare module '*.vue' {
 }
 declare module 'simple-uploader.js'
 declare module 'spark-md5'
+declare module 'v-charts'
+declare module 'echarts'
 //静态资源
 declare module '*.svg'
 declare module '*.png'

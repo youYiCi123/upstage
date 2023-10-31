@@ -73,6 +73,7 @@ declare module 'vue' {
     MultiUpload: typeof import('./src/components/newUpload/multiUpload.vue')['default']
     NewsBasicTop: typeof import('./src/components/HomeCard/newsBasicTop.vue')['default']
     NewsCard: typeof import('./src/components/HomeCard/newsCard.vue')['default']
+    PieChart: typeof import('./src/components/HomeCard/PieChart.vue')['default']
     RenameButton: typeof import('./src/components/buttons/rename-button/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -80,6 +81,7 @@ declare module 'vue' {
     SetButton: typeof import('./src/components/buttons/set-button/index.vue')['default']
     SingleUpload: typeof import('./src/components/newUpload/singleUpload.vue')['default']
     TransferButton: typeof import('./src/components/buttons/transfer-button/index.vue')['default']
+    TreeChart: typeof import('./src/components/HomeCard/TreeChart.vue')['default']
     UploadButton: typeof import('./src/components/buttons/upload-button/index.vue')['default']
     WangEdit: typeof import('./src/components/wangEdit/index.vue')['default']
   }

@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import pinia from '@/store/index'
 
+//解决使用 echarts 生成图表时,经常需要做繁琐的数据类型转化
+import VCharts from 'v-charts'
 
 // 添加全局CSS样式
 import '@/styles/index.scss' // global css
@@ -30,4 +32,4 @@ const app= createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
 }
-app.use(pinia).use(router).mount('#app')
+app.use(pinia).use(VCharts).use(router).mount('#app')
