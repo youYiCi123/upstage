@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item label="新闻类型：">
         <el-radio-group v-model="newsContentParam.newsType">
-          <el-radio :label="'1'">通知</el-radio>
-          <el-radio :label="'2'">公告</el-radio>
+          <el-radio :label="1">通知</el-radio>
+          <el-radio :label="2">公告</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="新闻内容：">

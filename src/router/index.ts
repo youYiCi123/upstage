@@ -117,10 +117,16 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         meta: { title: "新闻列表", icon: "icon-24gf-portraitMaleInfo3"},
       },
       {
+        path: "custom",
+        name: "custom",
+        component: () => import("@/views/business/custom/customList/index.vue"),
+        meta: { title: "业务列表", icon: "icon-24gf-portraitMaleInfo3"},
+      },
+      {
         path: "newsInfo",
         name: "newsInfo",
         component: () => import("@/views/business/news/newsInfo/index.vue"),
-        meta: { title: "新闻列表",hidden: true,},
+        meta: { title: "新闻查看",hidden: true,},
       },
       {
         name: "newsContentAdd",
@@ -133,6 +139,18 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         path: 'newsContentUpdate',
         component: () => import('@/views/business/news/newsUpdate/index.vue'),
         meta: { title: "新闻修改",hidden: true,},
+      },
+      {
+        name: "customAdd",
+        path: 'customAdd',
+        component: () => import('@/views/business/custom/customAdd/index.vue'),
+        meta: { title: "客户添加",hidden: true,},
+      },
+      {
+        name: "customUpdate",
+        path: 'customUpdate',
+        component: () => import('@/views/business/custom/customUpdate/index.vue'),
+        meta: { title: "客户修改",hidden: true,},
       },
     ]
   },
