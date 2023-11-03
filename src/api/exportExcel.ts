@@ -7,3 +7,13 @@ export function importUserExcel(data: any) {
     data: data,
   });
 }
+
+export function importCustomExcel(data: any) {
+  return request({
+    url: "/business-service/excel/importCustom",
+    method: "post",
+    data: data,
+  });
+}
+
+

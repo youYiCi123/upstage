@@ -25,9 +25,13 @@
             </div>
         </el-card>
         <el-card class="operate-container" shadow="never">
-            <i class="el-icon-tickets"></i>
-            <span>数据列表</span>
+            <el-button size="small" @click="downloadFile()">下载模板</el-button>
             <el-button size="small" class="btn-add" @click="handleAdd()" style="margin-left: 20px">添加客户</el-button>
+            <el-upload class="upload" action="#" :show-file-list="false" :on-change="handleExcel" accept="'.xlsx','.xls'"
+                :auto-upload="false" :headers="headers"
+                style="float:right;margin-left: 20px;margin-bottom: 20px">
+                <el-button size="small" type="primary">Excel导入</el-button>
+            </el-upload>
             <el-button size="small" type="danger" @click="batchDelete()" style="float:right;margin-bottom: 20px">批量删除
             </el-button>
         </el-card>
@@ -88,6 +92,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import axios from 'axios'
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from 'element-plus';
 import dayjs from "dayjs";
@@ -95,14 +100,15 @@ import { useRouter } from 'vue-router'; //vue3路由跳转
 import { fetchListWithChildren } from '@/api/dep';
 //客户
 import { getCustomList, deleteCustom, handleBatchDelete } from '@/api/custom';
+import { importCustomExcel } from "@/api/exportExcel";
 const router = useRouter();
 const listQuery = reactive({
     pageNum: 1,
     pageSize: 10,
     keyword: '',
-    salesPersonId:''
+    salesPersonId: ''
 })
-
+const headers = { "Content-Type": "multipart/form-data;charset=UTF-8" };
 const sendPersonOptions = ref<any>([]) //获取部门下所有人员的级联信息
 const list = ref<any[]>([]) //所有客户信息
 const total = ref(0)  //客户数量
@@ -160,6 +166,49 @@ function timeFormat(time: string) {
         html += '<span style="font-size:12px; color: #f56c6c;  margin-left: 4px">' + diff + '天后到期</span>'
     }
     return html
+}
+
+function downloadFile() {
+  axios({
+    method: "GET", // 因为要避免request.ts中相应拦截
+    url: "http://localhost:8079/business-service/excel/download/custom",
+    responseType: "blob"
+  }).then(res => {
+    const blob = new Blob([res.data]);
+    const downloadElement = document.createElement("a");
+    // 创建下载链接
+    const href = window.URL.createObjectURL(blob);
+    downloadElement.href = href;
+    // 下载后文件名
+    downloadElement.download = "客户模板.xlsx";
+    document.body.appendChild(downloadElement);
+    // 点击下载
+    downloadElement.click();
+    document.body.removeChild(downloadElement);
+    window.URL.revokeObjectURL(href);
+  }).catch(err => {
+    console.log("err: ", err)
+  })
+}
+
+//导入表格
+function handleExcel(file: any) {
+  let formData = new FormData(); //声明一个FormDate对象
+  formData.append("file", file.raw);    //把文件信息放入对象中
+  //调用后台导入的接口
+  importCustomExcel(formData).then(res => {
+    if (res.code === 200) { //得自定义res属性 在AxiosResponse中定义
+      ElMessage.success(res.data);
+      getList();   // 导入表格之后可以获取导入的数据渲染到页面，此处的方法是获取导入的数据
+    } else {
+      ElMessage.error(res.message)
+    }
+  }).catch(err => {
+    ElMessage({
+      type: 'error',
+      message: '导入失败'
+    })
+  })
 }
 
 function handleDelete(row: any) {

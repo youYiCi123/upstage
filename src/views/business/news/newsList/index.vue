@@ -20,8 +20,8 @@
                         <el-input v-model="listQuery.keyword" class="input-width" placeholder="请输入主题" clearable>
                         </el-input>
                     </el-form-item>
-                    <el-form-item label="新闻类型：">
-                        <el-select v-model="listQuery.newsType" clearable placeholder="新闻类型">
+                    <el-form-item label="公告类型：">
+                        <el-select v-model="listQuery.newsType" clearable placeholder="公告类型">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                         </el-select>
                     </el-form-item>
