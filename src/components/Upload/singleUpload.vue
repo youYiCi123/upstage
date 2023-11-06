@@ -57,8 +57,8 @@ function handlePreview(file: any) {
 const OSS = require('ali-oss');
 
 const client = new OSS({
-  accessKeyId: "LTAI5tQypUTDzwEmi8Hx1kqC", // 查看你自己的阿里云KEY
-  accessKeySecret: "nhWgUzvNB6jlxTssOwfx1rGWyrsa1J", // 查看自己的阿里云KEYSECRET
+  accessKeyId: "", // 查看你自己的阿里云KEY
+  accessKeySecret: "", // 查看自己的阿里云KEYSECRET
   bucket: "example-wang-oss", // 你的 OSS bucket 名称
   region: "cn-hangzhou", // bucket 所在地址，我的是 华北2 北京
   endpoint: "oss-cn-hangzhou.aliyuncs.com", // 自己的域名
