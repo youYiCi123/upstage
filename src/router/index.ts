@@ -155,6 +155,20 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/system',
+    name: 'system',
+    component: Layout,
+    meta: { title: '系统', icon: 'ums' },
+    redirect: '/system/emailConfig',
+    children: [
+      {
+        path: "emailConfig",
+        name: "emailConfig",
+        component: () => import("@/views/system/emailConfig.vue"),
+        meta: { title: "邮件配置", icon: "product-list" },
+      }
+    ]},
+  {
     path: "/pms",
     component: markRaw(Layout),
     redirect: "/pms/product",
