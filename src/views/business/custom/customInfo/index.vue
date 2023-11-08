@@ -38,9 +38,9 @@
                 <el-input v-model="custom.legalPerson" style="width: 250px"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button style="margin-top: 50px;margin-left:0.8%;margin-bottom: 30px" size="default" type="primary"
+                <el-button style="margin-top: 30px;margin-left:0.8%;margin-bottom: 30px" size="default" type="primary"
                     @click="goBack">取消</el-button>
-                <el-button style="margin-top: 50px;margin-left:5.6%;margin-bottom: 30px" size="default" type="primary"
+                <el-button style="margin-top: 30px;margin-left:5.6%;margin-bottom: 30px" size="default" type="primary"
                     @click="doSubmit">保存</el-button>
             </el-form-item>
         </el-form>

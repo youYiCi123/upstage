@@ -16,4 +16,11 @@ export function importCustomExcel(data: any) {
   });
 }
 
+export function importCertificateExcel(data: any) {
+  return request({
+    url: "/business-service/excel/importCertificate",
+    method: "post",
+    data: data,
+  });
+}
 

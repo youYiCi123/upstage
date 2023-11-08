@@ -15,7 +15,7 @@ export function update(data:any) {
   })
 }
 
-export function send(data:any) {
+export function sendEmail(data:any) {
   return request({
     url: '/business-service/email',
     data,

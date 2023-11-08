@@ -100,8 +100,9 @@
                     </el-form-item>
                     <el-form-item label="选择通知方式：">
                         <el-radio-group v-model="sendType" size="default">
-                            <el-radio-button :label="0">邮件</el-radio-button>
-                            <el-radio-button :label="1">短信</el-radio-button>
+                            <el-radio-button :label="0">全部</el-radio-button>
+                            <el-radio-button :label="1">邮件</el-radio-button>
+                            <el-radio-button :label="2">短信</el-radio-button>
                         </el-radio-group>
                     </el-form-item>
                 </el-form>
@@ -122,7 +123,8 @@ import { useRouter } from 'vue-router'; //vue3路由跳转
 import { fetchListWithChildren } from '@/api/dep';
 //客户
 import { getCustomList, deleteCustom, handleBatchDelete } from '@/api/custom';
-import { send } from '@/api/email'
+import { sendEmail } from '@/api/email'
+import { sendSms } from '@/api/sms'
 import { importCustomExcel } from "@/api/exportExcel";
 const router = useRouter();
 const listQuery = reactive({
@@ -136,13 +138,18 @@ const emailSendInfo = reactive({
     tos: '',
     content: ''
 })
+const smsSendInfo = reactive({
+    phone: '',
+    customName: '',
+    licenseTime: ''
+})
 const headers = { "Content-Type": "multipart/form-data;charset=UTF-8" };
 const sendPersonOptions = ref<any>([]) //获取部门下所有人员的级联信息
 const list = ref<any[]>([]) //所有客户信息
 const total = ref(0)  //客户数量
 const listLoading = ref(false);
 const sendLoading = ref(false);
-const sendType= ref(0);//发送方式
+const sendType = ref(0);//发送方式
 const sendDialogVisible = ref(false);
 //el-table多/全选后的存放用户数据的数组
 const multipleSelection = ref<any[]>([])
@@ -292,11 +299,48 @@ function noticeByEmail(row: any) {
     emailSendInfo.tos = row.salesPersonEmail
     emailSendInfo.subject = '客户证件到期提醒'
     emailSendInfo.content = '你所负责的客户（' + row.customName + '）的许可证到期时间为' + sendContent
+    smsSendInfo.phone = row.salesPersonPhone
+    smsSendInfo.licenseTime = credentialDate
+    smsSendInfo.customName = row.customName
     sendDialogVisible.value = true
 }
 
 function sendMessage() {
-    send(emailSendInfo).then(res => {
+    switch (sendType.value) {
+        case 1:
+            sendByEmail()
+            break;
+        case 2:
+            sendBySms()
+            break;
+        default:
+            sendByEmail()
+            sendBySms()
+            break;
+    }
+
+}
+
+function sendByEmail() {
+    sendEmail(emailSendInfo).then(res => {
+        ElNotification({
+            title: '发送成功',
+            type: 'success',
+            duration: 2500
+        })
+        sendLoading.value = false
+        sendDialogVisible.value = false
+    }).catch(err => {
+        sendLoading.value = false
+    })
+}
+
+function sendBySms() {
+    sendSms({
+        phone: smsSendInfo.phone,
+        customName: smsSendInfo.customName,
+        licenseTime: smsSendInfo.licenseTime
+    }).then(res => {
         ElNotification({
             title: '发送成功',
             type: 'success',

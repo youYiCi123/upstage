@@ -114,13 +114,19 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         path: "news",
         name: "news",
         component: () => import("@/views/business/news/newsList/index.vue"),
-        meta: { title: "新闻列表", icon: "icon-24gf-portraitMaleInfo3"},
+        meta: { title: "公告列表", icon: "icon-24gf-portraitMaleInfo3"},
       },
       {
         path: "custom",
         name: "custom",
         component: () => import("@/views/business/custom/customList/index.vue"),
         meta: { title: "业务列表", icon: "icon-24gf-portraitMaleInfo3"},
+      },
+      {
+        path: "certificate",
+        name: "certificate",
+        component: () => import("@/views/business/certificate/certificateList/index.vue"),
+        meta: { title: "证书列表", icon: "icon-24gf-portraitMaleInfo3"},
       },
       {
         path: "newsInfo",
@@ -151,6 +157,18 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         path: 'customUpdate',
         component: () => import('@/views/business/custom/customUpdate/index.vue'),
         meta: { title: "客户修改",hidden: true,},
+      },
+      {
+        name: "certificateAdd",
+        path: 'certificateAdd',
+        component: () => import('@/views/business/certificate/add/index.vue'),
+        meta: { title: "证书添加",hidden: true,},
+      },
+      {
+        name: "certificateUpdate",
+        path: 'certificateUpdate',
+        component: () => import('@/views/business/certificate/update/index.vue'),
+        meta: { title: "证书修改",hidden: true,},
       },
     ]
   },

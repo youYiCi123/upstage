@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7556325",
+      "name": "证书",
+      "font_class": "zhengshu",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
       "icon_id": "1131",
       "name": "资料库",
       "font_class": "ziliaoku",
