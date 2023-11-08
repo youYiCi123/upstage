@@ -18,23 +18,12 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    width: {
-        type: Number,
-        default: '100%'
-    },
     height: {
         type: Number,
         default: '100%'
     }
 })
 
-const chartWidth = computed(() => {
-    if (typeof props.width === 'number') {
-        return props.width + 'px'
-    } else {
-        return props.width
-    }
-})
 const chartHeight = computed(() => {
     if (typeof props.height === 'number') {
         return props.height + 'px'
@@ -87,5 +76,5 @@ function initChart() {
 }
 </script>
 <template>
-    <div ref="chart" :style="`width: ${chartWidth}; height: ${chartHeight};`"></div>
+    <div ref="chart" :style="`width: 100%; height: ${chartHeight};`"></div>
 </template>

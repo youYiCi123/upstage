@@ -57,7 +57,7 @@ export function deleteFiles(data: any) {
 //批量删除文件 真實
 export function handleBatchDelete(data:any) {
   return request({
-    url: '/file-service/file/deleteBatch',
+    url: '/file-service/file/delete/batch',
     method: 'post',
     data: data
   })
@@ -66,7 +66,7 @@ export function handleBatchDelete(data:any) {
 //批量审核文件
 export function handleBatchPass(data:any) {
   return request({
-    url: '/file-service/file/passeBatch',
+    url: '/file-service/file/passe/batch',
     method: 'post',
     data: data
   })
@@ -74,14 +74,14 @@ export function handleBatchPass(data:any) {
 
 export function deleteFile(id: any) {
   return request({
-    url: "/file-service/file/deleteFile/" + id,
+    url: "/file-service/file/delete/fileById/" + id,
     method: "get",
   });
 }
 
 export function passFile(id: any) {
   return request({
-    url: "/file-service/file/passFile/" + id,
+    url: "/file-service/file/pass/fileById/" + id,
     method: "get",
   });
 }
@@ -110,6 +110,7 @@ export function copy(data: any) {
   });
 }
 
+//todo 缓存搜索内容
 export function search(params: any) {
   return request({
     url: "/file-service/file/search",
@@ -136,7 +137,7 @@ export function detail(params: any) {
 
 export function secUpload(data: any) {
   return request({
-    url: "/file-service/file/sec-upload",
+    url: "/file-service/file/upload/sec-upload",
     data: data,
     method: "post",
   });
@@ -144,7 +145,7 @@ export function secUpload(data: any) {
 
 export function merge(data: any) {
   return request({
-    url: "/file-service/file/merge",
+    url: "/file-service/file/upload/merge",
     data: data,
     method: "post",
   });

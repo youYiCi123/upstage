@@ -15211,8 +15211,9 @@ a.ui.active.label:ActiveHover:before {
 
 .ui.red.labels .label,
 .ui.red.label {
-  background-color: #DB2828 !important;
-  border-color: #DB2828 !important;
+  margin-left: 10px;
+  background-color: #f56c6c !important;
+  border-color: #f56c6c !important;
   color: #FFFFFF !important;
 }
 

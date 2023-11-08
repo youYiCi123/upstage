@@ -5,12 +5,13 @@
 		<h3 class="ui header" v-if="total === 0">快来抢沙发！</h3>
 		<div class="comment" v-for="comment in commentList" :key="comment.id">
 			<span class="anchor" :id="`comment-${comment.id}`"></span>
-			<a class="ui circular image avatar">
-				<img :src="comment.avatar">
+			<a class="ui image avatar">
+				<!-- <img :src="comment.avatar"> -->
+				<el-avatar shape="square"><span v-html="avararFormat(comment.nickname)"></span> </el-avatar>
 			</a>
 			<div class="content">
 				<a class="nickname" target="_blank" rel="external nofollow noopener">{{ comment.nickname }}</a>
-				<div class="ui black left pointing label" v-if="comment.adminComment">作者</div>
+				<div class="ui red left label" v-if="comment.adminComment">创建人</div>
 				<div class="metadata">
 					<strong class="date"><span v-html="timeFormat(comment.createTime)"></span></strong>
 				</div>
@@ -21,12 +22,13 @@
 			<div class="comments" v-if="comment.replyComments.length > 0">
 				<div class="comment" v-for="reply in comment.replyComments" :key="reply.id">
 					<span class="anchor" :id="`comment-${reply.id}`"></span>
-					<a class="ui circular image avatar">
-						<img :src="reply.avatar">
-					</a>
+					<a class="ui image avatar">
+						<!-- <img :src="reply.avatar"> -->
+						<el-avatar shape="square"><span v-html="avararFormat(comment.nickname)"></span> </el-avatar>
+					</a>	
 					<div class="content">
 						<a class="nickname" target="_blank" rel="external nofollow noopener">{{ reply.nickname }}</a>
-						<div class="ui black left pointing label" v-if="reply.adminComment">作者
+						<div class="ui red left label" v-if="reply.adminComment">创建人
 						</div>
 						<div class="metadata">
 							<strong class="date"><span v-html="timeFormat(comment.createTime)"></span></strong>
@@ -80,6 +82,11 @@ function timeFormat(time: string) {
 	let date = new Date(time);
 	return dayjs(date).format("YYYY-MM-DD HH:mm:ss")
 }
+
+function avararFormat(nickname: string) {
+	return nickname.slice(-2)
+}
+
 function setReply(id: any) {
 	parentCommentId.value = id
 }

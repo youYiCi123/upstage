@@ -68,7 +68,7 @@ const assignFlag = ref(false);
 const fileOptions = {
     target: function (file: any, chunk: any) {
         if (panUtil.getChunkSize() && panUtil.getChunkSize() > 0) {
-            return panUtil.getUrlPrefix() + '/file/chunk-upload'
+            return panUtil.getUrlPrefix() + '/file/upload/chunk-upload'
         }
         return panUtil.getUrlPrefix() + '/file/upload'
     },

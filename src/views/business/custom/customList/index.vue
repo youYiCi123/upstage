@@ -141,7 +141,8 @@ const emailSendInfo = reactive({
 const smsSendInfo = reactive({
     phone: '',
     customName: '',
-    licenseTime: ''
+    licenseTime: '',
+    residueTime:''
 })
 const headers = { "Content-Type": "multipart/form-data;charset=UTF-8" };
 const sendPersonOptions = ref<any>([]) //获取部门下所有人员的级联信息
@@ -302,6 +303,7 @@ function noticeByEmail(row: any) {
     smsSendInfo.phone = row.salesPersonPhone
     smsSendInfo.licenseTime = credentialDate
     smsSendInfo.customName = row.customName
+    smsSendInfo.residueTime=diff+''
     sendDialogVisible.value = true
 }
 
@@ -339,7 +341,8 @@ function sendBySms() {
     sendSms({
         phone: smsSendInfo.phone,
         customName: smsSendInfo.customName,
-        licenseTime: smsSendInfo.licenseTime
+        licenseTime: smsSendInfo.licenseTime,
+        residueTime:smsSendInfo.residueTime
     }).then(res => {
         ElNotification({
             title: '发送成功',
