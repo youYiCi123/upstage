@@ -131,10 +131,10 @@ let panUtil = {
     return tagStr;
   },
   getPreviewUrl(fileId: any) {
-    return "http://localhost:8079/file-service/preview?fileId=" + fileId;
+    return "http://192.168.1.151:8079/file-service/preview?fileId=" + fileId;
   },
   getUrlPrefix() {
-    return "http://localhost:8079/file-service";
+    return "http://192.168.1.151:8079/file-service";
   },
   getChunkSize() {
     return 1024 * 1024 * 2;

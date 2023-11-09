@@ -68,9 +68,11 @@
                         :style="{ left: position.left + 'px', top: position.top + 'px', display: (outsideMenuVisible ? 'block' : 'none') }"
                         class="contextmenu">
                         <div class="menuItem" @click="toListMode">
+                            <i class="iconfont icon-liebiaoshitucaidan"></i>
                             列表模式
                         </div>
                         <div class="menuItem" @click="toImgMode">
+                            <i class="iconfont icon-dasuolvetuliebiao"></i>
                             图标模式
                         </div>
                     </ul>

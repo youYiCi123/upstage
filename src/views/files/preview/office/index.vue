@@ -18,7 +18,7 @@ function init() {
     let filename = route.params.filename;
     //使用kkfileview预览文档
     var url = panUtil.getPreviewUrl(fileId) + '&fullfilename=' + filename;
-    showPath.value = 'http://127.0.0.1:8012/onlinePreview?url=' + encodeURIComponent(Base64.encode(url));
+    showPath.value = 'http://192.168.1.151:8012/onlinePreview?url=' + encodeURIComponent(Base64.encode(url));
 }
 
 onMounted(() => {

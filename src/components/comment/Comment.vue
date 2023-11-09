@@ -1,7 +1,7 @@
 <template>
 	<div class="ui bottom teal attached segment threaded comments">
 		<CommentForm :parentCommentId="parentCommentId" :fileId="props.fileId" v-if="parentCommentId === -1" @getCommentList="getList" @setParentCommentId="resetParentCommentId"/>
-		<h3 class="ui dividing header">Comments | 共 {{ total }} 条评论</h3>
+		<h3 class="ui dividing header">评论区 | 共 {{ total }} 条评论</h3>
 		<h3 class="ui header" v-if="total === 0">快来抢沙发！</h3>
 		<div class="comment" v-for="comment in commentList" :key="comment.id">
 			<span class="anchor" :id="`comment-${comment.id}`"></span>
@@ -24,7 +24,7 @@
 					<span class="anchor" :id="`comment-${reply.id}`"></span>
 					<a class="ui image avatar">
 						<!-- <img :src="reply.avatar"> -->
-						<el-avatar shape="square"><span v-html="avararFormat(comment.nickname)"></span> </el-avatar>
+						<el-avatar shape="square"><span v-html="avararFormat(reply.nickname)"></span> </el-avatar>
 					</a>	
 					<div class="content">
 						<a class="nickname" target="_blank" rel="external nofollow noopener">{{ reply.nickname }}</a>
@@ -33,7 +33,7 @@
 						<div class="metadata">
 							<strong class="date"><span v-html="timeFormat(comment.createTime)"></span></strong>
 						</div>
-						<el-button size="small" type="danger" @click="deleteComment(comment.id)" v-if="reply.mimeComment">删除</el-button>
+						<el-button size="small" type="danger" @click="deleteComment(reply.id)" v-if="reply.mimeComment">删除</el-button>
 						<el-button size="small" type="primary" @click="setReply(reply.id)">回复</el-button>
 						<div class="text">
 							<a :href="`#comment-${reply.parentCommentId}`">@{{ reply.parentCommentNickname }}</a>
@@ -125,7 +125,7 @@ function getList() {
 			// 	allowedAttributes: false,
 			// 	disallowedTagsMode: 'recursiveEscape'
 			// }
-			res.data.list.forEach((comment: any) => {
+			res.data.pageCommentList.forEach((comment: any) => {
 				//转义评论中的html
 				comment.content = sanitizeHtml(comment.content, {
 					allowedTags: [],
@@ -149,8 +149,8 @@ function getList() {
 					}
 				})
 			})
-			total.value = res.data.total
-			commentList.value = res.data.list
+			total.value = res.data.commentCount
+			commentList.value = res.data.pageCommentList
 		}
 	}).catch(() => {
 		ElNotification({

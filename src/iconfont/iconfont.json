@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1280",
+      "name": "大缩略图列表",
+      "font_class": "dasuolvetuliebiao",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "1727500",
+      "name": "253列表视图、菜单",
+      "font_class": "liebiaoshitucaidan",
+      "unicode": "e8dc",
+      "unicode_decimal": 59612
+    },
+    {
       "icon_id": "7556325",
       "name": "证书",
       "font_class": "zhengshu",

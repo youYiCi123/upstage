@@ -26,6 +26,12 @@ export const constantRouterMap: RouteRecordRaw[] = [
         component: () => import("@/views/home/index.vue"),
         meta: { title: "首页", icon: "iconfont icon-shouye-shouye" },
       },
+      {
+        path: "/newsInfo",
+        name: "newsInfo",
+        component: () => import("@/views/business/news/newsInfo/index.vue"),
+        meta: { title: "新闻查看",hidden: true,},
+      },
     ],
   },
 ];
@@ -127,12 +133,6 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         name: "certificate",
         component: () => import("@/views/business/certificate/certificateList/index.vue"),
         meta: { title: "证书列表", icon: "icon-24gf-portraitMaleInfo3"},
-      },
-      {
-        path: "newsInfo",
-        name: "newsInfo",
-        component: () => import("@/views/business/news/newsInfo/index.vue"),
-        meta: { title: "新闻查看",hidden: true,},
       },
       {
         name: "newsContentAdd",

@@ -200,7 +200,7 @@ function batchDelete() {
     })
 }
 function handleSelectNews(row: NewsTable) {
-    router.push({ path: '/business/newsInfo', query: { id: row.id } });
+    router.push({ path: '/newsInfo', query: { id: row.id } });
 }
 
 

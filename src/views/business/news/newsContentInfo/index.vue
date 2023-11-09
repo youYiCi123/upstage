@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item label="新闻类型：">
         <el-radio-group v-model="newsContentParam.newsType">
-          <el-radio :label="1">通知</el-radio>
-          <el-radio :label="2">公告</el-radio>
+          <el-radio :label="'1'">通知</el-radio>
+          <el-radio :label="'2'">公告</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="新闻内容：">
@@ -15,7 +15,9 @@
         </component>
       </el-form-item>
       <el-form-item>
-        <el-button style="margin-top: 50px;margin-left:1.6%;margin-bottom: 30px" size="small" type="primary"
+        <el-button style="margin-top: 50px;margin-left:38.6%;margin-bottom: 30px" size="default" type="primary"
+          @click="goBack">返回</el-button>
+        <el-button style="margin-top: 50px;margin-left:6.6%;margin-bottom: 30px" size="default" type="primary"
           @click="doSubmit">保存</el-button>
       </el-form-item>
     </el-form>
@@ -39,12 +41,16 @@ const props = defineProps({
 const newsContentParam = reactive({
   newsId: 0,
   theme: '',//主题
-  newsType: 1,//新闻类型
+  newsType: "1",//新闻类型
   content: '',
 })
 const loadEdit = shallowRef(WangEdit); //加载的组件-解决wangEdit从后台拿到数据后，页面渲染不出的问题
 const route = useRoute();
 const router = useRouter();
+
+function goBack() {
+    router.back();
+}
 
 function doSubmit() {
   newsContentParam.newsId = route.query.id as unknown as number
@@ -86,9 +92,7 @@ function getContentInfo() {
     queryNewsContent(route.query.id).then(
       res => {
         if (res.data != null) {    //如果能取出值，则点击提交按钮时为修改操作，否则为提交操作
-          newsContentParam.content = res.data.content;
-          newsContentParam.newsType = res.data.newsType;
-          newsContentParam.theme = res.data.theme;
+          Object.assign(newsContentParam, res.data);
         }
         loadEdit.value = WangEdit//请求成功，加载子组件
       },

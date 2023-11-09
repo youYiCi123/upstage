@@ -30,7 +30,7 @@
                 <div class="articlePage"></div>
             </div>
         </div>
-        <div class="h40"></div>
+        <div class="h75"></div>
     </div>
 </template>
 <script setup lang="ts">
@@ -216,8 +216,8 @@ a.backList {
     color: #4c8cd2;
 }
 
-.h40 {
+.h75 {
     clear: both;
-    height: 40px;
+    height: 75px;
 }
 </style>

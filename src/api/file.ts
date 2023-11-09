@@ -66,7 +66,7 @@ export function handleBatchDelete(data:any) {
 //批量审核文件
 export function handleBatchPass(data:any) {
   return request({
-    url: '/file-service/file/passe/batch',
+    url: '/file-service/file/pass/batch',
     method: 'post',
     data: data
   })

@@ -43,7 +43,7 @@
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55">
         </el-table-column>
-        <el-table-column label="姓名" width="130" align="center">
+        <el-table-column label="姓名"  align="center">
           <template #default="scope">{{ scope.row.nickName }}</template>
         </el-table-column>
         <el-table-column label="部门" width="130" align="center">
@@ -52,7 +52,7 @@
         <el-table-column label="帐号" width="130" align="center">
           <template #default="scope">{{ scope.row.username }}</template>
         </el-table-column>
-        <el-table-column label="职责" width="220" align="center">
+        <el-table-column label="职责"  align="center">
           <template #default="scope">
             <el-tag :type="scope.row.duty.search('负责人') == '-1' ? 'warning' : 'success'">{{ scope.row.duty }}</el-tag>
           </template>
@@ -112,17 +112,17 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="帐号："  prop="username">
+          <el-input v-model="admin.username" style="width: 250px"></el-input>
+        </el-form-item>
+        <el-form-item label="密码："  prop="password">
+          <el-input v-model="admin.password" type="password" style="width: 250px"></el-input>
+        </el-form-item>
         <el-form-item label="职责：">
           <el-input v-model="admin.duty" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="地址：">
           <el-input v-model="admin.address" style="width: 250px"></el-input>
-        </el-form-item>
-        <el-form-item label="帐号：">
-          <el-input v-model="admin.username" style="width: 250px"></el-input>
-        </el-form-item>
-        <el-form-item label="密码：">
-          <el-input v-model="admin.password" type="password" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="admin.note" type="textarea" :rows="5" style="width: 250px"></el-input>
@@ -206,6 +206,8 @@ const allocAdminId = ref(-1)
 const addUserRules: FormRules = {
   nickName: [{ required: true, trigger: 'change', message: '姓名不能为空' }],
   email: [{ required: true, trigger: 'blur', validator: validateEmail }],
+  username:[{ required: true, trigger: 'change', message: '账号不能为空' }],
+  password:[{ required: true, trigger: 'change', message: '密码不能为空' }]
 }
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
@@ -280,7 +282,7 @@ function timeFormat(time: string) {
 function downloadFile() {
   axios({
     method: "GET", // 因为要避免request.ts中相应拦截
-    url: "http://localhost:8079/upstage-service/excel/download",
+    url: "http://192.168.1.151:8079/upstage-service/excel/download",
     responseType: "blob"
   }).then(res => {
     const blob = new Blob([res.data]);

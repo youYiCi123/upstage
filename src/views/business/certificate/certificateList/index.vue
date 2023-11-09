@@ -221,7 +221,7 @@ function handleUpdate(row: any) {
 function downloadFile() {
     axios({
         method: "GET", // 因为要避免request.ts中相应拦截
-        url: "http://localhost:8079/business-service/excel/download/certificate",
+        url: "http://192.168.1.151:8079/business-service/excel/download/certificate",
         responseType: "blob"
     }).then(res => {
         const blob = new Blob([res.data]);
