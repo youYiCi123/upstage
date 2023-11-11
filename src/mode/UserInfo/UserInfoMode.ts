@@ -15,7 +15,7 @@ export interface UserCreateMode{
       note:string;
       address:string;
       depId:string;
-      phoneNumber:string;
+      phone:string;
 }
 
 export interface UserTableMode{
@@ -29,7 +29,7 @@ export interface UserTableMode{
       depId:any;
       depName:string;
       duty:string;
-      phoneNumber:string;
+      phone:string;
       address:string;
       note:string;
       createTime:Date;

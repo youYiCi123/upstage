@@ -93,7 +93,7 @@
       </el-pagination>
     </div>
     <el-dialog :title="isEdit ? '编辑用户' : '添加用户'" v-model="dialogVisible" width="40%">
-      <el-form :model="admin" ref="adminForm" label-width="150px" size="small" :rules="addUserRules">
+      <el-form :model="admin" ref="adminForm" label-width="150px" size="default" :rules="addUserRules">
         <el-form-item label="姓名：" prop="nickName">
           <el-input v-model="admin.nickName" style="width: 250px"></el-input>
         </el-form-item>
@@ -102,6 +102,9 @@
             <el-radio :label="1">男</el-radio>
             <el-radio :label="0">女</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item label="手机号：" prop="phone">
+          <el-input v-model="admin.phone" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="邮箱：" prop="email">
           <el-input v-model="admin.email" style="width: 250px"></el-input>
@@ -112,10 +115,10 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="帐号："  prop="username">
+        <el-form-item label="登录帐号："  prop="username">
           <el-input v-model="admin.username" style="width: 250px"></el-input>
         </el-form-item>
-        <el-form-item label="密码："  prop="password">
+        <el-form-item label="登录密码："  prop="password">
           <el-input v-model="admin.password" type="password" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="职责：">
@@ -125,7 +128,7 @@
           <el-input v-model="admin.address" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
-          <el-input v-model="admin.note" type="textarea" :rows="5" style="width: 250px"></el-input>
+          <el-input v-model="admin.note" type="textarea" :rows="3" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="是否启用：">
           <el-radio-group v-model="admin.status">
@@ -180,6 +183,7 @@ const admin = reactive({
   sex: 1,
   password: '',
   nickName: '',
+  phone:'',
   email: '',
   depId: null,
   duty: '',
@@ -206,6 +210,7 @@ const allocAdminId = ref(-1)
 const addUserRules: FormRules = {
   nickName: [{ required: true, trigger: 'change', message: '姓名不能为空' }],
   email: [{ required: true, trigger: 'blur', validator: validateEmail }],
+  phone: [{ required: true, trigger: 'blur', validator: validateTelephone }],
   username:[{ required: true, trigger: 'change', message: '账号不能为空' }],
   password:[{ required: true, trigger: 'change', message: '密码不能为空' }]
 }
@@ -244,7 +249,9 @@ function handleAdd() {
   admin.username = ''
   admin.sex = 1
   admin.password = ''
+  admin.depId=null
   admin.nickName = ''
+  admin.phone=''
   admin.email = ''
   admin.duty = ''
   admin.note = ''
@@ -282,7 +289,7 @@ function timeFormat(time: string) {
 function downloadFile() {
   axios({
     method: "GET", // 因为要避免request.ts中相应拦截
-    url: "http://192.168.1.151:8079/upstage-service/excel/download",
+    url: "http://localhost:8079/upstage-service/excel/download",
     responseType: "blob"
   }).then(res => {
     const blob = new Blob([res.data]);
@@ -330,6 +337,7 @@ function handleUpdate(row: UserTableMode) {
   admin.sex = row.sex
   admin.password = row.password
   admin.nickName = row.nickName
+  admin.phone=row.phone
   admin.email = row.email
   admin.depId = row.depId
   admin.address = row.address

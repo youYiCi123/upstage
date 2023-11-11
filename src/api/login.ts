@@ -107,7 +107,7 @@ export function getRoleByAdmin(id:number) {
   })
 }
 
-export function getUserInfoById(id:number) {
+export function getUserInfoById(id:any) {
   return request({
     url: '/upstage-service/admin/' + id,
     method: 'get'

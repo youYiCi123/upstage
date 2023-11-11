@@ -8,7 +8,6 @@ import VCharts from 'v-charts'
 
 // 添加全局CSS样式
 import '@/styles/index.scss' // global css
-
 //引入semantic-ui-css样式
 import '@/styles/semantic.css'
 
