@@ -69,6 +69,13 @@ export function createAdmin(data:any) {
   })
 }
 
+export function getMimeInfo() {
+  return request({
+    url: '/upstage-service/admin/getMimeInfo',
+    method: 'get'
+  })
+}
+
 export function updateAdmin(id:number, data:any) {
   return request({
     url: '/upstage-service/admin/update/' + id,

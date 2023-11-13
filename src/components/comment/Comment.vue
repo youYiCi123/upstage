@@ -6,8 +6,8 @@
 		<div class="comment" v-for="comment in commentList" :key="comment.id">
 			<span class="anchor" :id="`comment-${comment.id}`"></span>
 			<a class="ui image avatar">
-				<!-- <img :src="comment.avatar"> -->
-				<el-avatar shape="square"><span v-html="avararFormat(comment.nickname)"></span> </el-avatar>
+				<el-avatar v-if="comment.avatar" shape="square" :src="comment.avatar"></el-avatar>
+				<el-avatar v-else shape="square"><span v-html="avararFormat(comment.nickname)"></span> </el-avatar>
 			</a>
 			<div class="content">
 				<a class="nickname" target="_blank" rel="external nofollow noopener">{{ comment.nickname }}</a>
@@ -24,7 +24,8 @@
 					<span class="anchor" :id="`comment-${reply.id}`"></span>
 					<a class="ui image avatar">
 						<!-- <img :src="reply.avatar"> -->
-						<el-avatar shape="square"><span v-html="avararFormat(reply.nickname)"></span> </el-avatar>
+						<el-avatar v-if="reply.avatar" shape="square" :src="reply.avatar"></el-avatar>
+						<el-avatar v-else shape="square"><span v-html="avararFormat(reply.nickname)"></span> </el-avatar>
 					</a>	
 					<div class="content">
 						<a class="nickname" target="_blank" rel="external nofollow noopener">{{ reply.nickname }}</a>

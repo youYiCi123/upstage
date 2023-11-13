@@ -1,19 +1,19 @@
 <template>
     <div class="privewUser">
         <div class="text-center">
-            <el-avatar shape="square" size="large"><span v-html="avararFormat(user.nickName)"></span> </el-avatar>
+            <el-avatar v-if="user.icon" shape="square" size="large" :src="user.icon"></el-avatar>
+            <el-avatar v-else shape="square" size="large"><span v-html="avararFormat(user.nickName)"></span> </el-avatar>
         </div>
         <el-descriptions  title="用户基本信息"  v-if="user" class="description" :column="2" border>
             <el-descriptions-item label="姓名" width="130" align="center">{{ user.nickName }}</el-descriptions-item>
-            <el-descriptions-item label="电话" align="center">{{
-                user.phone
-            }}</el-descriptions-item>
+            <el-descriptions-item label="电话" align="center">
+                <span v-html="PhoneFormat(user.phone)"></span></el-descriptions-item>
             <el-descriptions-item label="性别" align="center">{{
                 user.sex == "1" ? "男" : user.sex == "0"?"女":""
             }}</el-descriptions-item>
             <el-descriptions-item label="邮箱" align="center">{{ user.email }}</el-descriptions-item>
             <el-descriptions-item label="座右铭" role="2" align="center">
-                {{ user.depName }}
+                {{ user.motto }}
             </el-descriptions-item>
         </el-descriptions>
         <span class="display-footer">
@@ -29,7 +29,8 @@ const user = reactive({
     sex: '',
     phone: '',
     email: '',
-    depName: ''
+    icon: '',
+    motto:''
 })
 
 const props = defineProps({
@@ -48,6 +49,13 @@ watch(displayUserId, () => {
 
 function avararFormat(nickname: string) {
 	return nickname.slice(-2)
+}
+
+function PhoneFormat(phone: string) {
+    if(phone){
+        return phone.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')
+    }
+    return phone
 }
 
 function getUserInfo() {
