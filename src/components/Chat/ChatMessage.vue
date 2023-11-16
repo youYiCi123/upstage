@@ -30,7 +30,7 @@
                             </div>
                             <div class="im-chat-text">
                                 <!--  pre<pre> 标签可定义预格式化的文本。被包围在 <pre> 标签 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。                -->
-                                <pre v-html="ChatUtils.transform(item.content)" v-on:click="openImageProxy($event)"></pre>
+                                <pre v-html="ChatUtils.transform(item.content)"></pre>
                             </div>
                         </li>
                     </ul>
@@ -80,8 +80,9 @@ const chat = computed((): Chat => {
 });
 
 function avararFormat(nickname: string) {
-    return nickname.slice(-2)
+    return nickname
 }
+
 
 watch(
     chat,
@@ -119,7 +120,6 @@ const openModal = () => {
 const messageList = computed((): Array<Message> => {
     return chatStore.chatMessage.get(chat.value.id) ?? new Array<Message>();
 });
-
 /**
  * 用户点击消息列表某一个人
  */
@@ -132,19 +132,6 @@ const readMessage = () => {
             type: chat.value.type,
         };
         proxy.$ws.sendRead(receipt);
-    }
-};
-
-// 附件和图片点击展开
-const openImageProxy = (event: any) => {
-    event.preventDefault();
-    if (event.target.nodeName === "IMG") {
-        proxy.$winControl.default.openURL(event.target.src);
-    } else if (
-        event.target.className === "message-file" ||
-        event.target.nodeName === "A"
-    ) {
-        proxy.$winControl.default.openURL(event.target.href);
     }
 };
 
@@ -241,7 +228,7 @@ onMounted(() => {
                     position: relative;
                     line-height: 22px;
                     margin-top: 25px;
-                    padding: 1rem;
+                    padding: 9px;
                     background-color: #e2e2e2;
                     border-radius: 3px;
                     color: #333;
@@ -300,7 +287,6 @@ onMounted(() => {
 
                 i {
                     font-style: normal;
-                    padding-left: 15px;
                 }
             }
 
@@ -367,7 +353,7 @@ onMounted(() => {
 
 .im-chat-footer {
     border-top: 1px solid #dddddd;
-    height: 15rem;
+    height: 120px;
     display: flex;
     flex-direction: column;
 

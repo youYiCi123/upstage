@@ -96,29 +96,6 @@ const ChatUtils = {
         .replace(/'/g, "&#39;")
         .replace(/"/g, "&quot;") // XSS
         .replace(/@(\S+)(\s+?|$)/g, '@<a href="javascript:;">$1</a>$2')
-        .replace(/img\[([^\s]+?)]/g, function (img: string) {
-          // 转义图片
-          const href = img.replace(/(^img\[)|(]$)/g, "");
-          return (
-            '<img class="message-img" src="' +
-            href +
-            '" alt="消息图片不能加载">'
-          );
-        })
-        .replace(/file\([\s\S]+?\)\[[\s\S]*?]/g, function (str: string) {
-          // 转义文件
-          const href = (str.match(/file\(([\s\S]+?)\)\[/) || [])[1];
-          const text = (str.match(/\)\[([\s\S]*?)]/) || [])[1];
-          if (!href) return str;
-          return (
-            '<a class="message-file" href="' +
-            href +
-            '"><i class="cuIcon-file file-icon"></i>' +
-            (text || href) +
-            "</a>"
-          );
-        })
-
         .replace(html(), "<$1 $2>")
         .replace(html("/"), "</$1>") // 转移HTML代码
         .replace(/\n/g, "<br>"); // 转义换行
