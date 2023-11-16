@@ -26,7 +26,12 @@ import "element-plus/theme-chalk/el-notification.css";
 import "element-plus/theme-chalk/el-message-box.css";
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
+//注册全局变量ws
+import WsRequest from "@/api/wsRequest";
+const ws = new WsRequest();
+
 const app= createApp(App)
+app.config.globalProperties.$ws = ws;
 // 注册elementplus图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);

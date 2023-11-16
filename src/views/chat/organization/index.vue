@@ -54,6 +54,7 @@ function handleNodeClick(data: any) {
 <style lang="scss" scoped>
 .panel-group {
     height: 93vh;
+    
     .chatLeft {
         background-color: #eeeeee;
         .title {
@@ -66,7 +67,7 @@ function handleNodeClick(data: any) {
 .el-tree {
     background-color: transparent !important;
 }
-
 .el-divider--horizontal {
     margin: 5px 0;
-}</style>
+}
+</style>

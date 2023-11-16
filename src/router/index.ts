@@ -200,9 +200,15 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     path: "/chat",
     name: "chat",
     component: Layout,
-    redirect: "/chat/organization",
+    redirect: "/chat/sendMessage",
     meta: { title: "聊天模块" },
     children: [
+      {
+        path: "sendMessage",
+        name: "sendMessage",
+        component: () => import("@/views/chat/sendMessage/index.vue"),
+        meta: { title: "发送消息", icon: "product-list" },
+      },
       {
         path: "organization",
         name: "organization",

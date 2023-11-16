@@ -5,6 +5,7 @@ import LoginuserMode from "@/mode/LoginuserMode";
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
+    id:'',
     nickName: '',
     token: getToken(),
     name: '',
@@ -13,6 +14,9 @@ export const useUserStore = defineStore('userStore', {
     isPractice: false, //练习模式标志
   }),
   actions: {
+    setId(id: string) {
+      this.id = id
+    },
     setNickName(nickName: string) {
       this.nickName = nickName
     },
@@ -35,9 +39,7 @@ export const useUserStore = defineStore('userStore', {
         const password = userInfo.password as string
         const response = await login(username, password, userInfo.code, userInfo.uuid)
         const data = response.data
-        console.log('data: ',data)
         const tokenStr = data.tokenHead + data.token
-        let str=setToken(tokenStr)
         this.setToken(tokenStr)
         return 1
       } catch (error) {
@@ -54,6 +56,7 @@ export const useUserStore = defineStore('userStore', {
         } else {
           throw new Error('getInfo: roles must be a non-null array!')
         }
+        this.setId(data.id)
         this.setName(data.username)
         this.setAvatar(data.icon)
         this.setNickName(data.nickName)

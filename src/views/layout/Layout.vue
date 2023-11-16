@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted,getCurrentInstance,nextTick } from 'vue'
 import { ElMessage } from 'element-plus';
 import { getUserFileBrief } from '@/api/login'
 import { Navbar, Sidebar, AppMain } from './components'
@@ -45,6 +45,42 @@ onMounted(() => {
     ElMessage.error(res.message)
   })
 })
+
+import Message from "@/mode/chat/Message";
+import ChatType from "@/mode/chat/ChatType";
+import ChatUtils from "@/utils/ChatUtils";
+import vimConfig from "@/mode/chat/ChatConfig";
+import { useUserStore } from "@/store/modules/userStore";
+import { useChatStore } from "@/store/modules/chatStore";
+const userStore = useUserStore();
+const chatStore = useChatStore();
+const { proxy } = getCurrentInstance();
+let currentUserId= userStore.id
+onMounted(() => {
+  if (currentUserId) {
+    //初始化websocket
+    proxy.$ws.init(vimConfig.wsProtocol + "://" + vimConfig.host + ":" + vimConfig.wsPort+ "?userId=" + userStore.id);
+    //重写 onmessage 方法，收到的消息都在这里进行分发
+    proxy.$ws.onmessage = (message: Message) => {
+      //群聊里面，自己发的消息不再显示
+      if (currentUserId === message.fromId) {
+        message.mine = true;
+      }
+      //友聊换chatId,chatId 不一样
+      if (
+        ChatType.FRIEND === message.type &&
+        currentUserId !== message.fromId
+      ) {
+        message.chatId = message.fromId;
+      }
+      chatStore.pushMessage(message);
+      nextTick(() => {
+        ChatUtils.imageLoad("message-box");
+      });
+    };
+  }
+});
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
