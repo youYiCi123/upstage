@@ -9,7 +9,8 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="活动地点：" v-if="TempQu.tempType == 2">
-                    <el-input v-model="activity.address" type="textarea" :rows="2" placeholder="请输入活动地点" :disabled="isView" clearable>
+                    <el-input v-model="activity.address" type="textarea" :rows="2" placeholder="请输入活动地点" :disabled="isView"
+                        clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="活动日期：" v-if="TempQu.tempType == 2">
@@ -30,27 +31,27 @@
                 <el-divider v-if="TempQu.tempType == 2" />
                 <!-- 以下为模板选项 -->
                 <div v-for="(item, index) in TempQu.quList" :index="index" :key="item.id" class="qu-content">
-                        <p>{{ index + 1 }}.{{ item.content }}</p>
+                    <p>{{ index + 1 }}.{{ item.content }}</p>
                     <!-- 1：评分，2：单选框，3：复选框，4：输入框 -->
                     <div v-if="item.quType == 1">
-                        <el-rate size="large" v-model="item.rateValue" :disabled="isView"/>
+                        <el-rate size="large" v-model="item.rateValue" />
                     </div>
                     <div v-if="item.quType == 2">
-                        <el-radio-group v-model="item.radioValue" :disabled="isView">
+                        <el-radio-group v-model="item.radioValue">
                             <el-radio v-for="an in item.answerList" :label="an.id">
                                 {{ an.content }}
                             </el-radio>
                         </el-radio-group>
                     </div>
                     <div v-if="item.quType == 3">
-                        <el-checkbox-group v-model="item.checkValue" :disabled="isView">
+                        <el-checkbox-group v-model="item.checkValue">
                             <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{
                                 an.content }}
                             </el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div v-if="item.quType == 4">
-                        <el-input v-model="item.inputValue" type="textarea" placeholder="请输入活动主题" clearable :disabled="isView">
+                        <el-input v-model="item.inputValue" type="textarea" placeholder="请输入活动主题" clearable>
                         </el-input>
                     </div>
                 </div>
@@ -58,7 +59,7 @@
                     <el-button style="margin-top: 50px;margin-left:17.6%;margin-bottom: 30px" size="default" type="primary"
                         @click="goBack">返回</el-button>
                     <el-button style="margin-top: 50px;margin-left:6.6%;margin-bottom: 30px" size="default" type="primary"
-                        @click="doSubmit"  :disabled="isView">保存</el-button>
+                        @click="doSubmit">保存</el-button>
                 </el-form-item>
             </el-card>
         </el-form>
@@ -67,9 +68,11 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 import TempQuDetailDto from "@/mode/business/Temp";
 import { getTempDetail } from "@/api/field"
 import { getDepIdToName, fetchListWithChildren } from "@/api/dep"
+import { submitSurvey } from "@/api/survey"
 const router = useRouter();
 const route = useRoute();
 const allDepList = ref<any[]>([])
@@ -82,12 +85,14 @@ const props = defineProps({
 
 //提交模板信息
 const activity = reactive({
+    //《----活动模板
     name: '',
     address: '',
     activityTime: [],
     handlerUserId: '',
     depIds: [],
-    complateValues:[] as any[]
+    //----》
+    complateValues: [] as any[]
 })
 
 //获取模板内容
@@ -164,22 +169,40 @@ function findIndexArray(data: any, id: any) {
 }
 
 function doSubmit() {
-    TempQu.quList.forEach(t=>{
-        if(t.quType==1){//1：评分，2：单选框，3：复选框
-            activity.complateValues.push({quId:t.quId,quType:t.quType,
-                rateValue: t.rateValue,radioValue:null,checkValue:null,inputValue:null })
-        }else if(t.quType==2){
-            activity.complateValues.push({quId:t.quId,quType:t.quType,
-                rateValue: null,radioValue:t.radioValue,checkValue:null,inputValue:null })
-        }else if(t.quType==3){
-            activity.complateValues.push({quId:t.quId,quType:t.quType,
-                rateValue: null,radioValue:null,checkValue:t.checkValue,inputValue:null })
-        }else{
-            activity.complateValues.push({quId:t.quId,quType:t.quType,
-                rateValue: null,radioValue:null,checkValue:null,inputValue:t.inputValue })
+    TempQu.quList.forEach(t => {
+        if (t.quType == 1) {//1：评分，2：单选框，3：复选框
+            activity.complateValues.push({
+                tempId: route.query.id, quId: t.quId, quType: t.quType,
+                rateValue: t.rateValue, radioValue: null, checkValue: null, inputValue: null
+            })
+        } else if (t.quType == 2) {
+            activity.complateValues.push({
+                tempId: route.query.id, quId: t.quId, quType: t.quType,
+                rateValue: null, radioValue: t.radioValue, checkValue: null, inputValue: null
+            })
+        } else if (t.quType == 3) {
+            activity.complateValues.push({
+                tempId: route.query.id, quId: t.quId, quType: t.quType,
+                rateValue: null, radioValue: null, checkValue: t.checkValue, inputValue: null
+            })
+        } else {
+            activity.complateValues.push({
+                tempId: route.query.id, quId: t.quId, quType: t.quType,
+                rateValue: null, radioValue: null, checkValue: null, inputValue: t.inputValue
+            })
         }
     })
-    // console.log('activity.complateValues:', activity.complateValues)    
+    if (TempQu.tempType == 2) {
+
+    } else {
+        submitSurvey(activity.complateValues).then((res) => {
+            ElMessage.success('提交成功')
+            router.back()
+        }).catch(res => {
+            router.back()
+        })
+    }
+
 }
 
 function goBack() {
