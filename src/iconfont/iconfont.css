@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4275619 */
-  src: url('iconfont.woff2?t=1699677963525') format('woff2'),
-       url('iconfont.woff?t=1699677963525') format('woff'),
-       url('iconfont.ttf?t=1699677963525') format('truetype');
+  src: url('iconfont.woff2?t=1700796119966') format('woff2'),
+       url('iconfont.woff?t=1700796119966') format('woff'),
+       url('iconfont.ttf?t=1700796119966') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yanjiuzhulu:before {
+  content: "\e622";
+}
+
+.icon-mobansheji:before {
+  content: "\e627";
+}
+
+.icon-moban:before {
+  content: "\e604";
+}
+
+.icon-zidingyiziduan:before {
+  content: "\e766";
+}
+
+.icon-essential-information:before {
+  content: "\e612";
 }
 
 .icon-duihua:before {

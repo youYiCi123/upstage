@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed ,getCurrentInstance} from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage, ElNotification } from 'element-plus';
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
@@ -62,7 +62,7 @@ import { useAppStore } from "@/store/modules/appStore";
 import { useUserStore } from "@/store/modules/userStore";
 const AppStore = useAppStore(pinia);
 const UserStore = useUserStore(pinia);
-
+const { proxy } = getCurrentInstance();
 const changePasswordDialogVisible = ref(false);
 const changePasswordFormRef = ref()
 const password = ref()
@@ -149,6 +149,7 @@ function logout() {
   let key1 = []
   key1.push(logOutRedis())
   UserStore.LogOut().then(() => {
+    proxy.$ws.close();
     location.reload() // 为了重新实例化vue-router对象 避免bug
   })
 }

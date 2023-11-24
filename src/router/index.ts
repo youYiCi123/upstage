@@ -173,7 +173,55 @@ export const asyncRouterMap: RouteRecordRaw[] = [
           import("@/views/business/certificate/update/index.vue"),
         meta: { title: "证书修改", hidden: true },
       },
+      {
+        name: "fieldAdd",
+        path: "fieldAdd",
+        component: () => import("@/views/business/writeFile/tempField/add.vue"),
+        meta: { title: "字段添加", hidden: true },
+      },
+      {
+        name: "fieldUpdate",
+        path: "fieldUpdate",
+        component: () =>
+          import("@/views/business/writeFile/tempField/update.vue"),
+        meta: { title: "字段修改", hidden: true },
+      },
     ],
+  },
+  {
+    path: "/research",
+    name: "research",
+    component: Layout,
+    meta: { title: "常规研究", icon: "ums" },
+    redirect: "/research/template",
+    children: [
+      {
+        path: "template",
+        name: "template",
+        component: () =>
+          import("@/views/business/writeFile/temp/index.vue"),
+        meta: { title: "模板列表", icon: "icon-24gf-portraitMaleInfo3" },
+      },
+      {
+        path: "field",
+        name: "field",
+        component: () =>
+          import("@/views/business/writeFile/tempField/index.vue"),
+        meta: { title: "模板字段", icon: "icon-24gf-portraitMaleInfo3" },
+      },
+      {
+        name: "tempSubmit",
+        path: "tempSubmit",
+        component: () => import("@/views/business/writeFile/temp/submit.vue"),
+        meta: { title: "模板提交", hidden: true },
+      },
+      {
+        name: "tempView",
+        path: "tempView",
+        component: () =>import("@/views/business/writeFile/temp/view.vue"),
+        meta: { title: "模板查看", hidden: true },
+      },
+    ]
   },
   {
     path: "/system",

@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "6627751",
+      "name": "研究著录",
+      "font_class": "yanjiuzhulu",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "7017744",
+      "name": "模板设计",
+      "font_class": "mobansheji",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "12704370",
+      "name": "模板",
+      "font_class": "moban",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "26913742",
+      "name": "自定义字段",
+      "font_class": "zidingyiziduan",
+      "unicode": "e766",
+      "unicode_decimal": 59238
+    },
+    {
+      "icon_id": "14440235",
+      "name": "基本信息",
+      "font_class": "essential-information",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
       "icon_id": "1235",
       "name": "对话",
       "font_class": "duihua",
