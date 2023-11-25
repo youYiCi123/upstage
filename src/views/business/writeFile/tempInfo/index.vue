@@ -5,12 +5,11 @@
                 <h2 style="text-align: center">{{ TempQu.tempName }}</h2>
                 <el-divider />
                 <el-form-item label="活动主题：" v-if="TempQu.tempType == 2">
-                    <el-input v-model="activity.name" :disabled="isView" placeholder="请输入活动主题" clearable>
+                    <el-input v-model="activity.name" placeholder="请输入活动主题" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="活动地点：" v-if="TempQu.tempType == 2">
-                    <el-input v-model="activity.address" type="textarea" :rows="2" placeholder="请输入活动地点" :disabled="isView"
-                        clearable>
+                    <el-input v-model="activity.address" type="textarea" :rows="2" placeholder="请输入活动地点" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="活动日期：" v-if="TempQu.tempType == 2">
@@ -59,7 +58,7 @@
                     <el-button style="margin-top: 50px;margin-left:17.6%;margin-bottom: 30px" size="default" type="primary"
                         @click="goBack">返回</el-button>
                     <el-button style="margin-top: 50px;margin-left:6.6%;margin-bottom: 30px" size="default" type="primary"
-                        @click="doSubmit">保存</el-button>
+                        @click="doSubmit" :disabled="isView">保存</el-button>
                 </el-form-item>
             </el-card>
         </el-form>
@@ -70,9 +69,12 @@ import { ref, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import TempQuDetailDto from "@/mode/business/Temp";
-import { getTempDetail } from "@/api/field"
+import { getTempDetail, getTempUserDetail } from "@/api/field"
 import { getDepIdToName, fetchListWithChildren } from "@/api/dep"
 import { submitSurvey } from "@/api/survey"
+import { useUserStore } from "@/store/modules/userStore";
+const userStore = useUserStore();
+
 const router = useRouter();
 const route = useRoute();
 const allDepList = ref<any[]>([])
@@ -92,7 +94,17 @@ const activity = reactive({
     handlerUserId: '',
     depIds: [],
     //----》
-    complateValues: [] as any[]
+    tempId: '',
+    tempName: '',
+    tempType: 2,
+    tempValueSubmitSingerDtos: [] as any[]
+})
+
+const survey = reactive({
+    tempId: '',
+    tempName: '',
+    tempType: 1,
+    tempValueSubmitSingerDtos: [] as any[]
 })
 
 //获取模板内容
@@ -111,14 +123,19 @@ function init() {
     getDepSelector()
     //获取部门人员级联关系
     getSendPersonList()
-
     getTempDetail(route.query.id).then(res => {
         TempQu.tempName = res.data.tempName
         TempQu.tempType = res.data.tempType
         TempQu.quList = res.data.quList
     }).catch(() => {
-
     })
+
+    // getTempUserDetail({tempId:route.query.id,userId:userStore.id}).then(res => {
+    //         TempQu.tempName = res.data.tempName
+    //         TempQu.tempType = res.data.tempType
+    //         TempQu.quList = res.data.quList
+    //     }).catch(() => {
+    //     })
 }
 
 function getDepSelector() {
@@ -171,31 +188,54 @@ function findIndexArray(data: any, id: any) {
 function doSubmit() {
     TempQu.quList.forEach(t => {
         if (t.quType == 1) {//1：评分，2：单选框，3：复选框
-            activity.complateValues.push({
-                tempId: route.query.id, quId: t.quId, quType: t.quType,
-                rateValue: t.rateValue, radioValue: null, checkValue: null, inputValue: null
-            })
+            if (TempQu.tempType == 2) {
+                activity.tempValueSubmitSingerDtos.push({
+                    quId: t.quId, quType: t.quType, rateValue: t.rateValue, radioValue: null, checkValue: null, inputValue: null
+                })
+            } else {
+                survey.tempValueSubmitSingerDtos.push({
+                    quId: t.quId, quType: t.quType, rateValue: t.rateValue, radioValue: null, checkValue: null, inputValue: null
+                })
+            }
         } else if (t.quType == 2) {
-            activity.complateValues.push({
-                tempId: route.query.id, quId: t.quId, quType: t.quType,
-                rateValue: null, radioValue: t.radioValue, checkValue: null, inputValue: null
-            })
+            if (TempQu.tempType == 2) {
+                activity.tempValueSubmitSingerDtos.push({
+                    quId: t.quId, quType: t.quType, rateValue: null, radioValue: t.radioValue, checkValue: null, inputValue: null
+                })
+            } else {
+                survey.tempValueSubmitSingerDtos.push({
+                    quId: t.quId, quType: t.quType, rateValue: null, radioValue: t.radioValue, checkValue: null, inputValue: null
+                })
+            }
         } else if (t.quType == 3) {
-            activity.complateValues.push({
-                tempId: route.query.id, quId: t.quId, quType: t.quType,
-                rateValue: null, radioValue: null, checkValue: t.checkValue, inputValue: null
-            })
+            if (TempQu.tempType == 2) {
+                activity.tempValueSubmitSingerDtos.push({
+                    quId: t.quId, quType: t.quType, rateValue: null, radioValue: null, checkValue: t.checkValue, inputValue: null
+                })
+            } else {
+                survey.tempValueSubmitSingerDtos.push({
+                    quId: t.quId, quType: t.quType, rateValue: null, radioValue: null, checkValue: t.checkValue, inputValue: null
+                })
+            }
         } else {
-            activity.complateValues.push({
-                tempId: route.query.id, quId: t.quId, quType: t.quType,
-                rateValue: null, radioValue: null, checkValue: null, inputValue: t.inputValue
-            })
+            if (TempQu.tempType == 2) {
+                activity.tempValueSubmitSingerDtos.push({
+                    quId: t.quId, quType: t.quType, rateValue: null, radioValue: null, checkValue: null, inputValue: t.inputValue
+                })
+            } else {
+                survey.tempValueSubmitSingerDtos.push({
+                    quId: t.quId, quType: t.quType, rateValue: null, radioValue: null, checkValue: null, inputValue: t.inputValue
+                })
+            }
         }
     })
     if (TempQu.tempType == 2) {
 
     } else {
-        submitSurvey(activity.complateValues).then((res) => {
+        survey.tempId=route.query.id as string
+        survey.tempName=TempQu.tempName
+        survey.tempType=TempQu.tempType
+        submitSurvey(survey).then((res) => {
             ElMessage.success('提交成功')
             router.back()
         }).catch(res => {

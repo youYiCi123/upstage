@@ -44,3 +44,11 @@ export function getTempDetail(id: any) {
     method: "get",
   });
 }
+
+export function getTempUserDetail(params:any) {
+  return request({
+    url: '/business-service/field/tempUserDetail',
+    method: 'get',
+    params: params
+  })
+}
