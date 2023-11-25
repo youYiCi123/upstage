@@ -15,6 +15,20 @@ export function getTempIdToName() {
   });
 }
 
+export function getSurveyIdToName() {
+  return request({
+    url: "/business-service/temp/getSurveyIdToName",
+    method: "get"
+  });
+}
+
+export function getActiveIdToName() {
+  return request({
+    url: "/business-service/temp/getActiveIdToName",
+    method: "get"
+  });
+}
+
 export function createTemplate(data: any) {
   return request({
     url: "/business-service/temp/add",

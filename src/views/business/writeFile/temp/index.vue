@@ -188,7 +188,7 @@ function handleAdd() {
 }
 
 function handleView(row: any) {
-    router.push({ path: '/research/tempView', query: { id: row.id } });
+    router.push({ path: '/research/tempView', query: { tempId: row.id } });
 }
 
 function handleUpdate(row: any) {

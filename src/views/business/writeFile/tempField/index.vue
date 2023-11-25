@@ -133,7 +133,7 @@ function handleUpdate(row: any) {
 function colorByType(type: number){
     switch (type) {
         case 1:
-            return "primary";
+            return "";
         case 2:
             return "success";
         case 3:

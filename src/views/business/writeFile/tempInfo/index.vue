@@ -58,7 +58,7 @@
                     <el-button style="margin-top: 50px;margin-left:17.6%;margin-bottom: 30px" size="default" type="primary"
                         @click="goBack">返回</el-button>
                     <el-button style="margin-top: 50px;margin-left:6.6%;margin-bottom: 30px" size="default" type="primary"
-                        @click="doSubmit" :disabled="isView">保存</el-button>
+                        @click="doSubmit">保存</el-button>
                 </el-form-item>
             </el-card>
         </el-form>
@@ -72,8 +72,7 @@ import TempQuDetailDto from "@/mode/business/Temp";
 import { getTempDetail, getTempUserDetail } from "@/api/field"
 import { getDepIdToName, fetchListWithChildren } from "@/api/dep"
 import { submitSurvey } from "@/api/survey"
-import { useUserStore } from "@/store/modules/userStore";
-const userStore = useUserStore();
+import { submitActive } from "@/api/active"
 
 const router = useRouter();
 const route = useRoute();
@@ -123,19 +122,21 @@ function init() {
     getDepSelector()
     //获取部门人员级联关系
     getSendPersonList()
-    getTempDetail(route.query.id).then(res => {
-        TempQu.tempName = res.data.tempName
-        TempQu.tempType = res.data.tempType
-        TempQu.quList = res.data.quList
-    }).catch(() => {
-    })
-
-    // getTempUserDetail({tempId:route.query.id,userId:userStore.id}).then(res => {
-    //         TempQu.tempName = res.data.tempName
-    //         TempQu.tempType = res.data.tempType
-    //         TempQu.quList = res.data.quList
-    //     }).catch(() => {
-    //     })
+    if (!route.query.userId) {
+        getTempDetail(route.query.tempId).then(res => {
+            TempQu.tempName = res.data.tempName
+            TempQu.tempType = res.data.tempType
+            TempQu.quList = res.data.quList
+        }).catch(() => {
+        })
+    } else {
+        getTempUserDetail({ tempId: route.query.tempId, userId: route.query.userId }).then(res => {
+            TempQu.tempName = res.data.tempName
+            TempQu.tempType = res.data.tempType
+            TempQu.quList = res.data.quList
+        }).catch(() => {
+        })
+    }
 }
 
 function getDepSelector() {
@@ -230,11 +231,19 @@ function doSubmit() {
         }
     })
     if (TempQu.tempType == 2) {
-
+        activity.tempId = route.query.tempId as string
+        activity.tempName = TempQu.tempName
+        activity.tempType = TempQu.tempType
+        submitActive(activity).then((res) => {
+            ElMessage.success('提交成功')
+            router.back()
+        }).catch(res => {
+            router.back()
+        })
     } else {
-        survey.tempId=route.query.id as string
-        survey.tempName=TempQu.tempName
-        survey.tempType=TempQu.tempType
+        survey.tempId = route.query.tempId as string
+        survey.tempName = TempQu.tempName
+        survey.tempType = TempQu.tempType
         submitSurvey(survey).then((res) => {
             ElMessage.success('提交成功')
             router.back()
