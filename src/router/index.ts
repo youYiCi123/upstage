@@ -217,6 +217,13 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         meta: { title: "问卷调查", icon: "icon-24gf-portraitMaleInfo3" },
       },
       {
+        path: "active",
+        name: "active",
+        component: () =>
+          import("@/views/business/writeFile/active/index.vue"),
+        meta: { title: "活动评估", icon: "icon-24gf-portraitMaleInfo3" },
+      },
+      {
         name: "tempSubmit",
         path: "tempSubmit",
         component: () => import("@/views/business/writeFile/temp/submit.vue"),

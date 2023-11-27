@@ -5,24 +5,24 @@
                 <h2 style="text-align: center">{{ TempQu.tempName }}</h2>
                 <el-divider />
                 <el-form-item label="活动主题：" v-if="TempQu.tempType == 2">
-                    <el-input v-model="activity.name" placeholder="请输入活动主题" clearable>
+                    <el-input v-model="activity.name" :disabled="isView" placeholder="请输入活动主题" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="活动地点：" v-if="TempQu.tempType == 2">
-                    <el-input v-model="activity.address" type="textarea" :rows="2" placeholder="请输入活动地点" clearable>
+                    <el-input v-model="activity.address" :disabled="isView" type="textarea" :rows="2" placeholder="请输入活动地点" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="活动日期：" v-if="TempQu.tempType == 2">
-                    <el-date-picker v-model="activity.activityTime" type="daterange" start-placeholder="开始时间"
+                    <el-date-picker v-model="activity.activityTime" :disabled="isView" type="datetimerange" format="YYYY-MM-DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss" start-placeholder="开始时间"
                         end-placeholder="结束时间" range-separator="-" size="default" />
                 </el-form-item>
                 <el-form-item label="活动组织者：" v-if="TempQu.tempType == 2">
-                    <el-cascader clearable v-model="selectUserArray" :options="sendPersonOptions"
+                    <el-cascader clearable v-model="selectUserArray" :disabled="isView" :options="sendPersonOptions"
                         @change="selectProductCateValue" style="width: 250px">
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="参与部门：" v-if="TempQu.tempType == 2">
-                    <el-select v-model="activity.depIds" multiple placeholder="请选择部门" clearable>
+                    <el-select v-model="activity.depIds" multiple :disabled="isView" placeholder="请选择部门" clearable>
                         <el-option v-for="item in allDepList" :key="item.id" :label="item.depName" :value="item.id">
                         </el-option>
                     </el-select>
@@ -33,24 +33,24 @@
                     <p>{{ index + 1 }}.{{ item.content }}</p>
                     <!-- 1：评分，2：单选框，3：复选框，4：输入框 -->
                     <div v-if="item.quType == 1">
-                        <el-rate size="large" v-model="item.rateValue" />
+                        <el-rate size="large" :disabled="isView" v-model="item.rateValue" />
                     </div>
                     <div v-if="item.quType == 2">
-                        <el-radio-group v-model="item.radioValue">
+                        <el-radio-group :disabled="isView" v-model="item.radioValue">
                             <el-radio v-for="an in item.answerList" :label="an.id">
                                 {{ an.content }}
                             </el-radio>
                         </el-radio-group>
                     </div>
                     <div v-if="item.quType == 3">
-                        <el-checkbox-group v-model="item.checkValue">
+                        <el-checkbox-group :disabled="isView" v-model="item.checkValue">
                             <el-checkbox v-for="an in item.answerList" :key="an.id" :label="an.id">{{
                                 an.content }}
                             </el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div v-if="item.quType == 4">
-                        <el-input v-model="item.inputValue" type="textarea" placeholder="请输入活动主题" clearable>
+                        <el-input v-model="item.inputValue" :disabled="isView" type="textarea" placeholder="请输入活动主题" clearable>
                         </el-input>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     <el-button style="margin-top: 50px;margin-left:17.6%;margin-bottom: 30px" size="default" type="primary"
                         @click="goBack">返回</el-button>
                     <el-button style="margin-top: 50px;margin-left:6.6%;margin-bottom: 30px" size="default" type="primary"
-                        @click="doSubmit">保存</el-button>
+                        @click="doSubmit" :disabled="isView">保存</el-button>
                 </el-form-item>
             </el-card>
         </el-form>
@@ -130,7 +130,13 @@ function init() {
         }).catch(() => {
         })
     } else {
-        getTempUserDetail({ tempId: route.query.tempId, userId: route.query.userId }).then(res => {
+        getTempUserDetail({ tempId: route.query.tempId,relateId:route.query.relateId, userId: route.query.userId }).then(res => {
+            activity.name=res.data.name
+            activity.address=res.data.address
+            activity.activityTime=res.data.activityTime
+            activity.handlerUserId=res.data.handlerUserId
+            activity.depIds=res.data.depIds
+            selectUserArray.value = findIndexArray(sendPersonOptions.value, activity.handlerUserId)
             TempQu.tempName = res.data.tempName
             TempQu.tempType = res.data.tempType
             TempQu.quList = res.data.quList

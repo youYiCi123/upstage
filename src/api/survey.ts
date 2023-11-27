@@ -15,3 +15,11 @@ export function getAllSurvey(params: any) {
     params: params,
   });
 }
+
+//删除
+export function deleteSurvey(id: any) {
+  return request({
+    url: "/business-service/survey/delete/" + id,
+    method: "post",
+  });
+}

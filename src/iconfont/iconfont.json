@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3866093",
+      "name": "登记",
+      "font_class": "dengji-",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "11372715",
+      "name": "问卷",
+      "font_class": "wenjuan",
+      "unicode": "e8bb",
+      "unicode_decimal": 59579
+    },
+    {
       "icon_id": "6627751",
       "name": "研究著录",
       "font_class": "yanjiuzhulu",
