@@ -1,5 +1,5 @@
 <template>
-  <el-upload action="http://localhost:8079/upstage-service/avatar/upload" :headers="headers" :show-file-list="false"
+  <el-upload action="http://192.168.1.170:8079/upstage-service/avatar/upload" :headers="headers" :show-file-list="false"
     :on-success="handleSuccess" accept=".png,.jpg">
     <el-avatar v-if="avatar" size="large" :src="avatar"></el-avatar>
     <el-avatar v-if="!avatar" size="large">

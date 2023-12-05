@@ -75,7 +75,6 @@ function submitForm() {
         ElMessage.success('修改成功')
         emit('loadFileList')
     }).catch((res: any) => {
-        ElMessage.error(res.message)
         loading.value = false
     })
 }

@@ -93,7 +93,6 @@ function doCreateFolder(formEl: FormInstance | undefined) {
                 ElMessage.success('新建成功')
                 emit('loadFileList')
             }).catch((res: any) => {
-                ElMessage.error(res.message)
                 loading.value = false
             })
         }

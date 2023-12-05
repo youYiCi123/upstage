@@ -193,8 +193,29 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     name: "research",
     component: Layout,
     meta: { title: "常规研究", icon: "ums" },
-    redirect: "/research/template",
+    redirect: "/research/survey",
     children: [
+      {
+        path: "survey",
+        name: "survey",
+        component: () =>
+          import("@/views/business/writeFile/survey/index.vue"),
+        meta: { title: "问卷中心", icon: "icon-24gf-portraitMaleInfo3" },
+      },
+      {
+        path: "active",
+        name: "active",
+        component: () =>
+          import("@/views/business/writeFile/active/index.vue"),
+        meta: { title: "活动中心", icon: "icon-24gf-portraitMaleInfo3" },
+      },
+      {
+        path: "activeTemps",
+        name: "activeTemps",
+        component: () =>
+          import("@/views/business/writeFile/activeTemps/index.vue"),
+        meta: { title: "活动模板", icon: "icon-24gf-portraitMaleInfo3" },
+      },
       {
         path: "template",
         name: "template",
@@ -208,20 +229,6 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         component: () =>
           import("@/views/business/writeFile/tempField/index.vue"),
         meta: { title: "模板字段", icon: "icon-24gf-portraitMaleInfo3" },
-      },
-      {
-        path: "survey",
-        name: "survey",
-        component: () =>
-          import("@/views/business/writeFile/survey/index.vue"),
-        meta: { title: "问卷调查", icon: "icon-24gf-portraitMaleInfo3" },
-      },
-      {
-        path: "active",
-        name: "active",
-        component: () =>
-          import("@/views/business/writeFile/active/index.vue"),
-        meta: { title: "活动评估", icon: "icon-24gf-portraitMaleInfo3" },
       },
       {
         name: "tempSubmit",

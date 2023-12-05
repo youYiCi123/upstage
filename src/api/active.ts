@@ -7,7 +7,7 @@ export function submitActive(data: any) {
     data: data,
   });
 }
-
+//获取用户已经填写好的活动评估
 export function getAllActive(params: any) {
   return request({
     url: "/business-service/active/getActiveBySearch",

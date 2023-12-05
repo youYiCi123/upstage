@@ -12,7 +12,7 @@ interface ChatConfig {
   const chatConfig: ChatConfig = {
     clientId: "app",
     clientSecret: "app",
-    host: "localhost",
+    host: "192.168.1.170",
     httProtocol: "http",
     wsProtocol: "ws",
     scope: "server",

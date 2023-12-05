@@ -21,8 +21,7 @@
             </div>
         </el-card>
         <div class="table-container">
-            <el-table ref="adminTable" :data="list" style="width: 100%;" stripe v-loading="listLoading"
-                @selection-change="handleSelectionChange" border>
+            <el-table ref="adminTable" :data="list" style="width: 100%;" stripe v-loading="listLoading" border>
                 <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column label="模板名称" width="320" align="center">
@@ -33,7 +32,7 @@
                 </el-table-column>
                 <el-table-column label="操作" width="350" align="center" fixed="right">
                     <template #default="scope">
-                        <el-button size="small" type="primary" @click="handleView(scope.row)">查看模板内容
+                        <el-button size="small" type="primary" @click="handleActiveSubmit(scope.row)">填写内容
                         </el-button>
                     </template>
                 </el-table-column>
@@ -51,7 +50,7 @@
 import { ref, reactive, computed, watch } from "vue";
 import { useRouter } from 'vue-router'; //vue3路由跳转
 import { usePagination } from "@/hooks/usePagination";
-import { ElMessage,ElMessageBox } from 'element-plus';
+import { getAllActive} from "@/api/template"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 const router = useRouter();
@@ -73,9 +72,20 @@ function handleSearchList() {
     getList();
 }
 
-function handleSelectActive(row: any) {
-    router.push({ path: '/research/tempSubmit', query: { tempId: row.tempId } });
+function handleActiveSubmit(row: any) {
+    router.push({ path: '/research/tempSubmit', query: { tempId: row.id } });
 }
 
+function getList() {
+    listLoading.value = true;
+    getAllActive({ keyword: listQuery.keyword,pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
+        listLoading.value = false;
+        list.value = response.data.list;
+        total.value = response.data.total;
+    });
+}
+
+/** 监听分页参数的变化 */
+watch([() => paginationData.currentPage, () => paginationData.pageSize], getList, { immediate: true })
 
 </script>

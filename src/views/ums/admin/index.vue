@@ -289,7 +289,7 @@ function timeFormat(time: string) {
 function downloadFile() {
   axios({
     method: "GET", // 因为要避免request.ts中相应拦截
-    url: "http://localhost:8079/upstage-service/excel/download",
+    url: "http://192.168.1.170:8079/upstage-service/excel/download",
     responseType: "blob"
   }).then(res => {
     const blob = new Blob([res.data]);

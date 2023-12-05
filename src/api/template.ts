@@ -8,6 +8,15 @@ export function fetchList(params: any) {
   });
 }
 
+//获取活动模板
+export function getAllActive(params: any) {
+  return request({
+    url: "/business-service/temp/getAllActive",
+    method: "get",
+    params: params,
+  });
+}
+
 export function getTempIdToName() {
   return request({
     url: "/business-service/temp/getTempIdToName",
