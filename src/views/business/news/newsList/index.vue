@@ -155,7 +155,7 @@ function getList() {
     });
 }
 function handleDelete(row: NewsTable) {
-    ElMessageBox.confirm('是否要删除该培训?', '提示', {
+    ElMessageBox.confirm('是否要删除该咨询?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

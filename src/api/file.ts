@@ -7,6 +7,28 @@ export function filesForTable(params: any) {
     method: "get",
   });
 }
+export function getAllFileLog(params:any) {
+  return request({
+    url: '/file-service/filesOperateLogs/select',
+    method: 'get',
+    params: params
+  })
+}
+
+export function deleteFileLog(id:any) {
+  return request({
+    url: '/file-service/filesOperateLogs/delete/' + id,
+    method: 'post'
+  })
+}
+
+export function handleBatchDeleteLog(data:any) {
+  return request({
+    url: '/file-service/filesOperateLogs/deleteBatch',
+    method: 'post',
+    data: data
+  })
+}
 
 export function list(params: any) {
   return request({

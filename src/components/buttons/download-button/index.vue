@@ -32,7 +32,8 @@ import type { FormInstance, FormRules } from 'element-plus';
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
 const fileStore = useFileStore(pinia);
-
+import { useUserStore } from "@/store/modules/userStore";
+const userStore = useUserStore();
 import panUtil from '../../../utils/fileUtil'
 
 const waterMarkDialogVisible = ref(false);
@@ -112,7 +113,8 @@ function downloadFile(formEl: FormInstance | undefined) {
 }
 
 function doDownload(item: any,waterMark:any) {
-    let url = panUtil.getUrlPrefix() + '/file/download?fileId=' + item.fileId+'&waterMark='+waterMark,
+    let url = panUtil.getUrlPrefix() + '/file/download?fileId=' + item.fileId+
+    '&userId='+userStore.id+'&waterMark='+waterMark,
         filename = item.filename,
         link = document.createElement('a')
     link.style.display = 'none'

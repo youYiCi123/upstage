@@ -107,6 +107,12 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         component: () => import("@/views/files/verifyDep/index.vue"),
         meta: { title: "部门审核", icon: "product-list" },
       },
+      {
+        path: "fileOperateLog",
+        name: "fileOperateLog",
+        component: () => import("@/views/files/fileOperateLog/index.vue"),
+        meta: { title: "操作日志", icon: "product-list" },
+      },
     ],
   },
   {
