@@ -319,14 +319,15 @@ function goInFolder(item: any) {
 
 //office预览
 function showOffice(row: any) {
-    openNewPage('/preview/office/' + row.fileId + '/' + row.filename, 'PreviewOffice', {
+    openNewPage('/preview/office/' + row.fileId + '/' + row.filename+'/'+userStore.nickName, 'PreviewOffice', {
         fileId: row.fileId,
         filename: row.filename,
+        userName: userStore.nickName
     })
 }
 
 function showIframe(row: any) {
-    const pdfUrl = panUtil.getPreviewUrl(row.fileId)  // pdf路径
+    const pdfUrl = panUtil.getPreviewUrl(row.fileId,userStore.nickName)  // pdf路径
     window.open(pdfUrl)
 }
 
@@ -360,7 +361,7 @@ function showImg(row: any) {
     let t = 0
     for (let i = 0, iLength = fileList.value.length; i < iLength; ++i) {
         if (fileList.value[i].fileType === 7) {
-            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId))
+            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId,''))
             if (fileList.value[i].fileId === row.fileId) {
                 imgIndex.value = t
             }

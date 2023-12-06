@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11799093",
+      "name": "系统日志",
+      "font_class": "xitongrizhi",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
       "icon_id": "3866093",
       "name": "登记",
       "font_class": "dengji-",

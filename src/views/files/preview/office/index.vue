@@ -15,9 +15,10 @@ const showPath = ref('');
 
 function init() {
     let fileId = route.params.fileId;
+    let userName = route.params.userName;
     let filename = route.params.filename;
     //使用kkfileview预览文档
-    var url = panUtil.getPreviewUrl(fileId) + '&fullfilename=' + filename;
+    var url = panUtil.getPreviewUrl(fileId,userName) + '&fullfilename=' + filename;
     showPath.value = 'http://localhost:8012/onlinePreview?url=' + encodeURIComponent(Base64.encode(url));
 }
 

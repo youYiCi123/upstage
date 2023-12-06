@@ -13,7 +13,7 @@
             </div>
             <div style="margin-top: 15px">
                 <el-form :inline="true" :model="listQuery" size="default" label-width="140px">
-                    <el-form-item label="创建时间">
+                    <el-form-item label="操作时间: ">
                         <DateTimeRangePicker :date="listQuery.date" :setDate="setDate" />
                     </el-form-item>
                     <el-form-item label="选择操作员：">

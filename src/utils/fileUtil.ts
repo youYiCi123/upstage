@@ -130,8 +130,8 @@ let panUtil = {
     }
     return tagStr;
   },
-  getPreviewUrl(fileId: any) {
-    return "http://localhost:8079/file-service/preview?fileId=" + fileId;
+  getPreviewUrl(fileId: any,userName:any) {
+    return "http://localhost:8079/file-service/preview?fileId=" + fileId+"&userName="+userName;
   },
   getUrlPrefix() {
     return "http://localhost:8079/file-service";

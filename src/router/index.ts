@@ -381,7 +381,7 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "/preview/office/:fileId/:filename",
+    path: "/preview/office/:fileId/:filename/:userName",
     name: "PreviewOffice",
     component: () => import("@/views/files/preview/office/index.vue"),
     meta: { title: "office预览", hidden: true },

@@ -87,6 +87,9 @@ const { paginationData, handleCurrentChange, handleSizeChange } = usePagination(
 import panUtil from '@/utils/fileUtil';
 import { filesForTable, handleBatchDelete, deleteFile, handleBatchPass, passFile } from '@/api/file'
 import { useRouter } from 'vue-router'; //vue3路由跳转
+import pinia from '@/store/index'
+import { useUserStore } from "@/store/modules/userStore";
+const userStore = useUserStore(pinia);
 const router = useRouter();
 const showViewer = ref(false);
 const imgUrl = ref<any[]>([]);
@@ -205,9 +208,10 @@ function clickFilename(row: any) {
 }
 
 function showOffice(row: any) {
-    openNewPage('/preview/office/' + row.fileId + '/' + row.filename, 'PreviewOffice', {
+    openNewPage('/preview/office/' + row.fileId + '/' + row.filename+'/'+userStore.nickName, 'PreviewOffice', {
         fileId: row.fileId,
         filename: row.filename,
+        userName: userStore.nickName
     })
 }
 
@@ -229,7 +233,7 @@ function showVideo(row: any) {
 }
 
 function showIframe(row: any) {
-    const pdfUrl = panUtil.getPreviewUrl(row.fileId)  // pdf路径
+    const pdfUrl = panUtil.getPreviewUrl(row.fileId,"")  // pdf路径
     window.open(pdfUrl)
 }
 
@@ -253,7 +257,7 @@ function showImg(row: any) {
     let t = 0
     for (let i = 0, iLength = fileList.value.length; i < iLength; ++i) {
         if (fileList.value[i].fileType === 7) {
-            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId))
+            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId,""))
             if (fileList.value[i].fileId === row.fileId) {
                 imgIndex.value = t
             }

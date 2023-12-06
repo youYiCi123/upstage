@@ -62,7 +62,7 @@ function selectVideo(index:string) {
     videoList.value.some((item:any) => {
         if (item.fileId === index) {
             videoName.value = item.fileName
-            videoShowPath.value = panUtil.getPreviewUrl(item.fileId)
+            videoShowPath.value = panUtil.getPreviewUrl(item.fileId,"")
             return true
         }
     })
@@ -77,7 +77,7 @@ function renderVideoList(dataList:any) {
         }
         if (item.fileId === route.params.fileId) {
             videoName.value = item.filename
-            videoShowPath.value = panUtil.getPreviewUrl(item.fileId)
+            videoShowPath.value = panUtil.getPreviewUrl(item.fileId,"")
         }
         videoList.value.push(item)
         activeIndex.value = route.params.fileId as unknown as string
@@ -102,7 +102,7 @@ function selectNext(currentFileId:any) {
     }
     let item = videoList.value[++i]
     videoName.value = item.filename
-    videoShowPath.value = panUtil.getPreviewUrl(item.fileId)
+    videoShowPath.value = panUtil.getPreviewUrl(item.fileId,"")
     activeIndex.value = item.fileId
 }
 

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4275619 */
-  src: url('iconfont.woff2?t=1701065307774') format('woff2'),
-       url('iconfont.woff?t=1701065307774') format('woff'),
-       url('iconfont.ttf?t=1701065307774') format('truetype');
+  src: url('iconfont.woff2?t=1701787659446') format('woff2'),
+       url('iconfont.woff?t=1701787659446') format('woff'),
+       url('iconfont.ttf?t=1701787659446') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-xitongrizhi:before {
+  content: "\e664";
 }
 
 .icon-dengji-:before {

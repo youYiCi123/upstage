@@ -62,7 +62,7 @@ function selectMusic(index:any, indexPath:any) {
     musicList.value.some(item => {
         if (item.fileId === index) {
             musicName.value = item.filename
-            musicShowPath.value = panUtil.getPreviewUrl(item.fileId)
+            musicShowPath.value = panUtil.getPreviewUrl(item.fileId,"")
             return true
         }
     })
@@ -77,7 +77,7 @@ function renderMusicList(dataList:any) {
         }
         if (item.fileId === route.params.fileId) {
             musicName.value = item.filename
-            musicShowPath.value = panUtil.getPreviewUrl(item.fileId)
+            musicShowPath.value = panUtil.getPreviewUrl(item.fileId,"")
         }
         musicList.value.push(item)
         activeIndex.value = route.params.fileId as unknown as string
@@ -97,7 +97,7 @@ function selectNext(currentFileId:any) {
     }
     let item = musicList.value[++i]
     musicName.value = item.filename
-    musicShowPath.value = panUtil.getPreviewUrl(item.fileId)
+    musicShowPath.value = panUtil.getPreviewUrl(item.fileId,"")
     activeIndex.value = item.fileId
 }
 
