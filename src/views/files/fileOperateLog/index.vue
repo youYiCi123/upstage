@@ -37,7 +37,9 @@
                     <template #default="scope">{{ scope.row.userName }}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center">
-                    <template #default="scope">{{ scope.row.operate }}</template>
+                    <template #default="scope">
+                        <el-tag :type="scope.row.operate== '上传' ? 'success' : 'warning'">{{ scope.row.operate }}</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column label="文件" align="center">
                     <template #default="scope">{{ scope.row.fileName }}</template>

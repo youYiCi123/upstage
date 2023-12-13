@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { userUploadCount } from "@/mode/business/UserUploadModel";
 import { ref, onMounted, computed } from 'vue'
 // 使用 ECharts 提供的按需引入的接口来打包必须的组件
 // 引入 echarts 核心模块，核心模块提供了 echarts 使用必须要的接口
@@ -9,13 +10,13 @@ import * as echarts from 'echarts'
   你只需要使用 svg 渲染模式，打包的结果中就不会再包含无需使用的 CanvasRenderer 模块
 */
 const chart = ref()
-const pieChart = ref()
+const barChart = ref()
 var option
 
 const props = defineProps({
     //按钮数组
-    pieData: {
-        type: Array,
+    barData: {
+        type: Array as any,
         default: []
     },
     height: {
@@ -37,42 +38,41 @@ onMounted(() => {
 
 function initChart() {
     // 等价于使用 Canvas 渲染器（默认）：echarts.init(containerDom, null, { renderer: 'canvas' })
-    pieChart.value = echarts.init(chart.value, 'light')
+    barChart.value = echarts.init(chart.value, 'light')
+
     option = {
         title: {
-            text: '企业文件类型占比图',
+            text: '文件分享排行榜',
             x: 'center'
         },
-        legend: {
-            top: 'bottom',
-            selectedMode: false, // 是否允许点击
+        xAxis: {
+            data: [] as any,
         },
-        tooltip: {
-            trigger: 'item',
-            formatter: '{b}数量 : {c}个 <br/>(占比{d}%)'
-        },
+        yAxis: {},
         series: [
             {
                 name: '文件数量',
-                type: 'pie',
-                // radius: '50%',  
-                radius: [20, 110],
-                roseType: 'area',    
+                type: 'bar',
+                radius: [30, 110],
+                roseType: 'area',
+                data: [] as any,
                 itemStyle: {
-                    borderRadius: 8
+                    barBorderRadius: 5,
+                    borderWidth: 1,
+                    borderType: 'solid',
+                    borderColor: '#73c0de',
+                    shadowColor: '#5470c6',
+                    shadowBlur: 3
                 },
-                data: props.pieData,
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
+                barWidth: '55%'
             }
         ]
     }
-    option && pieChart.value.setOption(option)
+    for (let i = 0; i < props.barData.length; i++) {
+        option.xAxis.data.push(props.barData[i].userName)
+        option.series[0].data.push(props.barData[i].uploadCount)
+    }
+    option && barChart.value.setOption(option)
 }
 </script>
 <template>
