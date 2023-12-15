@@ -1,5 +1,5 @@
 <template>
-    <div class="o2oa_net_homepage_home_content_top_right">
+    <div class="home_content_top_right">
         <div
             style="position: relative; margin-left: 2px; margin-top: 0px; margin-right: 0px; float: left; height: 30px; cursor: pointer; min-width: 80px;">
             <div
@@ -7,8 +7,8 @@
                 日常应用</div>
         </div>
         <div style="overflow: hidden;clear: both;line-height: normal;">
-            <div style="display: flex;padding-top: 10px;" class="o2oa_net_homepage_home_tab_content">
-                <div style="display: flex;" class="o2oa_net_homepage_home_app_item" v-for="(item, index) in iconArrs" @click="writeSurvey()">
+            <div style="display: flex;padding-top: 10px;" class="home_tab_content">
+                <div style="display: flex;" class="home_app_item" v-for="(item, index) in iconArrs" @click="writeSurvey()">
                     <img :src="item.imgUrl">
                     <div>{{ item.content }}</div>
                 </div>
@@ -39,7 +39,7 @@ const iconArrs = [{
 
 </script>
 <style>
-.o2oa_net_homepage_home_content_top_right {
+.home_content_top_right {
     height: calc(100% - 40px);
     padding: 20px;
     background-color: #ffffff;
@@ -47,13 +47,13 @@ const iconArrs = [{
     position: relative;
 }
 
-.o2oa_net_homepage_home_tab_content {
+.home_tab_content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
-.o2oa_net_homepage_home_app_item {
+.home_app_item {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -68,7 +68,7 @@ const iconArrs = [{
     cursor: pointer;
 }
 
-.o2oa_net_homepage_home_app_item img {
+.home_app_item img {
     width: 46px;
     height: 46px;
     margin-right: 10px;
