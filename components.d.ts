@@ -89,6 +89,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SetButton: typeof import('./src/components/buttons/set-button/index.vue')['default']
     SingleUpload: typeof import('./src/components/newUpload/singleUpload.vue')['default']
+    TaskChart: typeof import('./src/components/HomeCard/taskChart.vue')['default']
     Time: typeof import('./src/components/Chat/Time.vue')['default']
     TransferButton: typeof import('./src/components/buttons/transfer-button/index.vue')['default']
     TreeChart: typeof import('./src/components/HomeCard/TreeChart.vue')['default']

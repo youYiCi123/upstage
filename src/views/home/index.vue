@@ -34,12 +34,16 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="16">
+      <el-col :span="15">
         <el-card>
           <TreeChart v-if="flag2" :treeData="treeData" :height="500"></TreeChart>
         </el-card>
       </el-col>
-
+      <el-col :span="9">
+        <el-card>
+          <taskChart :tempId="tempId"></taskChart>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -48,6 +52,7 @@ import { ref, reactive } from 'vue'
 import TreeChart from '@/components/HomeCard/TreeChart.vue'
 import PieChart from '@/components/HomeCard/PieChart.vue'
 import bar from '@/components/HomeCard/bar.vue'
+import taskChart from '@/components/HomeCard/taskChart.vue'
 import NewsCard from '@/components/HomeCard/newsCard.vue'
 import NewsBasicTop from '@/components/HomeCard/newsBasicTop.vue'
 import { getDashboard } from '@/api/news';
@@ -69,9 +74,11 @@ const treeData = ref({
   name: '天一人员总览',
   children: [] as any[] // 属性需要做类型断言处理
 })
+
 const newsList = ref<[]>([])  //新闻公告列表信息
 const pieData = ref<any>([])
 const barData = ref<any>([])
+const tempId=ref('')
 
 function convertFileTypeData(data: any) {
   let res = []
@@ -157,6 +164,9 @@ function getData() {
     }
     //渲染分享前十用户数量信息
     barData.value=res.data.userUploadCountArrayList
+    //获取最新的调查问卷结果
+    tempId.value='926821671296438272'
+
     flag.value = true
     flag1.value = true
     flag2.value = true

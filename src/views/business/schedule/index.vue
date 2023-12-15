@@ -191,6 +191,7 @@ init()
 </script>
   
 <style>
+
 .badgeDot {
     width: 8px;
     height: 8px;
