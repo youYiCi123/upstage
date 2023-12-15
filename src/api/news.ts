@@ -57,7 +57,7 @@ export function updateNews(id:any,data:any) {
 //查询某部门信息信息
 export function getNewsInfo(id:any) {
   return request({
-    url:'/business-service/news//queryNewsContent/'+id,
+    url:'/business-service/news/queryNewsContent/'+id,
     method:'get',
   })
 }
