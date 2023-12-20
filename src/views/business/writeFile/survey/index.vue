@@ -30,9 +30,14 @@
         </el-card>
         <div class="table-container">
             <el-table ref="adminTable" :data="list" style="width: 100%;" border stripe v-loading="listLoading">
-                <el-table-column label="问卷提交者" align="center">
+                <el-table-column label="问卷" align="center">
                     <template #default="scope">
-                        <div @click="handleSelectSurvey(scope.row)" class="file-name-content">{{ scope.row.tempName }}___{{ scope.row.userName }}</div>
+                        <div @click="handleSelectSurvey(scope.row)" class="file-name-content">{{ scope.row.tempName }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="提交者"  width="160" align="center">
+                    <template #default="scope">
+                        <div class="file-name-content">{{ scope.row.userName }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column label="提交时间" width="160" align="center">

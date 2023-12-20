@@ -42,11 +42,15 @@ function initChart() {
 
     option = {
         title: {
-            text: '文件分享排行榜',
+            text: '文件分享前十榜',
             x: 'center'
         },
         xAxis: {
             data: [] as any,
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}共上传{c}个文件'
         },
         yAxis: {},
         series: [

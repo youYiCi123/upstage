@@ -165,7 +165,7 @@ function getData() {
     //渲染分享前十用户数量信息
     barData.value=res.data.userUploadCountArrayList
     //获取最新的调查问卷结果
-    tempId.value='926821671296438272'
+    tempId.value=res.data.surveyLatestId
 
     flag.value = true
     flag1.value = true
