@@ -142,6 +142,18 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         meta: { title: "证书列表", icon: "icon-24gf-portraitMaleInfo3" },
       },
       {
+        path: "process",
+        name: "process",
+        component: () => import("@/views/business/process/lists/index.vue"),
+        meta: { title: "流程管理", icon: "icon-24gf-portraitMaleInfo3" },
+      },
+      {
+        path: "design",
+        name: "design",
+        component: () => import("@/views/business/process/details/index.vue"),
+        meta: { title: "流程设计", icon: "icon-24gf-portraitMaleInfo3" },
+      },
+      {
         path: "schedule",
         name: "schedule",
         component: () =>
