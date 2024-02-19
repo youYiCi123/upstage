@@ -11,6 +11,9 @@ import '@/styles/index.scss' // global css
 //引入semantic-ui-css样式
 import '@/styles/semantic.css'
 
+//引入审批流程draw样式
+import '@/styles/override-element-ui.css'
+
 //引入新字体
 import '@/assets/font/font.scss';
 //添加iconfont

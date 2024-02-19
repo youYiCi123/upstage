@@ -56,6 +56,7 @@ declare module 'vue' {
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopconfirm: typeof import('element-plus/es')['ElPopconfirm']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
@@ -93,6 +94,7 @@ declare module 'vue' {
     Time: typeof import('./src/components/Chat/Time.vue')['default']
     TransferButton: typeof import('./src/components/buttons/transfer-button/index.vue')['default']
     TreeChart: typeof import('./src/components/HomeCard/TreeChart.vue')['default']
+    TreeTransfer: typeof import('./src/components/TreeTransfer/index.vue')['default']
     UploadButton: typeof import('./src/components/buttons/upload-button/index.vue')['default']
     WangEdit: typeof import('./src/components/wangEdit/index.vue')['default']
   }
