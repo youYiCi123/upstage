@@ -49,9 +49,7 @@
     //去右边
     const toRight = () =>{
       const checkNodes = treeRef.value.getCheckedNodes(false, false)
-
       const newArr = toData.value.concat(checkNodes)
-      console.log('newArr',newArr)
       let obj = {};
       let peon = newArr.reduce((cur,next) => {
           obj[next[props.nodeKey]] ? "" : obj[next[props.nodeKey]] = true && cur.push(next);
@@ -78,6 +76,7 @@
     }
     //返回父组件
     const checkVal = () =>{
+      console.log('toData.value',toData.value)
       emit('rcheckedData',toData.value)
     }
   

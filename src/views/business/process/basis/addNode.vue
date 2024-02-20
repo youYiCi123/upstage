@@ -5,26 +5,26 @@
                 <div class="add-node-popover-body">
                     <a class="add-node-popover-item approver" @click="addType(1)">
                         <div class="item-wrapper">
-                            <span class="iconfont"></span>
+                            <i class="iconfont icon-examine"></i>
                         </div>
                         <p>审批人</p>
                     </a>
                     <a class="add-node-popover-item notifier" @click="addType(2)">
                         <div class="item-wrapper">
-                            <span class="iconfont"></span>
+                            <i class="iconfont icon-_chaosongwode"></i>
                         </div>
                         <p>抄送人</p>
                     </a>
                     <a class="add-node-popover-item condition" @click="addType(4)">
                         <div class="item-wrapper">
-                            <span class="iconfont"></span>
+                            <i class="iconfont icon-tiaojianfenzhi"></i>
                         </div>
                         <p>条件分支</p>
                     </a>
                 </div>
                 <template #reference>
                     <button class="btn" type="button">
-                        <span class="iconfont"></span>
+                        <i class="iconfont icon-tongyong_tianjia"></i>
                     </button>
                 </template>
             </el-popover>
@@ -36,12 +36,12 @@ import { ref } from 'vue'
 let props = defineProps({
     childNodeP: {
         type: Object,
-        default: ()=> ({})
+        default: () => ({})
     }
 })
 let emits = defineEmits(['update:childNodeP'])
 let visible = ref(false)
-const addType = (type:any)=> {
+const addType = (type: any) => {
     visible.value = false;
     if (type != 4) {
         var data;
@@ -106,6 +106,7 @@ const addType = (type:any)=> {
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
     position: relative;
+
     &:before {
         content: "";
         position: absolute;
@@ -119,6 +120,7 @@ const addType = (type:any)=> {
         height: 100%;
         background-color: #cacaca
     }
+
     .add-node-btn {
         user-select: none;
         width: 240px;
@@ -129,6 +131,7 @@ const addType = (type:any)=> {
         flex-shrink: 0;
         -webkit-box-flex: 1;
         flex-grow: 1;
+
         .btn {
             outline: none;
             box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
@@ -141,14 +144,17 @@ const addType = (type:any)=> {
             line-height: 30px;
             -webkit-transition: all .3s cubic-bezier(.645, .045, .355, 1);
             transition: all .3s cubic-bezier(.645, .045, .355, 1);
+
             .iconfont {
                 color: #fff;
                 font-size: 16px
             }
+
             &:hover {
                 transform: scale(1.3);
                 box-shadow: 0 13px 27px 0 rgba(0, 0, 0, .1)
             }
+
             &:active {
                 transform: none;
                 background: #1e83e9;
@@ -161,12 +167,14 @@ const addType = (type:any)=> {
 <style lang="scss">
 .add-node-popover-body {
     display: flex;
+
     .add-node-popover-item {
         margin-right: 10px;
         cursor: pointer;
         text-align: center;
         flex: 1;
-        color: #191f25!important;
+        color: #191f25 !important;
+
         .item-wrapper {
             user-select: none;
             display: inline-block;
@@ -177,44 +185,51 @@ const addType = (type:any)=> {
             border: 1px solid #e2e2e2;
             border-radius: 50%;
             transition: all .3s cubic-bezier(.645, .045, .355, 1);
+
             .iconfont {
                 font-size: 35px;
                 line-height: 80px
             }
         }
-        &.approver{
+
+        &.approver {
             .item-wrapper {
                 color: #ff943e
             }
         }
-        &.notifier{
+
+        &.notifier {
             .item-wrapper {
                 color: #3296fa
             }
         }
-        &.condition{
+
+        &.condition {
             .item-wrapper {
                 color: #15bc83
             }
         }
-        &:hover{
+
+        &:hover {
             .item-wrapper {
                 background: #3296fa;
                 box-shadow: 0 10px 20px 0 rgba(50, 150, 250, .4)
             }
+
             .iconfont {
                 color: #fff
             }
         }
-        &:active{
+
+        &:active {
             .item-wrapper {
                 box-shadow: none;
                 background: #eaeaea
             }
+
             .iconfont {
                 color: inherit
             }
         }
     }
-}
-</style>
+}</style>

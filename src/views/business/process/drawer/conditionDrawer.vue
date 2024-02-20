@@ -78,8 +78,11 @@
 </template>
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import $func from '@/utils/index'
-import { useStore } from '@/stores/index'
+import $func from "@/utils/process"
+import pinia from '@/store/index'
+import { useProcessStore } from '@/store/modules/process'
+const processStore = useProcessStore(pinia);
+
 import { optTypes, opt1s } from '@/utils/const'
 import { getConditions } from '@/api/index'
 import employeesRoleDialog from '../dialog/employeesRoleDialog.vue'
@@ -88,18 +91,17 @@ let conditionVisible = ref(false)
 let conditionsConfig = ref({
     conditionNodes: [],
 })
-let conditionConfig = ref({})
-let PriorityLevel = ref('')
-let conditions = ref([])
-let conditionList = ref([])
-let checkedList = ref([])
+let conditionConfig = ref<any>({})
+let PriorityLevel = ref<any>('')
+let conditions = ref<any[]>([])
+let conditionList = ref<any[]>([])
+let checkedList = ref<any[]>([])
 let conditionRoleVisible = ref(false)
 
-let store = useStore()
-let { setCondition, setConditionsConfig } = store
-let tableId = computed(()=> store.tableId)
-let conditionsConfig1 = computed(()=> store.conditionsConfig1)
-let conditionDrawer = computed(()=> store.conditionDrawer)
+let { setCondition, setConditionsConfig } = processStore
+let tableId = computed(()=> processStore.tableId)
+let conditionsConfig1 = computed(()=> processStore.conditionsConfig1)
+let conditionDrawer = computed(()=> processStore.conditionDrawer)
 let visible = computed({
     get() {
         return conditionDrawer.value
@@ -108,7 +110,7 @@ let visible = computed({
         closeDrawer()
     }
 })
-watch(conditionsConfig1, (val) => {
+watch(conditionsConfig1, (val:any) => {
     conditionsConfig.value = val.value;
     PriorityLevel.value = val.priorityLevel
     conditionConfig.value = val.priorityLevel
@@ -116,7 +118,7 @@ watch(conditionsConfig1, (val) => {
         : { nodeUserList: [], conditionList: [] }
 })
 
-const changeOptType = (item) => {
+const changeOptType = (item:any) => {
     if (item.optType == 1) {
         item.zdy1 = 2;
     } else {
@@ -124,7 +126,7 @@ const changeOptType = (item) => {
         item.zdy2 = 2;
     }
 }
-const toStrChecked = (item, key) => {
+const toStrChecked = (item:any, key:any) => {
     let a = item.zdy1 ? item.zdy1.split(",") : []
     var isIncludes = $func.toggleStrClass(item, key);
     if (!isIncludes) {
@@ -134,10 +136,10 @@ const toStrChecked = (item, key) => {
         removeStrEle(item, key);
     }
 }
-const removeStrEle = (item, key) => {
+const removeStrEle = (item:any, key:any) => {
     let a = item.zdy1 ? item.zdy1.split(",") : []
     var includesIndex;
-    a.map((item, index) => {
+    a.map((item:any, index:any) => {
         if (item == key) {
             includesIndex = index
         }
@@ -218,7 +220,7 @@ const saveCondition = () => {
     closeDrawer()
     var a = conditionsConfig.value.conditionNodes.splice(PriorityLevel.value - 1, 1)//截取旧下标
     conditionsConfig.value.conditionNodes.splice(conditionConfig.value.priorityLevel - 1, 0, a[0])//填充新下标
-    conditionsConfig.value.conditionNodes.map((item, index) => {
+    conditionsConfig.value.conditionNodes.map((item:any, index:number) => {
         item.priorityLevel = index + 1
     });
     for (var i = 0; i < conditionsConfig.value.conditionNodes.length; i++) {
@@ -234,11 +236,11 @@ const addConditionRole = () => {
     conditionRoleVisible.value = true;
     checkedList.value = conditionConfig.value.nodeUserList
 }
-const sureConditionRole = (data) => {
+const sureConditionRole = (data:any) => {
     conditionConfig.value.nodeUserList = data;
     conditionRoleVisible.value = false;
 }
-const closeDrawer = (val) => {
+const closeDrawer = () => {
     setCondition(false)
 }
 </script>

@@ -10,10 +10,8 @@ export let placeholderList = ["发起人", "审核人", "抄送人"];
 
 export let setTypes = [
   {value: 1, label: '指定成员'},
-  {value: 2, label: '主管'},
-  {value: 4, label: '发起人自选'},
-  {value: 5, label: '发起人自己'},
-  {value: 7, label: '连续多级主管'},
+  {value: 2, label: '直接主管'},
+  {value: 4, label: '发起人自选'}
 ]
 
 export let selectModes = [
@@ -23,8 +21,7 @@ export let selectModes = [
 
 export let selectRanges = [
   {value: 1, label: '全公司'},
-  {value: 2, label: '指定成员'},
-  {value: 3, label: '指定角色'},
+  {value: 2, label: '指定成员'}
 ]
 
 export let optTypes = [

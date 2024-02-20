@@ -31,7 +31,7 @@
     </div>
     <!-- <errorDialog v-model:visible="tipVisible" :list="tipList" /> -->
     <!-- <promoterDrawer /> -->
-    <approverDrawer :directorMaxLevel="directorMaxLevel" />
+    <approverDrawer />
     <copyerDrawer />
     <!-- <conditionDrawer /> -->
   </div>
@@ -55,7 +55,6 @@ let processConfig = ref<any>({});
 let nodeConfig = ref<any>({});
 let workFlowDef = ref<any>({});
 let flowPermission = ref<any[]>([]);
-let directorMaxLevel = ref(0);
 let route = useRoute()
 
 onMounted(async () => {
@@ -66,13 +65,11 @@ onMounted(async () => {
   let {
     nodeConfig: nodes,
     flowPermission: flows,
-    directorMaxLevel: directors,
     workFlowDef: works,
     tableId,
   } = data;
   nodeConfig.value = nodes;
   flowPermission.value = flows;
-  directorMaxLevel.value = directors;
   workFlowDef.value = works;
   })
 });

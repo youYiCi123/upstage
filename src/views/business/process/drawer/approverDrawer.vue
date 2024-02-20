@@ -1,11 +1,12 @@
 <template>
-    <el-drawer :append-to-body="true" title="审批人设置" v-model="visible" class="set_promoter" :show-close="false" :size="550" :before-close="saveApprover"> 
+    <el-drawer :append-to-body="true" title="审批人设置" v-model="visible" class="set_promoter" :show-close="false" :size="500" :before-close="saveApprover"> 
         <div class="demo-drawer__content">
             <div class="drawer_content">
                 <div class="approver_content">
                     <el-radio-group v-model="approverConfig.settype" class="clear" @change="changeType">
                         <el-radio v-for="({value, label}) in setTypes" :key="value" :label="value">{{label}}</el-radio>
                     </el-radio-group>
+                    <br/>
                     <el-button type="primary" @click="addApprover" v-if="approverConfig.settype==1" size="small">添加/修改成员</el-button>
                     <p class="selected_list" v-if="approverConfig.settype==1">
                         <span v-for="(item,index) in approverConfig.nodeUserList" :key="index">{{item.label}}
@@ -13,18 +14,6 @@
                         </span>
                         <a v-if="approverConfig.nodeUserList.length!=0" @click="approverConfig.nodeUserList=[]">清除</a>
                     </p>
-                </div>
-                <div class="approver_manager" v-if="approverConfig.settype==2">
-                    <p>
-                        <span>发起人的：</span>
-                        <select v-model="approverConfig.directorLevel">
-                            <option v-for="item in directorMaxLevel" :value="item" :key="item">{{item==1?'直接':'第'+item+'级'}}主管</option>
-                        </select>
-                    </p>
-                    <p class="tip">找不到主管时，由上级主管代审批</p>
-                </div>
-                <div class="approver_self" v-if="approverConfig.settype==5">
-                    <p>该审批节点设置“发起人自己”后，审批人默认为发起人</p>
                 </div>
                 <div class="approver_self_select" v-show="approverConfig.settype==4">
                     <el-radio-group v-model="approverConfig.selectMode" style="width: 100%;">
@@ -34,9 +23,9 @@
                     <el-radio-group v-model="approverConfig.selectRange" style="width: 100%;" @change="changeRange">
                         <el-radio v-for="({value, label}) in selectRanges" :label="value" :key="value">{{label}}</el-radio>
                     </el-radio-group>
-                    <template v-if="approverConfig.selectRange==2||approverConfig.selectRange==3">
-                        <el-button type="primary" @click="addApprover" v-if="approverConfig.selectRange==2">添加/修改成员</el-button>
-                        <el-button type="primary" @click="addRoleApprover" v-else>添加/修改角色</el-button>
+                    <br/>
+                    <template v-if="approverConfig.selectRange==2">
+                        <el-button type="primary" @click="addApprover" size="small">添加/修改成员</el-button>
                         <p class="selected_list">
                             <span v-for="(item,index) in approverConfig.nodeUserList" :key="index">{{item.label}}
                                 <img src="@/assets/images/process/add-close1.png" @click="$func.removeEle(approverConfig.nodeUserList,item,'targetId')">
@@ -44,31 +33,13 @@
                             <a v-if="approverConfig.nodeUserList.length!=0&&approverConfig.selectRange!=1" @click="approverConfig.nodeUserList=[]">清除</a>
                         </p>
                     </template>
-                    
                 </div>
-                <div class="approver_manager" v-if="approverConfig.settype==7">
-                    <p>审批终点</p>
-                    <p style="padding-bottom:20px">
-                        <span>发起人的：</span>
-                        <select v-model="approverConfig.examineEndDirectorLevel">
-                            <option v-for="item in directorMaxLevel" :value="item" :key="item">{{item==1?'最高':'第'+item}}层级主管</option>
-                        </select>
-                    </p>
-                </div>
-                <div class="approver_some" v-if="(approverConfig.settype==1&&approverConfig.nodeUserList.length>1)||approverConfig.settype==2||(approverConfig.settype==4&&approverConfig.selectMode==2)">
+                <div class="approver_some" v-if="(approverConfig.settype==1&&approverConfig.nodeUserList.length>1)||(approverConfig.settype==4&&approverConfig.selectMode==2)">
                     <p>多人审批时采用的审批方式</p>
                     <el-radio-group v-model="approverConfig.examineMode" class="clear">
                         <el-radio :label="1">依次审批</el-radio>
                         <br/>
                         <el-radio :label="2" v-if="approverConfig.settype!=2">会签(须所有审批人同意)</el-radio>
-                    </el-radio-group>
-                </div>
-                <div class="approver_some" v-if="approverConfig.settype==2||approverConfig.settype==7">
-                    <p>审批人为空时</p>
-                    <el-radio-group v-model="approverConfig.noHanderAction" class="clear">
-                        <el-radio :label="1">自动审批通过/不允许发起</el-radio>
-                        <br/>
-                        <el-radio :label="2">转交给审核管理员</el-radio>
                     </el-radio-group>
                 </div>
             </div>
@@ -94,16 +65,8 @@ import { useProcessStore } from '@/store/modules/process'
 
 import employeesDialog from '../dialog/employeesDialog.vue'
 
-let props = defineProps({
-    directorMaxLevel: {
-        type: Number,
-        default: 0
-    }
-});
 let approverConfig = ref<any>({})
 let approverVisible = ref(false)
-let approverRoleVisible = ref(false)
-let checkedRoleList = ref<any[]>([])
 let checkedList = ref<any[]>([])
 
 const processStore = useProcessStore(pinia);
@@ -119,43 +82,36 @@ let visible = computed({
         closeDrawer()
     }
 }) 
+
 watch(approverConfig1, (val:any)=>{
     approverConfig.value = val.value
 })
 let changeRange = ()=> {
     approverConfig.value.nodeUserList = [];
 }
+//切换单选框
 const changeType = (val:any)=> {
     approverConfig.value.nodeUserList = [];
     approverConfig.value.examineMode = 1;
-    approverConfig.value.noHanderAction = 2;
     if (val == 2) {
-        approverConfig.value.directorLevel = 1;
-    } else if (val == 4) {
         approverConfig.value.selectMode = 1;
         approverConfig.value.selectRange = 1;
-    } else if (val == 7) {
-        approverConfig.value.examineEndDirectorLevel = 1
     }
 }
+
+//打开选择成员对话框
 const addApprover = ()=> {
     approverVisible.value = true;
     checkedList.value = approverConfig.value.nodeUserList
 }
-const addRoleApprover = ()=> {
-    approverRoleVisible.value = true;
-    checkedRoleList.value = approverConfig.value.nodeUserList
-}
+//关闭选择成员对话框
 const sureApprover = (data:any)=> {
-    console.log('为什么呢',data)
     approverConfig.value.nodeUserList = data;
     approverVisible.value = false;
 }
-const sureRoleApprover = (data:any)=> {
-    approverConfig.value.nodeUserList = data;
-    approverRoleVisible.value = false;
-}
 const saveApprover = ()=> {
+    console.log('2131',$func.setApproverStr(approverConfig.value))
+    console.log('2131',approverConfig.value)
     approverConfig.value.error = !$func.setApproverStr(approverConfig.value)
     setApproverConfig({
         value: approverConfig.value,

@@ -24,9 +24,10 @@ All.prototype = {
     },
     setApproverStr(nodeConfig:any) {
         if (nodeConfig.settype == 1) {
+            //
             if (nodeConfig.nodeUserList.length == 1) {
                 return nodeConfig.nodeUserList[0].name
-            } else if (nodeConfig.nodeUserList.length > 1) {
+            }else{
                 if (nodeConfig.examineMode == 1) {
                     return this.arrToStr(nodeConfig.nodeUserList)
                 } else if (nodeConfig.examineMode == 2) {
@@ -54,10 +55,6 @@ All.prototype = {
                     return "";
                 }
             }
-        } else if (nodeConfig.settype == 5) {
-            return "发起人自己"
-        } else if (nodeConfig.settype == 7) {
-            return '从直接主管到通讯录中级别最高的第' + nodeConfig.examineEndDirectorLevel + '个层级主管'
         }
     },
     dealStr(str:any, obj:any) {

@@ -4,7 +4,7 @@
             <div class="copyer_content drawer_content">
                 <el-button type="primary" @click="addCopyer">添加成员</el-button>
                 <p class="selected_list">
-                    <span v-for="(item,index) in copyerConfig.nodeUserList" :key="index">{{item.name}}
+                    <span v-for="(item,index) in copyerConfig.nodeUserList" :key="index">{{item.label}}
                         <img src="@/assets/images/process/add-close1.png" @click="$func.removeEle(copyerConfig.nodeUserList,item,'targetId')">
                     </span>
                     <a v-if="copyerConfig.nodeUserList&&copyerConfig.nodeUserList.length!=0" @click="copyerConfig.nodeUserList=[]">清除</a>
@@ -17,20 +17,19 @@
                 <el-button type="primary" @click="saveCopyer">确 定</el-button>
                 <el-button @click="closeDrawer">取 消</el-button>
             </div>
-            <!-- <employees-role-dialog 
+            <employees-dialog 
                 v-model:visible="copyerVisible"
                 :data="checkedList"
-                @change="sureCopyer"
-            /> -->
+                @checkedData="sureCopyer"
+            />
         </div>
     </el-drawer>
 </template>
 <script setup lang="ts">
-import employeesRoleDialog from '../dialog/employeesRoleDialog.vue'
+import employeesDialog from '../dialog/employeesDialog.vue'
 import $func from "@/utils/process";
 import pinia from '@/store/index'
 import { useProcessStore } from '@/store/modules/process'
-
 import { ref, watch, computed } from 'vue'
 let copyerConfig = ref<any>({})
 let ccSelfSelectFlag = ref<any[]>([])
