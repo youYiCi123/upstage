@@ -53,10 +53,7 @@ const addType = (type: any) => {
                 "settype": 1,
                 "selectMode": 0,
                 "selectRange": 0,
-                "directorLevel": 1,
                 "examineMode": 1,
-                "noHanderAction": 1,
-                "examineEndDirectorLevel": 0,
                 "childNode": props.childNodeP,
                 "nodeUserList": []
             }

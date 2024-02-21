@@ -59,10 +59,8 @@
 import {ref, watch, computed} from 'vue'
 import $func from "@/utils/process";
 import { setTypes, selectModes, selectRanges } from '@/utils/const'
-
 import pinia from '@/store/index'
 import { useProcessStore } from '@/store/modules/process'
-
 import employeesDialog from '../dialog/employeesDialog.vue'
 
 let approverConfig = ref<any>({})
@@ -110,8 +108,6 @@ const sureApprover = (data:any)=> {
     approverVisible.value = false;
 }
 const saveApprover = ()=> {
-    console.log('2131',$func.setApproverStr(approverConfig.value))
-    console.log('2131',approverConfig.value)
     approverConfig.value.error = !$func.setApproverStr(approverConfig.value)
     setApproverConfig({
         value: approverConfig.value,

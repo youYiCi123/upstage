@@ -5,7 +5,6 @@ export const useProcessStore = defineStore('processStore', {
     tableId: '',
     isTried: false,
     promoterDrawer: false,
-    flowPermission1: {},
     approverDrawer: false,
     approverConfig1: {},
     copyerDrawer: false,
@@ -24,9 +23,6 @@ export const useProcessStore = defineStore('processStore', {
     },
     setPromoter(payload:any) {
       this.promoterDrawer = payload
-    },
-    setFlowPermission(payload:any) {
-      this.flowPermission1 = payload
     },
     setApprover(payload:any) {
       this.approverDrawer = payload

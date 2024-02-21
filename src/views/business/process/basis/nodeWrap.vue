@@ -85,18 +85,14 @@ let props = defineProps({
     nodeConfig: {
         type: Object,
         default: () => ({}),
-    },
-    flowPermission: {
-        type: Object,
-        default: () => [],
-    },
+    }
 });
 
 let defaultText = computed(() => {
     return placeholderList[props.nodeConfig.type]
 });
 let showText = computed(() => {
-    if (props.nodeConfig.type == 0) return $func.arrToStr(props.flowPermission) || '所有人'
+    if (props.nodeConfig.type == 0) return '所有人'
     if (props.nodeConfig.type == 1) return $func.setApproverStr(props.nodeConfig)
     return $func.copyerStr(props.nodeConfig)
 });
@@ -117,7 +113,7 @@ onMounted(() => {
         resetConditionNodesErr()
     }
 });
-let emits = defineEmits(["update:flowPermission", "update:nodeConfig"]);
+let emits = defineEmits(["update:nodeConfig"]);
 
 const processStore = useProcessStore(pinia);
 let {
@@ -125,21 +121,15 @@ let {
     setApprover,
     setCopyer,
     setCondition,
-    setFlowPermission,
     setApproverConfig,
     setCopyerConfig,
     setConditionsConfig,
 } = processStore;
 let isTried = computed(() => processStore.isTried)
-let flowPermission1 = computed(() => processStore.flowPermission1)
 let approverConfig1 = computed(() => processStore.approverConfig1)
 let copyerConfig1 = computed(() => processStore.copyerConfig1)
 let conditionsConfig1 = computed(() => processStore.conditionsConfig1)
-watch(flowPermission1, (flow: any) => {
-    if (flow.flag && flow.id === _uid) {
-        emits("update:flowPermission", flow.value);
-    }
-});
+
 watch(approverConfig1, (approver: any) => {
     if (approver.flag && approver.id === _uid) {
         emits("update:nodeConfig", approver.value);
@@ -169,8 +159,6 @@ const blurEvent = (index?: number) => {
         isInputList.value[index] = false;
         props.nodeConfig.conditionNodes[index].nodeName = props.nodeConfig.conditionNodes[index].nodeName || "条件";
     } else {
-        console.log('props.nodeConfig.nodeName', props.nodeConfig.nodeName)
-        console.log('defaultText', defaultText)
         isInput.value = false;
         props.nodeConfig.nodeName = props.nodeConfig.nodeName || defaultText
     }
@@ -221,11 +209,6 @@ const setPerson = (priorityLevel: any) => {
     var { type } = props.nodeConfig;
     if (type == 0) {
         setPromoter(true);
-        setFlowPermission({
-            value: props.flowPermission,
-            flag: false,
-            id: _uid,
-        });
     } else if (type == 1) {
         setApprover(true);
         setApproverConfig({

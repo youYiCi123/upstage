@@ -1,13 +1,8 @@
 <template>
   <div>
     <div class="fd-nav">
-      <div class="fd-nav-left">
-        <div class="fd-nav-back" @click="toReturn">
-          <i class="anticon anticon-left"></i>
-        </div>
-        <div class="fd-nav-title">{{ workFlowDef.name }}</div>
-      </div>
       <div class="fd-nav-right">
+        <div class="fd-title">{{ processName }}</div>
         <button type="button" class="ant-btn button-publish" @click="saveSet">
           <span>发 布</span>
         </button>
@@ -21,7 +16,7 @@
           <div class="zoom-in" :class="nowVal == 300 && 'disabled'" @click="zoomSize(2)"></div>
         </div>
         <div class="box-scale" :style="`transform: scale(${ nowVal / 100});`">
-          <nodeWrap v-model:nodeConfig="nodeConfig" v-model:flowPermission="flowPermission" />
+          <nodeWrap v-model:nodeConfig="nodeConfig" />
           <div class="end-node">
             <div class="end-node-circle"></div>
             <div class="end-node-text">流程结束</div>
@@ -30,10 +25,9 @@
       </section>
     </div>
     <!-- <errorDialog v-model:visible="tipVisible" :list="tipList" /> -->
-    <!-- <promoterDrawer /> -->
     <approverDrawer />
     <copyerDrawer />
-    <!-- <conditionDrawer /> -->
+    <conditionDrawer />
   </div>
 </template>
 <script setup lang="ts">
@@ -42,8 +36,6 @@ import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getWorkFlowData, setWorkFlowData } from '@/api/workFlow';
 import nodeWrap from '@/views/business/process/basis/nodeWrap.vue'
-
-import promoterDrawer from "@/views/business/process/drawer/promoterDrawer.vue";
 import approverDrawer from "@/views/business/process/drawer/approverDrawer.vue";
 import copyerDrawer from "@/views/business/process/drawer/copyerDrawer.vue";
 import conditionDrawer from "@/views/business/process/drawer/conditionDrawer.vue";
@@ -51,31 +43,24 @@ import conditionDrawer from "@/views/business/process/drawer/conditionDrawer.vue
 let tipList = ref<any[]>([]);
 let tipVisible = ref(false);
 let nowVal = ref(100);
+let processName = ref('');
 let processConfig = ref<any>({});
 let nodeConfig = ref<any>({});
-let workFlowDef = ref<any>({});
-let flowPermission = ref<any[]>([]);
 let route = useRoute()
 
 onMounted(async () => {
 
-  getWorkFlowData({ workFlowDefId: route.query.workFlowDefId }).then(res=>{
+  getWorkFlowData({ workFlowDefId: route.query.id }).then(res=>{
     let {data}=res.data
     processConfig.value = data;
   let {
     nodeConfig: nodes,
-    flowPermission: flows,
-    workFlowDef: works,
-    tableId,
+    processName: works
   } = data;
   nodeConfig.value = nodes;
-  flowPermission.value = flows;
-  workFlowDef.value = works;
+  processName.value = works;
   })
-});
-const toReturn = () => {
-  //window.location.href = ""
-};
+}); 
 const reErr = ({ childNode }) => {
   if (childNode) {
     let { type, error, nodeName, conditionNodes } = childNode;
@@ -109,7 +94,6 @@ const saveSet = async () => {
     tipVisible.value = true;
     return;
   }
-  processConfig.value.flowPermission = flowPermission.value;
   // eslint-disable-next-line no-console
   console.log(JSON.stringify(processConfig.value));
   let res = await setWorkFlowData(processConfig.value);

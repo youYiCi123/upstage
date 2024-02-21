@@ -3,9 +3,10 @@ import { ref} from 'vue';
 All.prototype = {
     arrToStr(arr:any) {
         if (arr) {
-            return arr.map((item:any) => { return item.name }).toString()
+            return arr.map((item:any) => { return item.label }).toString()
         }
     },
+    //用于显示选中状态
     toggleClass(arr:any, elem:any, key = 'id') {
         return arr.some((item:any) => { return item[key] == elem[key] });
     },
@@ -21,6 +22,7 @@ All.prototype = {
             }
         });
         arr.splice(includesIndex, 1);
+        console.log('arr1',arr)
     },
     setApproverStr(nodeConfig:any) {
         if (nodeConfig.settype == 1) {
@@ -35,7 +37,7 @@ All.prototype = {
                 }
             }
         } else if (nodeConfig.settype == 2) {
-            let level = nodeConfig.directorLevel == 1 ? '直接主管' : '第' + nodeConfig.directorLevel + '级主管'
+            let level = '直接主管'
             if (nodeConfig.examineMode == 1) {
                 return level
             } else if (nodeConfig.examineMode == 2) {

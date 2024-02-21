@@ -1,61 +1,82 @@
 <template>
-    <el-drawer :append-to-body="true" title="条件设置" v-model="visible" class="condition_copyer" :show-close="false" :size="550" :before-close="saveCondition"> 
+    <el-drawer :append-to-body="true" title="条件设置" v-model="visible" class="condition_copyer" :show-close="false"
+        :size="550" :before-close="saveCondition">
         <template #header="{ titleId, titleClass }">
             <h3 :id="titleId" :class="titleClass">条件设置</h3>
             <select v-model="conditionConfig.priorityLevel" class="priority_level">
-                <option v-for="item in conditionsConfig.conditionNodes.length" :value="item" :key="item">优先级{{item}}</option>
+                <option v-for="item in conditionsConfig.conditionNodes.length" :value="item" :key="item">优先级{{ item }}
+                </option>
             </select>
         </template>
         <div class="demo-drawer__content">
             <div class="condition_content drawer_content">
                 <p class="tip">当审批单同时满足以下条件时进入此流程</p>
                 <ul>
-                    <li v-for="(item,index) in conditionConfig.conditionList" :key="index">
-                        <span class="ellipsis">{{item.type==1 ? '发起人':item.showName}}：</span>
-                        <div v-if="item.type==1">
-                            <p :class="conditionConfig.nodeUserList.length > 0?'selected_list':''" @click.self="addConditionRole" style="cursor:text">
-                                <span v-for="(item1,index1) in conditionConfig.nodeUserList" :key="index1">
-                                    {{item1.name}}<img src="@/assets/images/add-close1.png" @click="$func.removeEle(conditionConfig.nodeUserList,item1,'targetId')">
+                    <li v-for="(item, index) in conditionConfig.conditionList" :key="index">
+                        <span class="ellipsis">{{ item.type == 1 ? '发起人' : item.showName }}：</span>
+                        
+                        <div v-if="item.type == 1">
+                            <p :class="conditionConfig.nodeUserList.length > 0 ? 'selected_list' : ''"
+                                @click.self="addConditionPerson" style="cursor:text">
+                                <span v-for="(item1, index1) in conditionConfig.nodeUserList" :key="index1">
+                                    {{ item1.label }}<img src="@/assets/images/process/add-close1.png"
+                                        @click="$func.removeEle(conditionConfig.nodeUserList, item1, 'value')">
                                 </span>
-                                <input type="text" placeholder="请选择具体人员/角色/部门" v-if="conditionConfig.nodeUserList.length == 0" @click="addConditionRole">
+                                <input type="text" placeholder="请选择具体人员" v-if="conditionConfig.nodeUserList.length == 0"
+                                    @click="addConditionPerson">
                             </p>
                         </div>
+                        <!-- 复选框选项 -->
                         <div v-else-if="item.columnType == 'String' && item.showType == 3">
                             <p class="check_box">
-                                <a :class="$func.toggleStrClass(item,item1.key)&&'active'" @click="toStrChecked(item,item1.key)"
-                                v-for="(item1,index1) in JSON.parse(item.fixedDownBoxValue)" :key="index1">{{item1.value}}</a>
+                                <a :class="$func.toggleStrClass(item, item1.key) && 'active'"
+                                    @click="toStrChecked(item, item1.key)"
+                                    v-for="(item1, index1) in JSON.parse(item.fixedDownBoxValue)"
+                                    :key="index1">{{ item1.value }}</a>
                             </p>
                         </div>
+                        <!-- 设置大小范围 -->
                         <div v-else>
                             <p>
-                                <select v-model="item.optType" :style="'width:'+(item.optType==6?370:100)+'px'" @change="changeOptType(item)">
-                                    <option v-for="({value, label}) in optTypes" :value="value" :key="value">{{ label }}</option>
+                                <select v-model="item.optType" :style="'width:' + (item.optType == 6 ? 335 : 80) + 'px'"
+                                    @change="changeOptType(item)">
+                                    <option v-for="({ value, label }) in optTypes" :value="value" :key="value">{{ label }}
+                                    </option>
                                 </select>
-                                <input v-if="item.optType!=6" type="text" :placeholder="'请输入'+item.showName" v-enter-number="2" v-model="item.zdy1">
+                                <input v-if="item.optType != 6" type="text" :placeholder="'请输入' + item.showName"
+                                    v-enter-number="2" v-model="item.zdy1">
                             </p>
-                            <p v-if="item.optType==6">
-                                <input type="text" style="width:75px;" class="mr_10" v-enter-number="2" v-model="item.zdy1">
+                            <!-- 区间值范围设置 -->
+                            <p v-if="item.optType == 6">
+                                <input type="text" style="width:55px;" class="mr_10" v-enter-number="2" v-model="item.zdy1">
                                 <select style="width:60px;" v-model="item.opt1">
-                                    <option v-for="({value, label}) in opt1s" :value="value" :key="value">{{ label }}</option>
+                                    <option v-for="({ value, label }) in opt1s" :value="value" :key="value">{{ label }}
+                                    </option>
                                 </select>
-                                <span class="ellipsis" style="display:inline-block;width:60px;vertical-align: text-bottom;">{{item.showName}}</span>
+                                <span class="ellipsis"
+                                    style="display:inline-block;width:65px;vertical-align: text-bottom;">{{ item.showName }}</span>
                                 <select style="width:60px;" class="ml_10" v-model="item.opt2">
-                                    <option v-for="({value, label}) in opt1s" :value="value" :key="value">{{ label }}</option>
+                                    <option v-for="({ value, label }) in opt1s" :value="value" :key="value">{{ label }}
+                                    </option>
                                 </select>
-                                <input type="text" style="width:75px;" v-enter-number="2" v-model="item.zdy2">
+                                <input type="text" style="width:55px;" v-enter-number="2" v-model="item.zdy2">
                             </p>
                         </div>
-                        <a v-if="item.type==1" @click="conditionConfig.nodeUserList= [];$func.removeEle(conditionConfig.conditionList,item,'columnId')">删除</a>
-                        <a v-if="item.type==2" @click="$func.removeEle(conditionConfig.conditionList,item,'columnId')">删除</a>
+                        <a v-if="item.type == 1"
+                            @click="conditionConfig.nodeUserList = []; $func.removeEle(conditionConfig.conditionList, item, 'columnId')">删除</a>
+                        <a v-if="item.type == 2"
+                            @click="$func.removeEle(conditionConfig.conditionList, item, 'columnId')">删除</a>
                     </li>
                 </ul>
                 <el-button type="primary" @click="addCondition">添加条件</el-button>
                 <el-dialog title="选择条件" v-model="conditionVisible" :width="480" append-to-body class="condition_list">
                     <p>请选择用来区分审批流程的条件字段</p>
                     <p class="check_box">
-                        <a :class="$func.toggleClass(conditionList,{columnId:0},'columnId')&&'active'" @click="$func.toChecked(conditionList,{columnId:0},'columnId')">发起人</a>
-                        <a v-for="(item,index) in conditions" :key="index" :class="$func.toggleClass(conditionList,item,'columnId')&&'active'" 
-                        @click="$func.toChecked(conditionList,item,'columnId')">{{item.showName}}</a>
+                        <a :class="$func.toggleClass(conditionList, { columnId: 0 }, 'columnId') && 'active'"
+                            @click="$func.toChecked(conditionList, { columnId: 0 }, 'columnId')">发起人</a>
+                        <a v-for="(item, index) in conditions" :key="index"
+                            :class="$func.toggleClass(conditionList, item, 'columnId') && 'active'"
+                            @click="$func.toChecked(conditionList, item, 'columnId')">{{ item.showName }}</a>
                     </p>
                     <template #footer>
                         <el-button @click="conditionVisible = false">取 消</el-button>
@@ -63,12 +84,8 @@
                     </template>
                 </el-dialog>
             </div>
-            <employees-role-dialog 
-                v-model:visible="conditionRoleVisible"
-                :data="checkedList"
-                @change="sureConditionRole"
-                :isDepartment="true"
-            />
+            <employees-dialog v-model:visible="conditionPersonVisible" :data="checkedList"
+                @checkedData="sureConditionRole" />
             <div class="demo-drawer__footer clear">
                 <el-button type="primary" @click="saveCondition">确 定</el-button>
                 <el-button @click="closeDrawer">取 消</el-button>
@@ -84,11 +101,11 @@ import { useProcessStore } from '@/store/modules/process'
 const processStore = useProcessStore(pinia);
 
 import { optTypes, opt1s } from '@/utils/const'
-import { getConditions } from '@/api/index'
-import employeesRoleDialog from '../dialog/employeesRoleDialog.vue'
+import { getConditions } from '@/api/workFlow'
+import employeesDialog from '../dialog/employeesDialog.vue'
 
 let conditionVisible = ref(false)
-let conditionsConfig = ref({
+let conditionsConfig = ref<any>({
     conditionNodes: [],
 })
 let conditionConfig = ref<any>({})
@@ -96,12 +113,12 @@ let PriorityLevel = ref<any>('')
 let conditions = ref<any[]>([])
 let conditionList = ref<any[]>([])
 let checkedList = ref<any[]>([])
-let conditionRoleVisible = ref(false)
+let conditionPersonVisible = ref(false)
 
 let { setCondition, setConditionsConfig } = processStore
-let tableId = computed(()=> processStore.tableId)
-let conditionsConfig1 = computed(()=> processStore.conditionsConfig1)
-let conditionDrawer = computed(()=> processStore.conditionDrawer)
+let tableId = computed(() => processStore.tableId)
+let conditionsConfig1 = computed(() => processStore.conditionsConfig1)
+let conditionDrawer = computed(() => processStore.conditionDrawer)
 let visible = computed({
     get() {
         return conditionDrawer.value
@@ -110,7 +127,7 @@ let visible = computed({
         closeDrawer()
     }
 })
-watch(conditionsConfig1, (val:any) => {
+watch(conditionsConfig1, (val: any) => {
     conditionsConfig.value = val.value;
     PriorityLevel.value = val.priorityLevel
     conditionConfig.value = val.priorityLevel
@@ -118,7 +135,7 @@ watch(conditionsConfig1, (val:any) => {
         : { nodeUserList: [], conditionList: [] }
 })
 
-const changeOptType = (item:any) => {
+const changeOptType = (item: any) => {
     if (item.optType == 1) {
         item.zdy1 = 2;
     } else {
@@ -126,7 +143,7 @@ const changeOptType = (item:any) => {
         item.zdy2 = 2;
     }
 }
-const toStrChecked = (item:any, key:any) => {
+const toStrChecked = (item: any, key: any) => {
     let a = item.zdy1 ? item.zdy1.split(",") : []
     var isIncludes = $func.toggleStrClass(item, key);
     if (!isIncludes) {
@@ -136,10 +153,10 @@ const toStrChecked = (item:any, key:any) => {
         removeStrEle(item, key);
     }
 }
-const removeStrEle = (item:any, key:any) => {
+const removeStrEle = (item: any, key: any) => {
     let a = item.zdy1 ? item.zdy1.split(",") : []
     var includesIndex;
-    a.map((item:any, index:any) => {
+    a.map((item: any, index: any) => {
         if (item == key) {
             includesIndex = index
         }
@@ -147,11 +164,13 @@ const removeStrEle = (item:any, key:any) => {
     a.splice(includesIndex, 1);
     item.zdy1 = a.toString()
 }
-const addCondition = async () => {
+//打开添加条件对话框
+const addCondition = () => {
     conditionList.value = [];
     conditionVisible.value = true;
-    let { data } = await getConditions({ tableId: tableId.value })
-    conditions.value = data;
+    getConditions({ tableId: tableId.value }).then((res) => {
+        conditions.value = res.data.data
+    })
     if (conditionConfig.value.conditionList) {
         for (var i = 0; i < conditionConfig.value.conditionList.length; i++) {
             var { columnId } = conditionConfig.value.conditionList[i]
@@ -163,6 +182,7 @@ const addCondition = async () => {
         }
     }
 }
+//关闭添加条件对话框
 const sureCondition = () => {
     //1.弹窗有，外面无+
     //2.弹窗有，外面有不变
@@ -171,6 +191,7 @@ const sureCondition = () => {
         if ($func.toggleClass(conditionConfig.value.conditionList, conditionList.value[i], "columnId")) {
             continue;
         }
+        //没有加上
         if (columnId == 0) {
             conditionConfig.value.nodeUserList = [];
             conditionConfig.value.conditionList.push({
@@ -213,14 +234,16 @@ const sureCondition = () => {
             conditionConfig.value.conditionList.splice(i, 1);
         }
     }
-    conditionConfig.value.conditionList.sort(function (a, b) { return a.columnId - b.columnId; });
+    conditionConfig.value.conditionList.sort(function (a: any, b: any) { return a.columnId - b.columnId; });
     conditionVisible.value = false;
 }
+
+//保存并退出该Drawer
 const saveCondition = () => {
     closeDrawer()
     var a = conditionsConfig.value.conditionNodes.splice(PriorityLevel.value - 1, 1)//截取旧下标
     conditionsConfig.value.conditionNodes.splice(conditionConfig.value.priorityLevel - 1, 0, a[0])//填充新下标
-    conditionsConfig.value.conditionNodes.map((item:any, index:number) => {
+    conditionsConfig.value.conditionNodes.map((item: any, index: number) => {
         item.priorityLevel = index + 1
     });
     for (var i = 0; i < conditionsConfig.value.conditionNodes.length; i++) {
@@ -232,13 +255,13 @@ const saveCondition = () => {
         id: conditionsConfig1.value.id
     })
 }
-const addConditionRole = () => {
-    conditionRoleVisible.value = true;
+const addConditionPerson = () => {
+    conditionPersonVisible.value = true;
     checkedList.value = conditionConfig.value.nodeUserList
 }
-const sureConditionRole = (data:any) => {
+const sureConditionRole = (data: any) => {
     conditionConfig.value.nodeUserList = data;
-    conditionRoleVisible.value = false;
+    conditionPersonVisible.value = false;
 }
 const closeDrawer = () => {
     setCondition(false)
@@ -263,7 +286,7 @@ const closeDrawer = () => {
 
         p.tip {
             margin: 20px 0;
-            width: 510px;
+            width: 460px;
             text-indent: 17px;
             line-height: 45px;
             background: rgba(241, 249, 255, 1);
@@ -288,7 +311,7 @@ const closeDrawer = () => {
 
                 &>div {
                     display: inline-block;
-                    width: 370px;
+                    width: 335px;
 
                     &>p:not(:last-child) {
                         margin-bottom: 10px;
@@ -315,7 +338,7 @@ const closeDrawer = () => {
                 }
 
                 select+input {
-                    width: 260px;
+                    width: 245px;
                 }
 
                 select {
@@ -357,5 +380,4 @@ const closeDrawer = () => {
             line-height: 36px;
         }
     }
-}
-</style>
+}</style>
