@@ -49,9 +49,8 @@ let nodeConfig = ref<any>({});
 let route = useRoute()
 
 onMounted(async () => {
-
-  getWorkFlowData({ workFlowDefId: route.query.id }).then(res=>{
-    let {data}=res.data
+  getWorkFlowData(route.query.id).then(res=>{
+    let {data}=res
     processConfig.value = data;
   let {
     nodeConfig: nodes,

@@ -5,7 +5,7 @@
                 <el-button type="primary" @click="addCopyer">添加成员</el-button>
                 <p class="selected_list">
                     <span v-for="(item,index) in copyerConfig.nodeUserList" :key="index">{{item.label}}
-                        <img src="@/assets/images/process/add-close1.png" @click="$func.removeEle(copyerConfig.nodeUserList,item,'targetId')">
+                        <img src="@/assets/images/process/add-close1.png" @click="$func.removeEle(copyerConfig.nodeUserList,item,'value')">
                     </span>
                     <a v-if="copyerConfig.nodeUserList&&copyerConfig.nodeUserList.length!=0" @click="copyerConfig.nodeUserList=[]">清除</a>
                 </p>

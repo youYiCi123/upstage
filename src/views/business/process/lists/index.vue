@@ -164,7 +164,7 @@ function handleDelete(row: any) {
 }
 
 function handleSelectProcess(row: any) {
-    router.push({ path: 'design'});
+    router.push({ path: 'design', query: { id: row.id }});
 }
 
 function handleAdd() {
