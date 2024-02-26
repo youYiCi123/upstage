@@ -9,19 +9,19 @@ export let bgColors = ['87, 106, 149', '255, 148, 62', '50, 150, 250']
 export let placeholderList = ["发起人", "审核人", "抄送人"];
 
 export let setTypes = [
-  {value: 1, label: '指定成员'},
-  {value: 2, label: '直接主管'},
-  {value: 4, label: '发起人自选'}
+  {value: "1", label: '指定成员'},
+  {value: "2", label: '直接主管'},
+  {value: "4", label: '发起人自选'}
 ]
 
 export let selectModes = [
-  {value: 1, label: '选一个人'},
-  {value: 2, label: '选多个人'},
+  {value: "1", label: '选一个人'},
+  {value: "2", label: '选多个人'},
 ]
 
 export let selectRanges = [
-  {value: 1, label: '全公司'},
-  {value: 2, label: '指定成员'}
+  {value: "1", label: '全公司'},
+  {value: "2", label: '指定成员'}
 ]
 
 export let optTypes = [

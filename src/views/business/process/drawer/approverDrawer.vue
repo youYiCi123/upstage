@@ -3,19 +3,19 @@
         <div class="demo-drawer__content">
             <div class="drawer_content">
                 <div class="approver_content">
-                    <el-radio-group v-model="approverConfig.settype" class="clear" @change="changeType">
+                    <el-radio-group v-model="approverConfig.setType" class="clear" @change="changeType">
                         <el-radio v-for="({value, label}) in setTypes" :key="value" :label="value">{{label}}</el-radio>
                     </el-radio-group>
                     <br/>
-                    <el-button type="primary" @click="addApprover" v-if="approverConfig.settype==1" size="small">添加/修改成员</el-button>
-                    <p class="selected_list" v-if="approverConfig.settype==1">
+                    <el-button type="primary" @click="addApprover" v-if="approverConfig.setType==1" size="small">添加/修改成员</el-button>
+                    <p class="selected_list" v-if="approverConfig.setType==1">
                         <span v-for="(item,index) in approverConfig.nodeUserList" :key="index">{{item.label}}
                             <img src="@/assets/images/process/add-close1.png" @click="$func.removeEle(approverConfig.nodeUserList,item,'targetId')">
                         </span>
                         <a v-if="approverConfig.nodeUserList.length!=0" @click="approverConfig.nodeUserList=[]">清除</a>
                     </p>
                 </div>
-                <div class="approver_self_select" v-show="approverConfig.settype==4">
+                <div class="approver_self_select" v-show="approverConfig.setType==4">
                     <el-radio-group v-model="approverConfig.selectMode" style="width: 100%;">
                         <el-radio v-for="({value, label}) in selectModes" :label="value" :key="value">{{label}}</el-radio>
                     </el-radio-group>
@@ -34,12 +34,12 @@
                         </p>
                     </template>
                 </div>
-                <div class="approver_some" v-if="(approverConfig.settype==1&&approverConfig.nodeUserList.length>1)||(approverConfig.settype==4&&approverConfig.selectMode==2)">
+                <div class="approver_some" v-if="(approverConfig.setType==1&&approverConfig.nodeUserList.length>1)||(approverConfig.setType==4&&approverConfig.selectMode==2)">
                     <p>多人审批时采用的审批方式</p>
                     <el-radio-group v-model="approverConfig.examineMode" class="clear">
                         <el-radio :label="1">依次审批</el-radio>
                         <br/>
-                        <el-radio :label="2" v-if="approverConfig.settype!=2">会签(须所有审批人同意)</el-radio>
+                        <el-radio :label="2" v-if="approverConfig.setType!=2">会签(须所有审批人同意)</el-radio>
                     </el-radio-group>
                 </div>
             </div>

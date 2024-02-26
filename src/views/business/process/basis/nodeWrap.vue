@@ -10,7 +10,7 @@
                     <input v-if="isInput" type="text" class="ant-input editable-title-input" @blur="blurEvent()" v-focus
                         v-model="nodeConfig.nodeName" :placeholder="defaultText" />
                     <span v-else class="editable-title" @click="clickEvent()">{{ nodeConfig.nodeName }}</span>
-                    <i class="anticon anticon-close close" @click="delNode"></i>
+                    <i class="iconfont icon-guanbi close" @click="delNode"></i>
                 </template>
             </div>
             <div class="content" @click="setPerson">
@@ -43,7 +43,7 @@
                                     }}</span>
                                     <span class="priority-title" @click="setPerson(item.priorityLevel)">优先级{{
                                         item.priorityLevel }}</span>
-                                    <i class="anticon anticon-close close" @click="delTerm(index)"></i>
+                                    <i class="iconfont icon-guanbi close" @click="delTerm(index)"></i>
                                 </div>
                                 <div class="sort-right" v-if="index != nodeConfig.conditionNodes.length - 1"
                                     @click="arrTransfer(index)">&gt;</div>
@@ -92,6 +92,7 @@ let defaultText = computed(() => {
     return placeholderList[props.nodeConfig.type]
 });
 let showText = computed(() => {
+    console.log('props.nodeConfig',props.nodeConfig)
     if (props.nodeConfig.type == 0) return '所有人'
     if (props.nodeConfig.type == 1) return $func.setApproverStr(props.nodeConfig)
     return $func.copyerStr(props.nodeConfig)
@@ -214,7 +215,7 @@ const setPerson = (priorityLevel: any) => {
         setApproverConfig({
             value: {
                 ...JSON.parse(JSON.stringify(props.nodeConfig)),
-                ...{ settype: props.nodeConfig.settype ? props.nodeConfig.settype : 1 },
+                ...{ setType: props.nodeConfig.setType ? props.nodeConfig.setType : 1 },
             },
             flag: false,
             id: _uid,

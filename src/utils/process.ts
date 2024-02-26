@@ -25,10 +25,10 @@ All.prototype = {
         console.log('arr1',arr)
     },
     setApproverStr(nodeConfig:any) {
-        if (nodeConfig.settype == 1) {
+        if (nodeConfig.setType == 1) {
             //
             if (nodeConfig.nodeUserList.length == 1) {
-                return nodeConfig.nodeUserList[0].name
+                return nodeConfig.nodeUserList[0].label
             }else{
                 if (nodeConfig.examineMode == 1) {
                     return this.arrToStr(nodeConfig.nodeUserList)
@@ -36,14 +36,14 @@ All.prototype = {
                     return nodeConfig.nodeUserList.length + "人会签"
                 }
             }
-        } else if (nodeConfig.settype == 2) {
+        } else if (nodeConfig.setType == 2) {
             let level = '直接主管'
             if (nodeConfig.examineMode == 1) {
                 return level
             } else if (nodeConfig.examineMode == 2) {
                 return level + "会签"
             }
-        } else if (nodeConfig.settype == 4) {
+        } else if (nodeConfig.setType == 4) {
             if (nodeConfig.selectRange == 1) {
                 return "发起人自选"
             } else {
@@ -51,7 +51,7 @@ All.prototype = {
                     if (nodeConfig.selectRange == 2) {
                         return "发起人自选"
                     } else {
-                        return '发起人从' + nodeConfig.nodeUserList[0].name + '中自选'
+                        return '发起人从' + nodeConfig.nodeUserList[0].label + '中自选'
                     }
                 } else {
                     return "";
@@ -82,7 +82,7 @@ All.prototype = {
                 if (columnId == 0) {
                     if (nodeUserList.length != 0) {
                         str += '发起人属于：'
-                        str += nodeUserList.map((item:any) => { return item.name }).join("或") + " 并且 "
+                        str += nodeUserList.map((item:any) => { return item.label }).join("或") + " 并且 "
                     }
                 }
                 if (columnType == "String" && showType == "3") {
