@@ -22,7 +22,6 @@ All.prototype = {
             }
         });
         arr.splice(includesIndex, 1);
-        console.log('arr1',arr)
     },
     setApproverStr(nodeConfig:any) {
         if (nodeConfig.setType == 1) {
@@ -78,7 +77,7 @@ All.prototype = {
         } else {
             let str = ""
             for (var i = 0; i < conditionList.length; i++) {
-                var { columnId, columnType, showType, showName, optType, zdy1, opt1, zdy2, opt2, fixedDownBoxValue } = conditionList[i];
+                var { columnId, columnType, showType, showName, optType, zdy1, opt1, zdy2, opt2, child } = conditionList[i];
                 if (columnId == 0) {
                     if (nodeUserList.length != 0) {
                         str += '发起人属于：'
@@ -87,7 +86,7 @@ All.prototype = {
                 }
                 if (columnType == "String" && showType == "3") {
                     if (zdy1) {
-                        str += showName + '属于：' + this.dealStr(zdy1, JSON.parse(fixedDownBoxValue)) + " 并且 "
+                        str += showName + '属于：' + this.dealStr(zdy1,child) + " 并且 "
                     }
                 }
                 if (columnType == "Double") {

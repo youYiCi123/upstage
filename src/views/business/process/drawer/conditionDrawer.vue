@@ -29,10 +29,10 @@
                         <!-- 复选框选项 -->
                         <div v-else-if="item.columnType == 'String' && item.showType == 3">
                             <p class="check_box">
-                                <a :class="$func.toggleStrClass(item, item1.key) && 'active'"
-                                    @click="toStrChecked(item, item1.key)"
-                                    v-for="(item1, index1) in JSON.parse(item.fixedDownBoxValue)"
-                                    :key="index1">{{ item1.value }}</a>
+                                 <a :class="$func.toggleStrClass(item, item1.id) && 'active'"
+                                    @click="toStrChecked(item, item1.id)"
+                                    v-for="(item1, index1) in item.child"
+                                    :key="index1">{{ item1.value }}</a> 
                             </p>
                         </div>
                         <!-- 设置大小范围 -->
@@ -74,7 +74,7 @@
                     <p class="check_box">
                         <a :class="$func.toggleClass(conditionList, { columnId: 0 }, 'columnId') && 'active'"
                             @click="$func.toChecked(conditionList, { columnId: 0 }, 'columnId')">发起人</a>
-                        <a v-for="(item, index) in conditions" :key="index"
+                            <a v-for="(item, index) in conditions" :key="index"
                             :class="$func.toggleClass(conditionList, item, 'columnId') && 'active'"
                             @click="$func.toChecked(conditionList, item, 'columnId')">{{ item.showName }}</a>
                     </p>
@@ -143,6 +143,7 @@ const changeOptType = (item: any) => {
         item.zdy2 = 2;
     }
 }
+
 const toStrChecked = (item: any, key: any) => {
     let a = item.zdy1 ? item.zdy1.split(",") : []
     var isIncludes = $func.toggleStrClass(item, key);
@@ -153,6 +154,7 @@ const toStrChecked = (item: any, key: any) => {
         removeStrEle(item, key);
     }
 }
+
 const removeStrEle = (item: any, key: any) => {
     let a = item.zdy1 ? item.zdy1.split(",") : []
     var includesIndex;
@@ -168,8 +170,9 @@ const removeStrEle = (item: any, key: any) => {
 const addCondition = () => {
     conditionList.value = [];
     conditionVisible.value = true;
-    getConditions({ tableId: tableId.value }).then((res) => {
-        conditions.value = res.data.data
+    // getConditions({ processId: tableId.value }).then((res) => {
+    getConditions({ processId: 1 }).then((res) => {
+        conditions.value = res.data
     })
     if (conditionConfig.value.conditionList) {
         for (var i = 0; i < conditionConfig.value.conditionList.length; i++) {
@@ -187,7 +190,7 @@ const sureCondition = () => {
     //1.弹窗有，外面无+
     //2.弹窗有，外面有不变
     for (var i = 0; i < conditionList.value.length; i++) {
-        var { columnId, showName, columnName, showType, columnType, fixedDownBoxValue } = conditionList.value[i];
+        var { columnId, showName, showType, columnType, child } = conditionList.value[i];
         if ($func.toggleClass(conditionConfig.value.conditionList, conditionList.value[i], "columnId")) {
             continue;
         }
@@ -211,7 +214,6 @@ const sureCondition = () => {
                     "opt1": "<",
                     "zdy2": "",
                     "opt2": "<",
-                    "columnDbname": columnName,
                     "columnType": columnType,
                 })
             } else if (columnType == "String" && showType == "3") {
@@ -221,9 +223,9 @@ const sureCondition = () => {
                     "type": 2,
                     "showName": showName,
                     "zdy1": "",
-                    "columnDbname": columnName,
                     "columnType": columnType,
-                    "fixedDownBoxValue": fixedDownBoxValue
+                    "child":child
+                    // "fixedDownBoxValue": fixedDownBoxValue
                 })
             }
         }

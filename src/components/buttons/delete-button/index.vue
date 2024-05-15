@@ -37,6 +37,7 @@ const props = defineProps({
 const emit = defineEmits(['loadFileList'])
 
 function deleteFile() {
+    console.log("doDeleteFile",props.item.fileId)
     if (props.item) {
         doDeleteFile(props.item.fileId)
         return
@@ -49,15 +50,14 @@ function deleteFile() {
     }
     ElMessage.error('请选择要删除的文件')
 }
-function doDeleteFile(fileIds: any) {
+function doDeleteFile(fileId: any) {
     ElMessageBox.confirm('文件删除后将不保存，您确定这样做吗？', '删除文件', {
         confirmButtonText: '删除',
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-        deleteFiles({
-            fileIds: fileIds
-        }).then(()=>{
+        console.log("fileIds",fileId)
+        deleteFiles({fileId}).then(()=>{
             ElMessage.success('删除成功')
             emit('loadFileList')
         }).catch((res:any)=>{

@@ -7,10 +7,18 @@ let baseUrl = 'http://localhost:8079/'
  * @param {*} data 
  * @returns 
  */
-export function getConditions(data:any) {
-  // return request.get(`${baseUrl}conditions.json`, { params: data })
-  return axios.get("/static/conditions.json")
+// export function getConditions(data:any) {
+//   // return request.get(`${baseUrl}conditions.json`, { params: data })
+//   return axios.get("/static/conditions.json")
+// }
+export function getConditions(params: any) {
+  return request({
+    url:'/business-service/process/getAllProcessConditions',
+    method:'get',
+    params: params,
+  })
 }
+
 import axios from "axios";
 
 /**

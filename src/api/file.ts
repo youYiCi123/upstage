@@ -68,10 +68,10 @@ export function updateFilename(data: any) {
   });
 }
 
-export function deleteFiles(data: any) {
+export function deleteFiles(params: any) {
   return request({
     url: "/file-service/file/delete",
-    data: data,
+    params: params,
     method: "post",
   });
 }

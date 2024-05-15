@@ -15,6 +15,21 @@ export function getAllCertificates(params: any) {
   });
 }
 
+export function queryCertificateRemind() {
+  return request({
+    url: "/business-service/certificate/getRemind",
+    method: "get",
+  });
+}
+
+//设置证书提醒人内容
+export function setCertificateRemind(data: any){
+  return request({
+    url: "/business-service/certificate/setRemind",
+    method: "post",
+    data: data,
+})
+}
 //添加客户内容
 export function addCertificate(data: any) {
     return request({

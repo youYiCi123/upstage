@@ -38,8 +38,11 @@
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center">
                     <template #default="scope">
-                        <el-tag :type="scope.row.operate== '上传' ? 'success' : 'warning'">{{ scope.row.operate }}</el-tag>
+                        <el-tag :type="scope.row.operate== '上传' ? 'primary' : scope.row.operate== '下载'?'warning':'danger'">{{ scope.row.operate }}</el-tag>
                     </template>
+                </el-table-column>
+                <el-table-column label="水印内容" width="160" show-overflow-tooltip align="center">
+                    <template #default="scope">{{ scope.row.extendField }}</template>
                 </el-table-column>
                 <el-table-column label="文件" align="center">
                     <template #default="scope">{{ scope.row.fileName }}</template>
