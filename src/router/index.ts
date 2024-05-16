@@ -142,6 +142,13 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         meta: { title: "证书列表" },
       },
       {
+        path: "supplier",
+        name: "supplier",
+        component: () =>
+          import("@/views/business/supplier/supplierList/index.vue"),
+        meta: { title: "供应商列表" },
+      },
+      {
         path: "process",
         name: "process",
         component: () => import("@/views/business/process/lists/index.vue"),
@@ -196,6 +203,19 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         component: () =>
           import("@/views/business/certificate/update/index.vue"),
         meta: { title: "证书修改", hidden: true },
+      },
+      {
+        name: "supplierAdd",
+        path: "supplierAdd",
+        component: () => import("@/views/business/supplier/supplierAdd/index.vue"),
+        meta: { title: "供应商添加", hidden: true },
+      },
+      {
+        name: "supplierUpdate",
+        path: "supplierUpdate",
+        component: () =>
+          import("@/views/business/supplier/supplierUpdate/index.vue"),
+        meta: { title: "供应商修改", hidden: true },
       },
       {
         name: "fieldAdd",

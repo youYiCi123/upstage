@@ -10,6 +10,9 @@
             <el-form-item label="注册证号：">
                 <el-input v-model="certificate.registerNumber" style="width: 250px"></el-input>
             </el-form-item>
+            <el-form-item label="生产许可证号：">
+                <el-input v-model="certificate.prodLicenseNumber" style="width: 250px"></el-input>
+            </el-form-item>
             <el-form-item label="类别：">
                 <el-select v-model="certificate.category" clearable placeholder="公告类型" style="width: 250px">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -52,6 +55,7 @@ const certificate = reactive({
     certificateName: '',
     norms: '',
     registerNumber: '',
+    prodLicenseNumber:'',
     category: '',
     approvalTime: '',
     effectiveTime: '',

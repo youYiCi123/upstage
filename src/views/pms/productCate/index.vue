@@ -165,7 +165,7 @@ function handleDelete(row:ProductCateMode) {
       });
       getList();
     });
-  });
+  }).catch((res:any)=>{});
 }
 
 function levelFilter(value: number) {

@@ -492,7 +492,7 @@ function handleDelete(row:any) {
     let ids = [];
     ids.push(row.id);
     updateDeleteStatus(1, ids);
-  });
+  }).catch((res:any)=>{});
 }
 function handleUpdateProduct(row:any) {
   router.push({ path: '/pms/updateProduct', query: { id: row.id } });

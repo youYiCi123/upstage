@@ -180,7 +180,7 @@ function handleDelete(row: any) {
             });
             getList();
         });
-    });
+    }).catch((res:any)=>{});
 }
 
 function getList() {

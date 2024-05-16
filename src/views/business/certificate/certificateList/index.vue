@@ -70,6 +70,9 @@
                 <el-table-column label="注册证号" width="150" align="center">
                     <template #default="scope">{{ scope.row.registerNumber }}</template>
                 </el-table-column>
+                <el-table-column label="生产许可证号" width="150" align="center">
+                    <template #default="scope">{{ scope.row.prodLicenseNumber }}</template>
+                </el-table-column>
                 <el-table-column label="下次申报日期" width="180" align="center">
                     <template #default="scope">
                         <span v-html="timeFormatToHtml(scope.row.lastDeclareTime)"></span>
@@ -401,7 +404,7 @@ function handleDelete(row: any) {
             });
             getList();
         });
-    });
+    }).catch((res:any)=>{})
 }
 
 //批量删除

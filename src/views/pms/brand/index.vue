@@ -153,7 +153,7 @@ function handleDelete(row:BrandMode) {
       });
       getList();
     });
-  });
+  }).catch((res:any)=>{});
 }
 function getProductList(row:BrandMode) {
   console.log(row);
