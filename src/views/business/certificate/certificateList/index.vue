@@ -200,6 +200,7 @@ const remindInfo = reactive({
     id: -1,
     forwardDays: 0,
     sendType: 0,
+    serviceType:1,
     remindPersonEmail: '',
     updateTime: ''
 })
@@ -230,8 +231,8 @@ function getSendPersonList() {
         console.log('sendPersonOptions.value',sendPersonOptions.value)
     });
 }
-initCustom()
-function initCustom() {
+initCertificate()
+function initCertificate() {
     //获取部门人员级联关系
     getSendPersonList()
     queryCertificateRemind().then(response => {

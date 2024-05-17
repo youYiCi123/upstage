@@ -16,6 +16,14 @@ export function importCustomExcel(data: any) {
   });
 }
 
+export function importSupplierExcel(data: any) {
+  return request({
+    url: "/business-service/excel/importSupplier",
+    method: "post",
+    data: data,
+  });
+}
+
 export function importCertificateExcel(data: any) {
   return request({
     url: "/business-service/excel/importCertificate",

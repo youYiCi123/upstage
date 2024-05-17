@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1680667",
+      "name": "供应商",
+      "font_class": "gongyingshang",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
       "icon_id": "5286697",
       "name": "关闭",
       "font_class": "guanbi",

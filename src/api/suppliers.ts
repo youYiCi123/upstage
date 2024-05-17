@@ -49,3 +49,19 @@ export function getSupplierList(params: any) {
       data: data
     })
   }
+
+  export function querySupplierRemind() {
+    return request({
+      url: "/business-service/supplier/getRemind",
+      method: "get",
+    });
+  }
+  
+  //设置供应商提醒人内容
+  export function setSupplierRemind(data: any){
+    return request({
+      url: "/business-service/supplier/setRemind",
+      method: "post",
+      data: data,
+  })
+  }
