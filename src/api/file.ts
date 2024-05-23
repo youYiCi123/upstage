@@ -7,6 +7,15 @@ export function filesForTable(params: any) {
     method: "get",
   });
 }
+
+export function searchForName(params: any) {
+  return request({
+    url: "/file-service/searchForName",
+    params: params,
+    method: "get",
+  });
+}
+
 export function getAllFileLog(params:any) {
   return request({
     url: '/file-service/filesOperateLogs/select',
