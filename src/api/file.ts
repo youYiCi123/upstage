@@ -16,6 +16,15 @@ export function searchForName(params: any) {
   });
 }
 
+//获取回收站文件
+export function filesFromRecycleBin(params: any) {
+  return request({
+    url: "/file-service/filesFromRecycleBin",
+    params: params,
+    method: "get",
+  });
+}
+
 export function getAllFileLog(params:any) {
   return request({
     url: '/file-service/filesOperateLogs/select',
@@ -85,7 +94,7 @@ export function deleteFiles(params: any) {
   });
 }
 
-//批量删除文件 真實
+//批量删除文件 审核
 export function handleBatchDelete(data:any) {
   return request({
     url: '/file-service/file/delete/batch',
@@ -108,6 +117,38 @@ export function deleteFile(id: any) {
     url: "/file-service/file/delete/fileById/" + id,
     method: "get",
   });
+}
+//删除文件--回收站页面
+export function deleteRecycleFileById(id: any) {
+  return request({
+    url: "/file-service/file/deleteRecycle/fileById/" + id,
+    method: "get",
+  });
+}
+//批量删除文件 --回收站页面
+export function deleteRecycleBatch(data:any) {
+  return request({
+    url: '/file-service/file/deleteRecycle/batch',
+    method: 'post',
+    data: data
+  })
+}
+
+//恢复文件--回收站页面
+export function recoveryFile(id: any) {
+  return request({
+    url: "/file-service/file/recovery/fileById/" + id,
+    method: "get",
+  });
+}
+
+//批量恢复文件 --回收站页面
+export function recoveryBatch(data:any) {
+  return request({
+    url: '/file-service/file/recovery/batch',
+    method: 'post',
+    data: data
+  })
 }
 
 export function passFile(id: any) {

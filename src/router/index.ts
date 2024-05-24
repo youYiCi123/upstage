@@ -113,6 +113,12 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         component: () => import("@/views/files/fileOperateLog/index.vue"),
         meta: { title: "操作日志" },
       },
+      {
+        path: "recycleBin",
+        name: "recycleBin",
+        component: () => import("@/views/files/recycleBin/index.vue"),
+        meta: { title: "回收站" },
+      },
     ],
   },
   {
