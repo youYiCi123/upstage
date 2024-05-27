@@ -4,7 +4,9 @@
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container">
       <div class="avatar-wrapper">
-        <img class="user-avatar" :src="avatar ? avatar : require('@/assets/images/avatar_default.jpg')">
+        <el-badge :value="12" class="item">
+          <img class="user-avatar" :src="avatar ? avatar : require('@/assets/images/avatar_default.jpg')">
+        </el-badge>
         <i class="el-icon-caret-bottom"></i>
       </div>
       <template #dropdown>
@@ -14,6 +16,10 @@
               返回首页
             </el-dropdown-item>
           </router-link>
+          <el-dropdown-item divided>
+            <span @click="lookMessage" style="display:block;">
+              <el-text class="mx-1" type="danger">12</el-text>条消息</span>
+          </el-dropdown-item>
           <el-dropdown-item divided>
             <span @click="resetPassword" style="display:block;">修改密码</span>
           </el-dropdown-item>
@@ -30,8 +36,9 @@
       <el-form label-width="100px" :rules="changePasswordRules" ref="changePasswordFormRef" :model="changePasswordForm"
         status-icon @submit.native.prevent>
         <el-form-item label="旧密码" prop="password">
-          <el-input type="password" show-password ref="password" @keyup.enter.native="doChangePassword(changePasswordFormRef)"
-            v-model="changePasswordForm.password" autocomplete="off" />
+          <el-input type="password" show-password ref="password"
+            @keyup.enter.native="doChangePassword(changePasswordFormRef)" v-model="changePasswordForm.password"
+            autocomplete="off" />
         </el-form-item>
         <el-form-item label="新密码" prop="newPassword">
           <el-input type="password" show-password @keyup.enter.native="doChangePassword(changePasswordFormRef)"
@@ -48,15 +55,26 @@
       <el-button type="primary" @click="doChangePassword(changePasswordFormRef)">确 定</el-button>
     </template>
   </el-dialog>
+  <el-drawer title="消息查看" v-model="drawerVisible" size="25%" :show-close="false" :direction="direction">
+    <ul>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+      <li>1</li>
+    </ul>
+  </el-drawer>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed ,getCurrentInstance} from 'vue'
+import { ref, reactive, computed, getCurrentInstance } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage, ElNotification } from 'element-plus';
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import Hamburger from '@/components/Hamburger/index.vue'
-import { logOutRedis,changePassword } from '@/api/login'
+import { logOutRedis, changePassword } from '@/api/login'
 import pinia from '@/store/index'
 import { useAppStore } from "@/store/modules/appStore";
 import { useUserStore } from "@/store/modules/userStore";
@@ -64,8 +82,15 @@ const AppStore = useAppStore(pinia);
 const UserStore = useUserStore(pinia);
 const { proxy } = getCurrentInstance();
 const changePasswordDialogVisible = ref(false);
+
 const changePasswordFormRef = ref()
 const password = ref()
+
+const drawerVisible = ref(false);
+const direction = ref('rtl')
+function lookMessage() {
+  drawerVisible.value = true
+}
 
 const changePasswordForm = reactive({
   password: '',
@@ -106,15 +131,15 @@ function resetChangePasswordForm() {
 }
 
 function doChangePassword(formEl: FormInstance | undefined) {
-    // 表单校验
-    if (!formEl) return;
-    formEl.validate((valid) => {
+  // 表单校验
+  if (!formEl) return;
+  formEl.validate((valid) => {
     if (valid) {
       changePassword({
-        username:UserStore.name,
+        username: UserStore.name,
         oldPassword: changePasswordForm.password,
         newPassword: changePasswordForm.newPassword
-      }).then(()=>{
+      }).then(() => {
         changePasswordDialogVisible.value = false
         ElNotification({
           title: '成功',
@@ -122,7 +147,7 @@ function doChangePassword(formEl: FormInstance | undefined) {
           type: 'success'
         })
         setTimeout(() => logout(), 1000)
-      }).catch((res:any)=>{
+      }).catch((res: any) => {
         ElMessage.error(res.message)
       })
     }
@@ -142,7 +167,7 @@ function toggleSideBar() {
 }
 
 function resetPassword() {
-  changePasswordDialogVisible.value=true
+  changePasswordDialogVisible.value = true
 }
 
 function logout() {
@@ -159,8 +184,8 @@ function logout() {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 50px;
-  line-height: 50px;
+  height: 55px;
+  line-height: 55px;
   border-radius: 0px !important;
 
   .hamburger-container {
@@ -185,7 +210,7 @@ function logout() {
 
     .avatar-wrapper {
       cursor: pointer;
-      margin-top: 5px;
+      margin-top: 9px;
       position: relative;
 
       .user-avatar {

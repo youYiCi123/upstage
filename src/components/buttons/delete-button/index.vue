@@ -62,7 +62,9 @@ function doDeleteFile(fileId: any) {
             emit('loadFileList')
         }).catch((res:any)=>{
         })
-    }).catch(()=>{})
+    }).catch((res)=>{
+        ElMessage.error(res.message)
+    })
 }
 </script>
 
