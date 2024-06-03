@@ -18,7 +18,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="证书类型：">
-                        <el-select v-model="listQuery.category" clearable placeholder="公告类型">
+                        <el-select v-model="listQuery.category" clearable placeholder="公告类型" style="width: 150px;">
                             <el-option v-for="item in options" :key="item.value" :label="item.label"
                                 :value="item.value" />
                         </el-select>

@@ -22,7 +22,7 @@
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="参与部门：" v-if="TempQu.tempType == 2">
-                    <el-select v-model="activity.depIds" multiple :disabled="isView" placeholder="请选择部门" clearable>
+                    <el-select v-model="activity.depIds" multiple :disabled="isView" placeholder="请选择部门" style="width: 250px" clearable>
                         <el-option v-for="item in allDepList" :key="item.id" :label="item.depName" :value="item.id">
                         </el-option>
                     </el-select>

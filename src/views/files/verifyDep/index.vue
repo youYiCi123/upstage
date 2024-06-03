@@ -17,7 +17,7 @@
                         <el-input v-model="listQuery.keyword" class="input-width" placeholder="文件名称" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="文件类型">
-                        <el-select v-model="listQuery.fileType" clearable placeholder="请选择">
+                        <el-select v-model="listQuery.fileType" clearable placeholder="请选择" style="width: 150px">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
@@ -47,9 +47,10 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="parentFilename" label="文件夹名称" min-width="140" align="center">
+                <el-table-column prop="parentFilename" label="文件夹导航" min-width="140" align="center">
                     <template #default="scope">
-                        <el-link type="primary">{{ scope.row.parentFilename
+                        <el-link type="primary" @click="goInFolder(scope.row.parentId, scope.row.parentFilename)">{{
+                            scope.row.parentFilename
                         }}</el-link>
                     </template>
                 </el-table-column>
@@ -89,7 +90,12 @@ import { filesForTable, handleBatchDelete, deleteFile, handleBatchPass, passFile
 import { useRouter } from 'vue-router'; //vue3路由跳转
 import pinia from '@/store/index'
 import { useUserStore } from "@/store/modules/userStore";
+import { useFileStore } from "@/store/modules/fileStore";
+import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
+const breadcrumbStore = useBreadcrumbStore(pinia);
+const fileStore = useFileStore(pinia);
 const userStore = useUserStore(pinia);
+
 const router = useRouter();
 const showViewer = ref(false);
 const imgUrl = ref<any[]>([]);
@@ -101,69 +107,80 @@ const multipleSelectionId = ref<number[]>([])
 
 let listQuery = reactive({
     keyword: '',
-    fileType:''
+    fileType: ''
 });
 
 const options = [
-  {
-    value: '3',
-    label: 'Excel',
-  },
-  {
-    value: '4',
-    label: 'Word',
-  },
-  {
-    value: '5',
-    label: 'Pdf',
-  },
-  {
-    value: '6',
-    label: 'TXT',
-  },
-  {
-    value: '10',
-    label: 'PPT',
-  },
-  {
-    value: '7',
-    label: '图片',
-  },
-  {
-    value: '8',
-    label: '音频',
-  },
-  {
-    value: '9',
-    label: '视频',
-  },
+    {
+        value: '3',
+        label: 'Excel',
+    },
+    {
+        value: '4',
+        label: 'Word',
+    },
+    {
+        value: '5',
+        label: 'Pdf',
+    },
+    {
+        value: '6',
+        label: 'TXT',
+    },
+    {
+        value: '10',
+        label: 'PPT',
+    },
+    {
+        value: '7',
+        label: '图片',
+    },
+    {
+        value: '8',
+        label: '音频',
+    },
+    {
+        value: '9',
+        label: '视频',
+    },
 
-  {
-    value: '11',
-    label: '源码文件',
-  },
-  {
-    value: '1',
-    label: '普通文件',
-  },
-  {
-    value: '2',
-    label: '压缩文件',
-  },
+    {
+        value: '11',
+        label: '源码文件',
+    },
+    {
+        value: '1',
+        label: '普通文件',
+    },
+    {
+        value: '2',
+        label: '压缩文件',
+    },
 
-  {
-    value: '12',
-    label: 'CSV',
-  }
+    {
+        value: '12',
+        label: 'CSV',
+    }
 ]
 
 const fileList = ref<any[]>([]) //文件列表
 const total = ref(0);
 const tableLoading = ref(false);
 
+function goInFolder(parentId: any, parentFilename: any) {
+    //放到vuex中
+    fileStore.parentDepId = parentId
+    breadcrumbStore.depBreadCrumbs = [];
+    breadcrumbStore.depBreadCrumbs.unshift({
+        name: parentFilename,
+        id: parentId,
+    });
+    router.push({ path: '/fold/depFiles' })
+}
+
 function getList() {
     tableLoading.value = true;
-    filesForTable({ pageType: panUtil.fileFold.DEP, keyword: listQuery.keyword, fileType:listQuery.fileType,pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
+    filesForTable({ pageType: panUtil.fileFold.DEP, keyword: listQuery.keyword, fileType: listQuery.fileType, pageSize: paginationData.pageSize, pageNum: paginationData.currentPage }).then(response => {
         tableLoading.value = false;
         fileList.value = response.data.list;
         total.value = response.data.total;
@@ -208,7 +225,7 @@ function clickFilename(row: any) {
 }
 
 function showOffice(row: any) {
-    openNewPage('/preview/office/' + row.fileId + '/' + row.filename+'/'+userStore.nickName, 'PreviewOffice', {
+    openNewPage('/preview/office/' + row.fileId + '/' + row.filename + '/' + userStore.nickName, 'PreviewOffice', {
         fileId: row.fileId,
         filename: row.filename,
         userName: userStore.nickName
@@ -233,7 +250,7 @@ function showVideo(row: any) {
 }
 
 function showIframe(row: any) {
-    const pdfUrl = panUtil.getPreviewUrl(row.fileId,"")  // pdf路径
+    const pdfUrl = panUtil.getPreviewUrl(row.fileId, "")  // pdf路径
     window.open(pdfUrl)
 }
 
@@ -257,7 +274,7 @@ function showImg(row: any) {
     let t = 0
     for (let i = 0, iLength = fileList.value.length; i < iLength; ++i) {
         if (fileList.value[i].fileType === 7) {
-            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId,""))
+            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId, ""))
             if (fileList.value[i].fileId === row.fileId) {
                 imgIndex.value = t
             }

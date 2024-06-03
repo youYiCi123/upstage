@@ -20,6 +20,11 @@
                         </div>
                     </div>
                 </div>
+                <div style="text-align: center">
+                    <el-switch v-model="waterMarkFlag" class="ml-2" inline-prompt  size="large"
+                        style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949" active-text="开启水印"
+                        inactive-text="关闭水印" />
+                </div>
             </el-dialog>
         </div>
     </div>
@@ -32,7 +37,7 @@ import { ElMessage } from 'element-plus';
 import { getToken } from '../../../utils/auth'
 import panUtil from '../../../utils/fileUtil'
 import { MD5 } from '@/utils/md5'
-import {secUpload,merge} from '../../../api/file'
+import { secUpload, merge } from '../../../api/file'
 
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
@@ -40,6 +45,7 @@ import { useTaskStore } from "@/store/modules/taskStore";
 const taskStore = useTaskStore(pinia);
 const fileStore = useFileStore(pinia);
 
+const waterMarkFlag = ref(false)
 const props = defineProps({
     isDep: {
         type: Boolean,
@@ -133,7 +139,7 @@ function filesAdded(files: any, fileList: any, event: any) {
     // 插件在调用该方法之前会自动过滤选择的文件 去除正在上传的文件 新添加的文件就是第一个参数files
     uploadDialogVisible.value = false
     try {
-        const parentId=props.isDep?fileStore.parentDepId:fileStore.parentId
+        const parentId = props.isDep ? fileStore.parentDepId : fileStore.parentId
         files.forEach((f: any) => {
             f.pause()
             if (f.size > panUtil.getMaxFileSize()) {
@@ -156,11 +162,11 @@ function filesAdded(files: any, fileList: any, event: any) {
             MD5(f.file, (e: any, md5: any) => {
                 f['uniqueIdentifier'] = md5
                 secUpload({
-                    pageType:props.isDep?panUtil.fileFold.DEP:panUtil.fileFold.ENTERPRISE,
+                    pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
                     filename: f.name,
                     identifier: md5,
                     parentId: parentId
-                }).then((res)=>{
+                }).then((res) => {
                     if (res.code === 200) {
                         ElMessage.success('文件：' + f.name + ' 上传完成')
                         f.cancel()
@@ -177,7 +183,7 @@ function filesAdded(files: any, fileList: any, event: any) {
                             statusText: panUtil.fileStatus.WAITING.text
                         })
                     }
-                }).catch(()=>{
+                }).catch(() => {
                     f.resume()
                     taskStore.updateStatus({
                         filename: f.name,
@@ -271,12 +277,13 @@ function doMerge(file: any) {
         timeRemaining: panUtil.translateTime(file.timeRemaining())
     })
     merge({
-        pageType:props.isDep?panUtil.fileFold.DEP:panUtil.fileFold.ENTERPRISE,
+        waterMarkFlag:waterMarkFlag.value,
+        pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
         filename: uploadTaskItem.filename,
         identifier: uploadTaskItem.target.uniqueIdentifier,
         parentId: uploadTaskItem.parentId,
         totalSize: uploadTaskItem.target.size
-    }).then(()=>{
+    }).then(() => {
         ElMessage.success('文件：' + file.name + ' 上传完成')
         uploader.removeFile(file)
         taskStore.remove(file.name)
@@ -284,7 +291,7 @@ function doMerge(file: any) {
         if (uploader.files.length === 0) {
             taskStore.updateViewFlag(false)
         }
-    }).catch(()=>{
+    }).catch(() => {
         file.pause()
         taskStore.updateStatus({
             filename: file.name,

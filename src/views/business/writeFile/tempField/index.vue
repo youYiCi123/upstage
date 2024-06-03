@@ -17,7 +17,7 @@
                         <el-input v-model="listQuery.keyword" class="input-width" placeholder="字段名称" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="字段类型：">
-                        <el-select v-model="listQuery.quType" placeholder="请选择字段类型" clearable>
+                        <el-select v-model="listQuery.quType" style="width: 250px" placeholder="请选择字段类型" clearable>
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>

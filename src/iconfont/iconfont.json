@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1876332",
+      "name": "回收站",
+      "font_class": "huishouzhan",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
       "icon_id": "1680667",
       "name": "供应商",
       "font_class": "gongyingshang",

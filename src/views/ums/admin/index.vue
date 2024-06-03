@@ -18,7 +18,7 @@
           </el-form-item>
           <!-- todo -->
           <el-form-item label="部门分类：">
-            <el-select v-model="listQuery.depId" placeholder="请选择部门" clearable>
+            <el-select v-model="listQuery.depId" placeholder="请选择部门" style="width: 150px" clearable>
               <el-option v-for="item in allDepList" :key="item.id" :label="item.depName" :value="item.id">
               </el-option>
             </el-select>

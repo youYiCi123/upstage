@@ -21,7 +21,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="公告类型：">
-                        <el-select v-model="listQuery.newsType" clearable placeholder="公告类型">
+                        <el-select v-model="listQuery.newsType" clearable placeholder="公告类型" style="width: 150px;">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                         </el-select>
                     </el-form-item>
@@ -40,9 +40,9 @@
                 @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column label="公告标题" align="center">
+                <el-table-column label="公告标题" align="center" >
                     <template #default="scope">
-                        <div @click="handleSelectNews(scope.row)" class="file-name-content">{{ scope.row.theme }}</div>
+                        <div @click="handleSelectNews(scope.row)" style="cursor: pointer;" class="file-name-content">{{ scope.row.theme }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column label="公告类型"  width="130" align="center">
@@ -60,7 +60,12 @@
                         <span v-html="timeFormat(scope.row.createdTime)"></span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="350" align="center" fixed="right">
+                <el-table-column label="修改时间" width="160" align="center">
+                    <template #default="scope">
+                        <span v-html="timeFormat(scope.row.updateTime)"></span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作"  align="center" fixed="right">
                     <template #default="scope">
                         <el-button size="small" type="danger" @click="handleDelete(scope.row)">删除
                         </el-button>

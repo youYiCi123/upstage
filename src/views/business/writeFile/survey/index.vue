@@ -18,7 +18,7 @@
                         <el-input v-model="listQuery.keyword" class="input-width" placeholder="角色名称" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="选择模板：">
-                        <el-select v-model="listQuery.tempId" clearable placeholder="请选择模板">
+                        <el-select v-model="listQuery.tempId" clearable placeholder="请选择模板" style="width: 150px;">
                             <el-option v-for="item in allSurveyTypeList" :key="item.id" :label="item.title" :value="item.id" />
                         </el-select>
                     </el-form-item>

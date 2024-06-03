@@ -55,13 +55,45 @@
       <el-button type="primary" @click="doChangePassword(changePasswordFormRef)">确 定</el-button>
     </template>
   </el-dialog>
-  <el-drawer title="消息查看" v-model="drawerVisible" size="45%" :show-close="false" :direction="direction">
-    <div class="inner">
-    <ul class="hot-list-article">
-      <li v-for="(item,index) in unReadMessages">
-        <span v-html="formatToHtml(item)"></span></li>
-    </ul>
-    </div>
+  <el-drawer v-model="drawerVisible" size="45%" :show-close="false" :direction="direction" :with-header="false">
+    <el-tabs v-model="activeName" class="demo-tabs" type="border-card" @tab-click="handleClick" :stretch="true">
+      <el-tab-pane label="未读消息" name="first">
+        <div style="text-align: right;">
+          <el-button size="small" type="primary" :icon="Select" @click="readAllMessage">全部已读</el-button>
+        </div>
+        <div class="inner">
+          <ul class="hot-list-article">
+            <li v-for="(item, index) in allMessages" @click="handleReadSingleMessage(item.id)">
+              <span v-html="formatToHtml(item)"></span>
+            </li>
+          </ul>
+        </div>
+        <div class="pagination-container">
+          <el-pagination background @size-change="handleUnReadSizeChange" @current-change="handleUnReadCurrentChange"
+            layout="total, sizes,prev, pager, next,jumper" :current-page.sync="unReadList.pageNum"
+            :page-size="unReadList.pageSize" :page-sizes="[10, 15, 20]" :total="tolal">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="已读消息" name="second">
+        <div style="text-align: right;">
+          <el-button size="small" type="danger" :icon="Delete" @click="emptyReadMessage">清空消息</el-button>
+        </div>
+        <div class="inner">
+          <ul class="hot-list-article">
+            <li v-for="(item, index) in allMessages">
+              <span v-html="formatToHtml(item)"></span>
+            </li>
+          </ul>
+        </div>
+        <div class="pagination-container">
+          <el-pagination background @size-change="handleReadSizeChange" @current-change="handleReadCurrentChange"
+            layout="total, sizes,prev, pager, next,jumper" :current-page.sync="readList.pageNum"
+            :page-size="readList.pageSize" :page-sizes="[10, 15, 20]" :total="tolal">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </el-drawer>
 </template>
 
@@ -73,10 +105,12 @@ import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import Hamburger from '@/components/Hamburger/index.vue'
 import dayjs from "dayjs";
 import { logOutRedis, changePassword } from '@/api/login'
-import { getCountByUserId, selectByUserId } from '@/api/noticeMessage'
+import { getUnReadCount, selectMessage,readSingleMessage, readAll, deleteReadAll } from '@/api/noticeMessage'
 import pinia from '@/store/index'
 import { useAppStore } from "@/store/modules/appStore";
 import { useUserStore } from "@/store/modules/userStore";
+import { Delete, Select } from '@element-plus/icons-vue'
+
 const AppStore = useAppStore(pinia);
 const UserStore = useUserStore(pinia);
 const { proxy } = getCurrentInstance();
@@ -84,50 +118,156 @@ const changePasswordDialogVisible = ref(false);
 
 const changePasswordFormRef = ref()
 const password = ref()
+const readFlag = ref(0) //0未读 1已读
 const unReadMessageCount = ref(0)
-const unReadMessages = ref<any>([]);
+const allMessages = ref<any>([]);
 
 const drawerVisible = ref(false);
 const direction = ref('rtl')
 
+import type { TabsPaneContext } from 'element-plus'
+const activeName = ref('first')
+
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  if (tab.props.name == 'first') {
+    readFlag.value=0
+    getMessagesByReadFlag(readFlag.value,unReadList.pageNum,unReadList.pageSize)
+  } else {
+    readFlag.value=1
+    getMessagesByReadFlag(readFlag.value,readList.pageNum,readList.pageSize)
+  }
+
+}
+
+
+const tolal = ref(0)  //未读数量
+const unReadList = reactive({
+  pageNum: 1,
+  pageSize: 10
+})
+const readList = reactive({
+  pageNum: 1,
+  pageSize: 10
+})
+
 function lookMessage() {
   drawerVisible.value = true
-  selectByUserId({userId:UserStore.id}).then(t=>{
-    unReadMessages.value=t.data
+  if(activeName.value=='first'){
+    getMessagesByReadFlag(0, unReadList.pageNum, unReadList.pageSize)
+  }else{
+    getMessagesByReadFlag(1, readList.pageNum, readList.pageSize)
+  }
+
+}
+
+function getMessagesByReadFlag(readFlag: Number, pageNum: Number, pageSize: Number) {
+  selectMessage({ userId: UserStore.id, readFlag: readFlag, pageNum: pageNum, pageSize: pageSize }).then(t => {
+    allMessages.value = t.data.list
+    tolal.value = t.data.total
+  })
+}
+
+
+function handleUnReadSizeChange(val: number) {
+  unReadList.pageNum = 1;
+  unReadList.pageSize = val;
+  getMessagesByReadFlag(0, unReadList.pageNum, unReadList.pageSize);
+}
+
+function handleUnReadCurrentChange(val: number) {
+  unReadList.pageNum = val;
+  getMessagesByReadFlag(0, unReadList.pageNum, unReadList.pageSize);
+}
+
+function handleReadSizeChange(val: number) {
+  readList.pageNum = 1;
+  readList.pageSize = val;
+  getMessagesByReadFlag(1, readList.pageNum, readList.pageSize);
+}
+
+function handleReadCurrentChange(val: number) {
+  readList.pageNum = val;
+  getMessagesByReadFlag(1, readList.pageNum, readList.pageSize);
+}
+
+//对单条数据已读
+function handleReadSingleMessage(id:number){
+  readSingleMessage({id:id}).then(response=>{
+    ElNotification({
+      title: '已读',
+      type: 'success'
+    })
+    getMessagesByReadFlag(0, unReadList.pageNum, unReadList.pageSize);
+  }).catch((res) => {
+    ElNotification({
+      title: '失败',
+      type: 'error'
+    })
+  })
+}
+
+function readAllMessage() {
+  readAll({ userId: UserStore.id }).then(response => {
+    ElNotification({
+      title: '成功',
+      type: 'success'
+    })
+    getMessagesByReadFlag(readFlag.value,unReadList.pageNum, unReadList.pageSize)
+    unReadMessageCount.value = 0
+  }).catch((res) => {
+    ElNotification({
+      title: '失败',
+      type: 'error'
+    })
+  })
+}
+
+function emptyReadMessage() {
+  deleteReadAll({ userId: UserStore.id }).then(response => {
+    ElNotification({
+      title: '已清空',
+      type: 'success'
+    })
+    getMessagesByReadFlag(readFlag.value,readList.pageNum,readList.pageSize)
+  }).catch((res) => {
+    ElNotification({
+      title: '失败',
+      type: 'error'
+    })
   })
 }
 
 //时间格式化并计算当前到截至日期的时间
 function formatToHtml(t: any) {
   let messageContent = '';
-      switch(t.messageType){
-        // 1 文件被评论 2评论被回复 3上传 4审核未通过
-        case 1:
-        messageContent=
-        '<span style="color: #2ea7e0;">'+t.whoName+'</span>'+'评论了你上传的文件'+t.fileName
-        +'<span style="color: #e6a23c; font-size:12px;float:right">'+timeFormat(t.createDate)+'</span>'
-        break;
-        case 2:
-        messageContent='<span style="color: #2ea7e0;">'+t.whoName+'</span>'+'在'+t.fileName+'中回复了你的评论'
-        +'<span style="color: #e6a23c; font-size:12px;float:right">'+timeFormat(t.createDate)+'</span>'
-        break;
-        case 3:
-        messageContent='<span style="color: #2ea7e0;">'+t.whoName+'</span>'+'上传了'+t.fileName
-        +'<span style="color: #e6a23c; font-size:12px;float:right">'+timeFormat(t.createDate)+'</span>'
-        break;
-        case 4:
-        messageContent=t.whoName+'于'+timeFormat(t.createDate)+'在'
-        break;
-      }
-      return messageContent;
+  switch (t.messageType) {
+    // 1 文件被评论 2评论被回复 3上传 4审核未通过
+    case 1:
+      messageContent =
+        '<span style="color: #2ea7e0;">' + t.whoName + '</span>' + '评论了你上传的文件' + t.fileName
+        + '<span style="color: #e6a23c; font-size:12px;float:right">' + timeFormat(t.createDate) + '</span>'
+      break;
+    case 2:
+      messageContent = '<span style="color: #2ea7e0;">' + t.whoName + '</span>' + '在' + t.fileName + '中回复了你的评论'
+        + '<span style="color: #e6a23c; font-size:12px;float:right">' + timeFormat(t.createDate) + '</span>'
+      break;
+    case 3:
+      messageContent = '<span style="color: #2ea7e0;">' + t.whoName + '</span>' + '上传了' + t.fileName
+        + '<span style="color: #e6a23c; font-size:12px;float:right">' + timeFormat(t.createDate) + '</span>'
+      break;
+    case 4:
+      messageContent = t.whoName + '于' + timeFormat(t.createDate) + '在'
+      break;
+  }
+  return messageContent;
 }
 
 function timeFormat(time: string) {
-	if (time == null || time === '') {
-		return 'N/A';
-	}
-	let date = new Date(time);
-	return dayjs(date).format("YYYY-MM-DD HH:mm:ss")
+  if (time == null || time === '') {
+    return 'N/A';
+  }
+  let date = new Date(time);
+  return dayjs(date).format("YYYY-MM-DD HH:mm:ss")
 }
 
 
@@ -164,8 +304,8 @@ const changePasswordRules: FormRules = {
 getUnReadCounts()
 
 function getUnReadCounts() {
-  getCountByUserId().then(t=>{
-    unReadMessageCount.value=t.data
+  getUnReadCount().then(t => {
+    unReadMessageCount.value = t.data
   })
 }
 
@@ -275,6 +415,7 @@ function logout() {
     }
   }
 }
+
 ul {
   li {
     text-align: left;
@@ -286,6 +427,7 @@ ul {
     }
   }
 }
+
 .inner .hot-list-article li {
   display: block;
   line-height: 32px;

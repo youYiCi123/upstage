@@ -18,7 +18,7 @@
                     </el-form-item>
                     <!-- todo -->
                     <el-form-item label="模板类型：">
-                        <el-select v-model="listQuery.type" placeholder="请选择模板类型" clearable>
+                        <el-select v-model="listQuery.type" placeholder="请选择模板类型" style="width: 150px;" clearable>
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>

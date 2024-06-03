@@ -113,8 +113,9 @@ import TransferButton from "@/components/buttons/transfer-button/index.vue";
 import FileInfoButton from "@/components/buttons/fileInfo-button/index.vue";
 import SetButton from "@/components/buttons/set-button/index.vue";
 import panUtil from "@/utils/fileUtil";
-import { useRouter } from "vue-router"; //vue3路由跳转
+import { useRouter,useRoute } from "vue-router"; //vue3路由跳转
 const router = useRouter();
+const route = useRoute();
 import pinia from "@/store/index";
 import { useFileStore } from "@/store/modules/fileStore";
 import { useUserStore } from "@/store/modules/userStore";
@@ -222,7 +223,7 @@ function rename(rightClickItem: any) {
 function getList() {
   list({
     pageType: panUtil.fileFold.DEP,
-    parentId: fileStore.parentDepId,
+    parentId: route.params.parentId==undefined?fileStore.parentDepId:route.params.parentId,
     fileTypes: fileStore.fileTypes,
   }).then((response) => {
     fileList.value = response.data;

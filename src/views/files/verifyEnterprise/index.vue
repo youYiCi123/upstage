@@ -17,7 +17,7 @@
                         <el-input v-model="listQuery.keyword" class="input-width" placeholder="文件名称" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="文件类型">
-                        <el-select v-model="listQuery.fileType" clearable placeholder="请选择">
+                        <el-select v-model="listQuery.fileType" clearable placeholder="请选择" style="width: 150px;">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
@@ -47,9 +47,9 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="parentFilename" label="文件夹名称" min-width="140" align="center">
+                <el-table-column prop="parentFilename" label="文件夹导航" min-width="140" align="center">
                     <template #default="scope"> 
-                        <el-link type="primary">{{ scope.row.parentFilename
+                        <el-link @click="goInFolder(scope.row.parentId,scope.row.parentFilename)" type="primary">{{ scope.row.parentFilename
                         }}</el-link>
                     </template>
                 </el-table-column>
@@ -90,6 +90,10 @@ import { useRouter } from 'vue-router'; //vue3路由跳转
 import pinia from '@/store/index'
 import { useUserStore } from "@/store/modules/userStore";
 const userStore = useUserStore(pinia);
+import { useFileStore } from "@/store/modules/fileStore";
+const fileStore = useFileStore(pinia);
+import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
+const breadcrumbStore = useBreadcrumbStore(pinia);
 
 const router = useRouter();
 const showViewer = ref(false);
@@ -161,6 +165,18 @@ const options = [
 const fileList = ref<any[]>([]) //文件列表
 const total = ref(0);
 const tableLoading = ref(false);
+
+function goInFolder(parentId: any, parentFilename: any) {
+    //放到vuex中
+    fileStore.parentId = parentId
+    breadcrumbStore.breadCrumbs = [];
+    breadcrumbStore.breadCrumbs.unshift({
+        name: parentFilename,
+        id: parentId,
+    });
+    router.push({ path: '/fold/enterpriseFiles' })
+}
+
 
 function getList() {
     tableLoading.value = true;

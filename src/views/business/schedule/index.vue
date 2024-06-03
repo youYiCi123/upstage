@@ -15,7 +15,7 @@
                 <el-date-picker v-model="calendarInfo.endDate" type="date" placeholder="请选择日期" style="width: 250px" />
             </el-form-item>
             <el-form-item label="级别：">
-                <el-select v-model="calendarInfo.level" clearable>
+                <el-select v-model="calendarInfo.level" style="width: 150px;" clearable >
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         <span style="position: absolute;top: 50%; transform: translate(-150%, -50%);" :class="item.label === '紧急' ? 'badgeDot JJdot' : item.label === '重要' ? 'badgeDot ZYdot' :
                             item.label === '次要' ? 'badgeDot CYdot' : 'badgeDot BZYdot'"></span>

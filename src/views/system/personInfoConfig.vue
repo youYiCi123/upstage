@@ -3,10 +3,10 @@
         <el-form ref="personalConfigForm" :model="mime" :rules="rules" style="margin-top: 6px;" size="default" label-width="100px">
             <el-form-item label="头像：">
                 <avatar-upload class="avatar" :avatar="mime.icon" :nickname="mime.nickName"
-                    @uploadSuccess="uploadSuccess"></avatar-upload>
+                    @uploadSuccess="uploadSuccess" disabled></avatar-upload>
             </el-form-item>
             <el-form-item label="姓名：" prop="nickName">
-                <el-input v-model="mime.nickName" style="width: 250px"></el-input>
+                <el-input v-model="mime.nickName" style="width: 250px" disabled></el-input>
             </el-form-item>
             <el-form-item label="账号名：" prop="username">
                 <el-input v-model="mime.username" style="width: 250px"></el-input>
