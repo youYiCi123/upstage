@@ -28,7 +28,9 @@
                 <input type="text" v-model="fileNameBySerch" required @keyup.enter.native="searchFileByName" />
                 <span class="line"></span>
               </label>
+              
               <upload-button  @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
+              <TaskList></TaskList>
               <create-folder-button @loadFileList="getList" :is-dep="true" size="default"
                 :round-flag="true" />
             </div>
@@ -123,6 +125,7 @@ import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
 const fileStore = useFileStore(pinia);
 const userStore = useUserStore(pinia);
 const breadcrumbStore = useBreadcrumbStore(pinia);
+import TaskList from "@/components/task-list/index.vue";
 import UploadButton from "@/components/buttons/upload-button/index.vue";
 import CreateFolderButton from "@/components/buttons/create-folder-button/index.vue";
 import { ElButton } from "element-plus";

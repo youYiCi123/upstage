@@ -29,6 +29,7 @@
                 <span class="line"></span>
               </label>
               <upload-button ref="step2" @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
+              <TaskList></TaskList>
               <create-folder-button  ref="step3" @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
               <el-button type="primary" @click="open = true" size="small">新手导航</el-button>
             </div>
@@ -120,6 +121,8 @@ import { useBreadcrumbStore } from "@/store/modules/breadcrumbStore";
 const fileStore = useFileStore(pinia);
 const userStore = useUserStore(pinia);
 const breadcrumbStore = useBreadcrumbStore(pinia);
+import TaskList from "@/components/task-list/index.vue";
+
 import UploadButton from "@/components/buttons/upload-button/index.vue";
 import CreateFolderButton from "@/components/buttons/create-folder-button/index.vue";
 //用户名水印
