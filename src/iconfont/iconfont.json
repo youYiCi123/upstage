@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "622432",
+      "name": "zip",
+      "font_class": "zip",
+      "unicode": "e741",
+      "unicode_decimal": 59201
+    },
+    {
       "icon_id": "1876332",
       "name": "回收站",
       "font_class": "huishouzhan",

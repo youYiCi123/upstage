@@ -30,7 +30,8 @@
               </label>
               <upload-button ref="step2" @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
               <TaskList></TaskList>
-              <create-folder-button  ref="step3" @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
+              <create-folder-button ref="step3" @loadFileList="getList" :is-dep="false" size="default"
+                :round-flag="true" />
               <el-button type="primary" @click="open = true" size="small">新手导航</el-button>
             </div>
           </el-card>
@@ -242,6 +243,9 @@ function analysisType(type: any) {
   switch (type) {
     case 0:
       tagStr = require("@/assets/images/file-img/fold.png");
+      break;
+    case 2:
+      tagStr = require("@/assets/images/file-img/zip.png");
       break;
     case 3:
       tagStr = require("@/assets/images/file-img/excel.png");

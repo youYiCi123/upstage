@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div style="text-align: center">
-                    <el-switch v-model="waterMarkFlag" class="ml-2" inline-prompt  size="large"
+                    <el-switch v-model="waterMarkFlag" class="ml-2" inline-prompt size="large"
                         style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949" active-text="开启水印"
                         inactive-text="关闭水印" />
                 </div>
@@ -161,36 +161,42 @@ function filesAdded(files: any, fileList: any, event: any) {
             taskStore.add(taskItem)
             MD5(f.file, (e: any, md5: any) => {
                 f['uniqueIdentifier'] = md5
-                secUpload({
-                    pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
+                f.resume()
+                taskStore.updateStatus({
                     filename: f.name,
-                    identifier: md5,
-                    parentId: parentId
-                }).then((res) => {
-                    if (res.code === 200) {
-                        ElMessage.success('文件：' + f.name + ' 上传完成')
-                        f.cancel()
-                        taskStore.remove(f.name)
-                        emit('loadFileList')
-                        if (uploader.files.length === 0) {
-                            taskStore.updateViewFlag(false)
-                        }
-                    } else {
-                        f.resume()
-                        taskStore.updateStatus({
-                            filename: f.name,
-                            status: panUtil.fileStatus.WAITING.code,
-                            statusText: panUtil.fileStatus.WAITING.text
-                        })
-                    }
-                }).catch(() => {
-                    f.resume()
-                    taskStore.updateStatus({
-                        filename: f.name,
-                        status: panUtil.fileStatus.WAITING.code,
-                        statusText: panUtil.fileStatus.WAITING.text
-                    })
+                    status: panUtil.fileStatus.WAITING.code,
+                    statusText: panUtil.fileStatus.WAITING.text
                 })
+                // secUpload({ //秒传功能取消，避免相同文件在多个文件夹中出现
+                //     pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
+                //     filename: f.name,
+                //     identifier: md5,
+                //     parentId: parentId
+                // }).then((res) => {
+                //     if (res.code === 200 && res.message===null) {
+                //         ElMessage.success('文件：' + f.name + ' 上传完成')
+                //         f.cancel()
+                //         taskStore.remove(f.name)
+                //         emit('loadFileList')
+                //         if (uploader.files.length === 0) {
+                //             taskStore.updateViewFlag(false)
+                //         }
+                //     } else {
+                //         f.resume()
+                //         taskStore.updateStatus({
+                //             filename: f.name,
+                //             status: panUtil.fileStatus.WAITING.code,
+                //             statusText: panUtil.fileStatus.WAITING.text
+                //         })
+                //     }
+                // }).catch(() => {
+                //     f.resume()
+                //     taskStore.updateStatus({
+                //         filename: f.name,
+                //         status: panUtil.fileStatus.WAITING.code,
+                //         statusText: panUtil.fileStatus.WAITING.text
+                //     })
+                // })
             })
         })
     } catch (e: any) {
@@ -277,7 +283,7 @@ function doMerge(file: any) {
         timeRemaining: panUtil.translateTime(file.timeRemaining())
     })
     merge({
-        waterMarkFlag:waterMarkFlag.value,
+        waterMarkFlag: waterMarkFlag.value,
         pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
         filename: uploadTaskItem.filename,
         identifier: uploadTaskItem.target.uniqueIdentifier,

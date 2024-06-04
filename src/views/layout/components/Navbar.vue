@@ -198,6 +198,7 @@ function handleReadSingleMessage(id:number){
       type: 'success'
     })
     getMessagesByReadFlag(0, unReadList.pageNum, unReadList.pageSize);
+    unReadMessageCount.value--;
   }).catch((res) => {
     ElNotification({
       title: '失败',

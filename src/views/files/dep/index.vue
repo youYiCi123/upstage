@@ -28,11 +28,10 @@
                 <input type="text" v-model="fileNameBySerch" required @keyup.enter.native="searchFileByName" />
                 <span class="line"></span>
               </label>
-              
-              <upload-button  @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
+
+              <upload-button @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
               <TaskList></TaskList>
-              <create-folder-button @loadFileList="getList" :is-dep="true" size="default"
-                :round-flag="true" />
+              <create-folder-button @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
             </div>
           </el-card>
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
@@ -115,7 +114,7 @@ import TransferButton from "@/components/buttons/transfer-button/index.vue";
 import FileInfoButton from "@/components/buttons/fileInfo-button/index.vue";
 import SetButton from "@/components/buttons/set-button/index.vue";
 import panUtil from "@/utils/fileUtil";
-import { useRouter,useRoute } from "vue-router"; //vue3路由跳转
+import { useRouter, useRoute } from "vue-router"; //vue3路由跳转
 const router = useRouter();
 const route = useRoute();
 import pinia from "@/store/index";
@@ -226,7 +225,7 @@ function rename(rightClickItem: any) {
 function getList() {
   list({
     pageType: panUtil.fileFold.DEP,
-    parentId: route.params.parentId==undefined?fileStore.parentDepId:route.params.parentId,
+    parentId: route.params.parentId == undefined ? fileStore.parentDepId : route.params.parentId,
     fileTypes: fileStore.fileTypes,
   }).then((response) => {
     fileList.value = response.data;
@@ -240,6 +239,9 @@ function analysisType(type: any) {
   switch (type) {
     case 0:
       tagStr = require("@/assets/images/file-img/fold.png");
+      break;
+    case 2:
+      tagStr = require("@/assets/images/file-img/zip.png");
       break;
     case 3:
       tagStr = require("@/assets/images/file-img/excel.png");

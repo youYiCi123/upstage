@@ -9,11 +9,13 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="活动地点：" v-if="TempQu.tempType == 2">
-                    <el-input v-model="activity.address" :disabled="isView" type="textarea" :rows="2" placeholder="请输入活动地点" clearable>
+                    <el-input v-model="activity.address" :disabled="isView" type="textarea" :rows="2" placeholder="请输入活动地点"
+                        clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="活动日期：" v-if="TempQu.tempType == 2">
-                    <el-date-picker v-model="activity.activityTime" :disabled="isView" type="datetimerange" format="YYYY-MM-DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss" start-placeholder="开始时间"
+                    <el-date-picker v-model="activity.activityTime" :disabled="isView" type="datetimerange"
+                        format="YYYY-MM-DD HH:mm:ss" value-format="YYYY-MM-DD HH:mm:ss" start-placeholder="开始时间"
                         end-placeholder="结束时间" range-separator="-" size="default" />
                 </el-form-item>
                 <el-form-item label="活动组织者：" v-if="TempQu.tempType == 2">
@@ -22,12 +24,16 @@
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="参与部门：" v-if="TempQu.tempType == 2">
-                    <el-select v-model="activity.depIds" multiple :disabled="isView" placeholder="请选择部门" style="width: 250px" clearable>
+                    <el-select v-model="activity.depIds" multiple :disabled="isView" placeholder="请选择部门"
+                        style="width: 250px" clearable>
                         <el-option v-for="item in allDepList" :key="item.id" :label="item.depName" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-divider v-if="TempQu.tempType == 2" />
+                <el-switch v-show="isView==false" :disabled="isView" v-model="survey.anonymousFlag" class="ml-2" inline-prompt size="large"
+                    style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949" active-text="开启匿名"
+                    inactive-text="关闭匿名" />
                 <!-- 以下为模板选项 -->
                 <div v-for="(item, index) in TempQu.quList" :index="index" :key="item.id" class="qu-content">
                     <p>{{ index + 1 }}.{{ item.content }}</p>
@@ -50,7 +56,8 @@
                         </el-checkbox-group>
                     </div>
                     <div v-if="item.quType == 4">
-                        <el-input v-model="item.inputValue" :disabled="isView" type="textarea" placeholder="请输入活动主题" clearable>
+                        <el-input v-model="item.inputValue" :disabled="isView" type="textarea" placeholder="请输入活动主题"
+                            clearable>
                         </el-input>
                     </div>
                 </div>
@@ -103,8 +110,10 @@ const survey = reactive({
     tempId: '',
     tempName: '',
     tempType: 1,
+    anonymousFlag:false,
     tempValueSubmitSingerDtos: [] as any[]
 })
+
 
 //获取模板内容
 const TempQu = reactive({
@@ -130,12 +139,12 @@ function init() {
         }).catch(() => {
         })
     } else {
-        getTempUserDetail({ tempId: route.query.tempId,relateId:route.query.relateId, userId: route.query.userId }).then(res => {
-            activity.name=res.data.name
-            activity.address=res.data.address
-            activity.activityTime=res.data.activityTime
-            activity.handlerUserId=res.data.handlerUserId
-            activity.depIds=res.data.depIds
+        getTempUserDetail({ tempId: route.query.tempId, relateId: route.query.relateId, userId: route.query.userId }).then(res => {
+            activity.name = res.data.name
+            activity.address = res.data.address
+            activity.activityTime = res.data.activityTime
+            activity.handlerUserId = res.data.handlerUserId
+            activity.depIds = res.data.depIds
             selectUserArray.value = findIndexArray(sendPersonOptions.value, activity.handlerUserId)
             TempQu.tempName = res.data.tempName
             TempQu.tempType = res.data.tempType
@@ -275,5 +284,4 @@ p:first-child {
     border-bottom: #eee 1px solid;
     padding-bottom: 10px;
 
-}
-</style>
+}</style>

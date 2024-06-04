@@ -96,7 +96,7 @@ let panUtil = {
         tagStr = "iconfont  icon-folder-open";
         break;
       case 2:
-        tagStr = "iconfont  icon-archive";
+        tagStr = "iconfont icon-zip";
         break;
       case 3:
         tagStr = "iconfont  icon-excel";

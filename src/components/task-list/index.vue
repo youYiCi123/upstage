@@ -1,6 +1,7 @@
 <template>
     <div>
-        <el-badge :max="99" :value="taskStore.taskList.length" :hidden="taskStore.taskList.length<= 0" class="item" type="danger">
+        <el-badge :max="99" :value="taskStore.taskList.length" :hidden="taskStore.taskList.length <= 0" class="item"
+            type="danger">
             <el-popover title="上传任务列表" placement="bottom-end" width="600" trigger="manual" :visible="taskStore.viewFlag">
                 <div class="pan-upload-task-items-content">
                     <el-table empty-text="暂无传输任务" :data="taskStore.taskList" height="300px" style="width: 100%">
@@ -13,17 +14,17 @@
                                     <p>状态: {{ scope.row.statusText }}</p>
                                     <template #reference class="name-wrapper">
                                         <el-button v-show="scope.row.status === fileStatus.WAITING.code" size="small"
-                                        :icon="Stopwatch" circle></el-button>
+                                            :icon="Stopwatch" circle></el-button>
                                         <el-button v-show="scope.row.status === fileStatus.PAUSE.code" size="small"
-                                        :icon="VideoPlay" type="warning" circle></el-button>
+                                            :icon="VideoPlay" type="warning" circle></el-button>
                                         <el-button v-show="scope.row.status === fileStatus.UPLOADING.code" size="small"
-                                         :icon="Upload" type="success" circle></el-button>
+                                            :icon="Upload" type="success" circle></el-button>
                                         <el-button v-show="scope.row.status === fileStatus.FAIL.code" size="small"
-                                         :icon="Warning" type="danger" circle></el-button>
+                                            :icon="Warning" type="danger" circle></el-button>
                                         <el-button v-show="scope.row.status === fileStatus.PARSING.code" size="small"
-                                          :icon="Loading"  type="info"  circle></el-button>
+                                            :icon="Loading" type="info" circle></el-button>
                                         <el-button v-show="scope.row.status === fileStatus.MERGE.code" size="small"
-                                         :icon="MagicStick" type="primary"  circle></el-button>
+                                            :icon="MagicStick" type="primary" circle></el-button>
                                     </template>
                                 </el-popover>
                             </template>
@@ -43,33 +44,38 @@
                         </el-table-column>
                         <el-table-column align="center" header-align="center" label="操作" width="180">
                             <template #default="scope">
-                                <el-tooltip v-show="scope.row.status === fileStatus.UPLOADING.code" class="item"
-                                    effect="light" content="暂停上传" placement="top">
-                                    <el-button @click="pauseUpload(scope.row.filename)" size="small" type="info"
-                                    :icon="VideoPause" circle></el-button>
-                                </el-tooltip>
-                                <el-tooltip v-show="scope.row.status === fileStatus.PAUSE.code" class="item" effect="light"
-                                    content="继续上传" placement="top">
-                                    <el-button @click="resumeUpload(scope.row.filename)" size="small" type="success"
-                                     :icon="VideoPlay" circle></el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    v-show="scope.row.status === fileStatus.UPLOADING.code || scope.row.status === fileStatus.WAITING.code || scope.row.status === fileStatus.PAUSE.code"
-                                    class="item" effect="light" content="取消上传" placement="top">
-                                    <el-button @click="cancelUpload(scope.row.filename)" size="small" :icon="CircleClose"
-                                        circle></el-button>
-                                </el-tooltip>
-                                <el-tooltip v-show="scope.row.status === fileStatus.FAIL.code" class="item" effect="light"
-                                    content="重新上传" placement="top">
-                                    <el-button @click="retryUpload(scope.row.filename)" size="small" type="warning"
-                                     :icon="Refresh" circle></el-button>
-                                </el-tooltip>
+                                <div v-show="scope.row.status === fileStatus.UPLOADING.code">
+                                    <el-tooltip class="item" effect="light" content="暂停上传" placement="top">
+                                        <el-button @click="pauseUpload(scope.row.filename)" size="small" type="info"
+                                            :icon="VideoPause" circle></el-button>
+                                    </el-tooltip>
+                                </div>
+                                <div v-show="scope.row.status === fileStatus.PAUSE.code">
+                                    <el-tooltip class="item" effect="light" content="继续上传" placement="top">
+                                        <el-button @click="resumeUpload(scope.row.filename)" size="small" type="success"
+                                            :icon="VideoPlay" circle></el-button>
+                                    </el-tooltip>
+                                </div>
+                                <div
+                                    v-show="scope.row.status === fileStatus.UPLOADING.code || scope.row.status === fileStatus.WAITING.code || scope.row.status === fileStatus.PAUSE.code">
+                                    <el-tooltip class="item" effect="light" content="取消上传" placement="top">
+                                        <el-button @click="cancelUpload(scope.row.filename)" size="small"
+                                            :icon="CircleClose" circle></el-button>
+                                    </el-tooltip>
+                                </div>
+                                <div v-show="scope.row.status === fileStatus.FAIL.code">
+                                    <el-tooltip class="item" effect="light" content="重新上传" placement="top">
+                                        <el-button @click="retryUpload(scope.row.filename)" size="small" type="warning"
+                                            :icon="Refresh" circle></el-button>
+                                    </el-tooltip>
+                                </div>
                             </template>
                         </el-table-column>
                     </el-table>
                 </div>
                 <template #reference>
-                    <el-button type="warning" round @click="taskStore.changeViewFlag" size="default" :icon="Sort"></el-button>
+                    <el-button type="warning" round @click="taskStore.changeViewFlag" size="default"
+                        :icon="Sort"></el-button>
                 </template>
             </el-popover>
         </el-badge>
@@ -79,7 +85,7 @@
 <script setup lang="ts">
 import panUtil from '@/utils/fileUtil'
 import { ElMessage } from 'element-plus';
-import {Sort,Refresh,CircleClose,VideoPlay,VideoPause,Stopwatch,MagicStick,Loading,Upload,Warning } from '@element-plus/icons-vue'  
+import { Sort, Refresh, CircleClose, VideoPlay, VideoPause, Stopwatch, MagicStick, Loading, Upload, Warning } from '@element-plus/icons-vue'
 import pinia from '@/store/index'
 import { useTaskStore } from "@/store/modules/taskStore";
 const taskStore = useTaskStore(pinia);
@@ -90,17 +96,17 @@ const colors = [
 ]
 const fileStatus = panUtil.fileStatus
 
-function pauseUpload(filename:string|number) {
+function pauseUpload(filename: string | number) {
     taskStore.pause(filename)
 }
-function resumeUpload(filename:string|number) {
+function resumeUpload(filename: string | number) {
     taskStore.resume(filename)
 }
-function cancelUpload(filename:string|number) {
+function cancelUpload(filename: string | number) {
     taskStore.cancel(filename)
     ElMessage.info('文件：' + filename + ' 取消上传');
 }
-function retryUpload(filename:string|number) {
+function retryUpload(filename: string | number) {
     taskStore.retry(filename)
 }
 </script>
