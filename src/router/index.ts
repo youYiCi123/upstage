@@ -108,6 +108,12 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         meta: { title: "部门审核" },
       },
       {
+        path: "myUploadFileStatus",
+        name: "myUploadFileStatus",
+        component: () => import("@/views/files/myUploadFileStatus/index.vue"),
+        meta: { title: "我的上传" },
+      },
+      {
         path: "fileOperateLog",
         name: "fileOperateLog",
         component: () => import("@/views/files/fileOperateLog/index.vue"),

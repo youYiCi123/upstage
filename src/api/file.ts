@@ -222,3 +222,11 @@ export function merge(data: any) {
     method: "post",
   });
 }
+
+export function getMyUploadFileStatus(params: any) {
+  return request({
+    url: "/file-service/myUploadFileStatus/select",
+    params: params,
+    method: "get",
+  });
+}

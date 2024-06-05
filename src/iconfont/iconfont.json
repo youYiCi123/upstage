@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7678518",
+      "name": "上传状态",
+      "font_class": "yunfuwupingtai",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
       "icon_id": "622432",
       "name": "zip",
       "font_class": "zip",
