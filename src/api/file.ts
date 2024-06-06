@@ -230,3 +230,11 @@ export function getMyUploadFileStatus(params: any) {
     method: "get",
   });
 }
+
+export function depToEnterprise(params: any) {
+  return request({
+    url: "/file-service/depToEnterprise",
+    params: params,
+    method: "get",
+  });
+}

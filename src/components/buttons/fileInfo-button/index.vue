@@ -1,10 +1,9 @@
 <template>
     <div class="rename-button-content">
-        <el-button v-if="roundFlag" type="primary" :size="size" round @click="renameFile">
-            详情信息<i class="el-icon-edit el-icon--right" />
+        <el-button v-if="roundFlag" :icon="Postcard" type="primary" :size="size" round @click="renameFile">
+            详情信息
         </el-button>
-        <el-button v-if="circleFlag" type="primary" :size="size" circle @click="renameFile">
-            <i class="el-icon-edit" />
+        <el-button v-if="circleFlag" :icon="Postcard" type="primary" :size="size" circle @click="renameFile">
         </el-button>
         <el-dialog title="文件详情" v-model="fileInfoDialogVisible" width="47%" :append-to-body=true :modal-append-to-body=false
             :center=true>
@@ -24,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import { Postcard } from '@element-plus/icons-vue'
 import { ref} from 'vue'
 
 const props = defineProps({

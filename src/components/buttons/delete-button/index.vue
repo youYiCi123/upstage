@@ -1,16 +1,16 @@
 <template>
     <div class="download-button-content">
-        <el-button v-if="roundFlag" type="danger" :size="size" round @click="deleteFile">
-            删除<i class="el-icon-delete el-icon--right" />
+        <el-button v-if="roundFlag" :icon="Delete" type="danger" :size="size" round @click="deleteFile">
+            删除
         </el-button>
-        <el-button v-if="circleFlag" type="danger" :size="size" circle @click="deleteFile">
-            <i class="el-icon-delete" />
+        <el-button v-if="circleFlag" :icon="Delete" type="danger" :size="size" circle @click="deleteFile">
         </el-button>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { Delete } from '@element-plus/icons-vue'
 import {deleteFiles} from '../../../api/file'
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
@@ -37,7 +37,6 @@ const props = defineProps({
 const emit = defineEmits(['loadFileList'])
 
 function deleteFile() {
-    console.log("doDeleteFile",props.item.fileId)
     if (props.item) {
         doDeleteFile(props.item.fileId)
         return
@@ -63,7 +62,7 @@ function doDeleteFile(fileId: any) {
         }).catch((res:any)=>{
         })
     }).catch((res)=>{
-        ElMessage.error(res.message)
+
     })
 }
 </script>

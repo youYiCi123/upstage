@@ -1,10 +1,9 @@
 <template>
     <div class="download-button-content">
-        <el-button v-if="roundFlag" type="info" :size="size" round @click="showDialog" :loading="loading">
-            下载<i class="el-icon-download el-icon--right" />
+        <el-button v-if="roundFlag" :icon="Download" type="info" :size="size" round @click="showDialog" :loading="loading">
+            下载
         </el-button>
-        <el-button v-if="circleFlag" type="info" :size="size" circle @click="showDialog" :loading="loading">
-            <i class="el-icon-download" />
+        <el-button v-if="circleFlag" :icon="Download" type="info" :size="size" circle @click="showDialog" :loading="loading">
         </el-button>
         <el-dialog title="添加水印" v-model="waterMarkDialogVisible" width="30%" @opened="focusInput()" :append-to-body=true
             :modal-append-to-body=false :center=true>
@@ -28,6 +27,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus';
+import { Download } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";

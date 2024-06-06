@@ -1,10 +1,9 @@
 <template>
     <div class="rename-button-content">
-        <el-button v-if="roundFlag" type="primary" :size="size" round @click="lookComment">
-            评论<i class="el-icon-edit el-icon--right" />
+        <el-button v-if="roundFlag" :icon="ChatDotRound" type="primary" :size="size" round @click="lookComment">
+            评论
         </el-button>
-        <el-button v-if="circleFlag" type="primary" :size="size" circle @click="lookComment">
-            <i class="el-icon-edit" />
+        <el-button v-if="circleFlag" type="primary" :icon="ChatDotRound" :size="size" circle @click="lookComment">
         </el-button>
         <el-drawer destroy-on-close append-to-body v-model="drawerVisible" size="35%" :with-header="false" :direction="direction">
             <comment :fileId="props.item.fileId"></comment>
@@ -14,6 +13,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ChatDotRound } from '@element-plus/icons-vue'
 import Comment from "@/components/comment/Comment.vue";
 const props = defineProps({
     roundFlag: {

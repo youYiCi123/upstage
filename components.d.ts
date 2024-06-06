@@ -100,6 +100,7 @@ declare module 'vue' {
     TaskList: typeof import('./src/components/task-list/index.vue')['default']
     Time: typeof import('./src/components/Chat/Time.vue')['default']
     TransferButton: typeof import('./src/components/buttons/transfer-button/index.vue')['default']
+    TransferToEnterButton: typeof import('./src/components/buttons/transferToEnter-button/index.vue')['default']
     TreeChart: typeof import('./src/components/HomeCard/TreeChart.vue')['default']
     TreeTransfer: typeof import('./src/components/TreeTransfer/index.vue')['default']
     UploadButton: typeof import('./src/components/buttons/upload-button/index.vue')['default']

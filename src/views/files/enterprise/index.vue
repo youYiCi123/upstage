@@ -466,7 +466,7 @@ function init() {
     if (fileStore.parentId == 1) {
       let firstItem = {
         id: 1,
-        name: "公共文件",
+        name: "企业文件",
       };
       breadcrumbStore.clear();
       breadcrumbStore.addItem(firstItem);

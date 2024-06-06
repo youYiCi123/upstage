@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-card class="operate-container" shadow="never">
             <i class="el-icon-tickets"></i>
-            <span style="color:red ; font-weight:bold ">注：删除功能被禁用，被删除的文件将在30天后自动清理</span>
+            <span style="color:red ; font-weight:bold ">注：删除功能被禁用，被删除的文件将在15天后自动清理</span>
             <el-button size="small" type="primary" @click="batchRecovery()" class="btn-add"  style="margin-left: 15px">批量恢复
             </el-button>
             <el-button size="small"  type="danger" disabled @click="batchDelete()" class="btn-add" >批量删除

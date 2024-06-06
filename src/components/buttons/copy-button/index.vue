@@ -1,9 +1,9 @@
 <template>
     <div class="copy-button-content">
-        <el-button v-if="roundFlag" :size="size" round @click="copyFile">
+        <el-button v-if="roundFlag" :icon="DocumentCopy" :size="size" round @click="copyFile">
             复制到
         </el-button>
-        <el-button v-if="circleFlag" icon="el-icon-document-copy" :size="size" circle @click="copyFile">
+        <el-button v-if="circleFlag" :icon="DocumentCopy" :size="size" circle @click="copyFile">
         </el-button>
         <el-dialog title="复制文件" v-model="treeDialogVisible" @open="loadTreeData" @closed="resetTreeData" width="30%"
             :append-to-body=true :modal-append-to-body=false :center=true>
@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { ref} from 'vue'
 import { ElMessage,ElTree} from 'element-plus';
+import { DocumentCopy } from '@element-plus/icons-vue'
 import {copy,getFolderTree} from '../../../api/file'
 import panUtil from '@/utils/fileUtil'
 import pinia from '@/store/index'

@@ -71,11 +71,14 @@
       " class="menuItem">
       <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
     </div>
+    <div class="menuItem">
+      <transfer-to-enter-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+    </div>
     <!-- <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
               " class="menuItem">
               <copy-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true"
                 :item="rightClickItem" />
-            </div> -->
+    </div> -->
     <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
       " class="menuItem">
       <transfer-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true" :item="rightClickItem" />
@@ -109,6 +112,7 @@ import CommentButton from "@/components/buttons/comment-button/index.vue";
 import DownloadButton from "@/components/buttons/download-button/index.vue";
 import RenameButton from "@/components/buttons/rename-button/index.vue";
 import DeleteButton from "@/components/buttons/delete-button/index.vue";
+import TransferToEnterButton from "@/components/buttons/transferToEnter-button/index.vue";
 import CopyButton from "@/components/buttons/copy-button/index.vue";
 import TransferButton from "@/components/buttons/transfer-button/index.vue";
 import FileInfoButton from "@/components/buttons/fileInfo-button/index.vue";

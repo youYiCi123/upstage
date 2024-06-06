@@ -1,10 +1,9 @@
 <template>
     <div class="set-folder-button-content">
-        <el-button v-if="roundFlag" type="success" :size="size" round @click="setFile">
-            基础设置<i class="el-icon-folder-add el-icon--right" />
+        <el-button v-if="roundFlag" :icon="Setting" type="success" :size="size" round @click="setFile">
+            基础设置
         </el-button>
-        <el-button v-if="circleFlag" type="success" :size="size" circle @click="setFile">
-            <i class="el-icon-folder-add" />
+        <el-button v-if="circleFlag" :icon="Setting" type="success" :size="size" circle @click="setFile">
         </el-button>
         <el-dialog title="基础设置" v-model="basicSettingsDialogVisible" width="30%" :append-to-body=true
             :modal-append-to-body=false :center=true>
@@ -27,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import { Setting } from '@element-plus/icons-vue'
 import { saveSet } from '../../../api/file'
 import { ref, reactive} from 'vue'
 import { ElMessage } from 'element-plus';

@@ -1,10 +1,9 @@
 <template>
     <div class="rename-button-content">
-        <el-button v-if="roundFlag" type="warning" :size="size" round @click="renameFile">
-            重命名<i class="el-icon-edit el-icon--right" />
+        <el-button v-if="roundFlag" :icon="Reading" type="warning" :size="size" round @click="renameFile">
+            重命名
         </el-button>
-        <el-button v-if="circleFlag" type="warning" :size="size" circle @click="renameFile">
-            <i class="el-icon-edit" />
+        <el-button v-if="circleFlag" :icon="Reading" type="warning" :size="size" circle @click="renameFile">
         </el-button>
         <el-dialog title="文件重命名" v-model="renameDialogVisible" width="30%" @opened="focusInput()"
              :append-to-body=true :modal-append-to-body=false :center=true>
@@ -28,6 +27,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
+import { Reading } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
 import {updateFilename} from '../../../api/file'
 import pinia from '@/store/index'
