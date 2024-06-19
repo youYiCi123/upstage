@@ -32,7 +32,7 @@
               <TaskList></TaskList>
               <create-folder-button ref="step3" @loadFileList="getList" :is-dep="false" size="default"
                 :round-flag="true" />
-              <el-button type="primary" @click="open = true" size="small">新手导航</el-button>
+              <el-button type="primary" @click="open = true" size="small">操作指南</el-button>
             </div>
           </el-card>
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">

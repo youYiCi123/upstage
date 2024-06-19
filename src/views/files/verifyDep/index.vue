@@ -58,7 +58,7 @@
                 </el-table-column>
                 <el-table-column prop="creatName" label="创建人" width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="updateTime" sortable align="center" label="修改日期" width="240">
+                <el-table-column prop="updateTime" sortable align="center" label="上传日期" width="240">
                 </el-table-column>
                 <el-table-column label="操作" width="200" align="center">
                     <template #default="scope">

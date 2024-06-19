@@ -9,7 +9,9 @@
             highlight-current :props="defaultProps" :data="foldData" :filter-node-method="filterNode"
             @node-click="handleNodeClick">
             <template #default="{ node, data }">
-              <i class="iconfont icon-folder" style="margin-right: 15px; font-size: 20px; cursor: pointer" />
+              <i :class="[
+                node.level == 1 ? 'iconfont icon-kehuguanli' : 'iconfont icon-folder'
+              ]"  style="margin-right: 15px; font-size: 20px; cursor: pointer" />
               <span>{{ node.label }}</span>
             </template>
           </el-tree>
@@ -55,37 +57,51 @@
     top: position.top + 'px',
     display: menuVisible ? 'block' : 'none',
   }" class="contextmenu">
-    <div class="menuItem">
-      <file-info-button :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div class="menuItem">
-      <download-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div class="menuItem">
-      <comment-button :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div class="menuItem">
-      <set-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
-      " class="menuItem">
-      <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div class="menuItem">
-      <transfer-to-enter-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <!-- <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
+    <template v-if="rightClickItem">
+      <template v-if="!rightClickItem.folderFlag">
+        <div class="menuItem">
+          <file-info-button :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div class="menuItem">
+          <download-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div class="menuItem">
+          <comment-button :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div class="menuItem">
+          <set-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
+          " class="menuItem">
+          <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div class="menuItem">
+          <transfer-to-enter-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <!-- <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
               " class="menuItem">
               <copy-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true"
                 :item="rightClickItem" />
     </div> -->
-    <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
-      " class="menuItem">
-      <transfer-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true" :item="rightClickItem" />
-    </div>
-    <div class="menuItem">
-      <delete-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
+        <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
+          " class="menuItem">
+          <transfer-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true"
+            :item="rightClickItem" />
+        </div>
+        <div class="menuItem">
+          <delete-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+      </template>
+      <template v-else>
+        <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
+          " class="menuItem">
+          <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div class="menuItem">
+          <share-button :round-flag="true" size="small" :item="rightClickItem">分享给</share-button>
+        </div>
+      </template>
+    </template>
   </ul>
   <!-- 外部右键菜单 -->
   <ul v-show="outsideMenuVisible" :style="{
@@ -102,6 +118,9 @@
       图标模式
     </div>
   </ul>
+  <el-drawer destroy-on-close append-to-body v-model="drawerVisible" size="30%" :with-header="false">
+    <team-user :foldId="foldId"></team-user>
+  </el-drawer>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -117,6 +136,9 @@ import CopyButton from "@/components/buttons/copy-button/index.vue";
 import TransferButton from "@/components/buttons/transfer-button/index.vue";
 import FileInfoButton from "@/components/buttons/fileInfo-button/index.vue";
 import SetButton from "@/components/buttons/set-button/index.vue";
+import ShareButton from "@/components/buttons/share-button/index.vue";
+import TeamUser from "@/components/team-user/index.vue";
+
 import panUtil from "@/utils/fileUtil";
 import { useRouter, useRoute } from "vue-router"; //vue3路由跳转
 const router = useRouter();
@@ -138,6 +160,8 @@ const waterMark = ref(userStore.nickName)
 const foldName = ref("");
 const treeRef = ref();
 const currentLivingId = ref<any>(null);
+//用户点击el-tree后填充foldId,后续获取用户
+const foldId=ref(0);
 //用户搜索文件名
 const fileNameBySerch = ref("");
 //图片
@@ -176,7 +200,8 @@ watch(outsideMenuVisible, () => {
 });
 //文件呈现方式，true大图标；false列表
 const isImg = ref(true);
-
+//点击小组可以展示用户列表
+const drawerVisible = ref(false);
 interface Tree {
   [key: string]: any;
 }
@@ -279,6 +304,10 @@ function analysisType(type: any) {
 
 //点击el-tree
 function handleNodeClick(item: any, data: any) {
+  if(item.folderType!=0){
+    foldId.value=item.id
+    drawerVisible.value=true
+  }
   //加载文件
   list({
     pageType: panUtil.fileFold.DEP,

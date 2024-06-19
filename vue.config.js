@@ -9,8 +9,11 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     port: 8082, // 启动端口号
+    client: {
+      overlay: false
+    },
   },
-  configureWebpack:{  //配置webpack信息
+  configureWebpack: {  //配置webpack信息
     plugins: [
       //按需导入ElementPlus组件
       AutoImport({

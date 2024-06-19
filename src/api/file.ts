@@ -166,6 +166,23 @@ export function getFolderTree(params: any) {
   });
 }
 
+export function getTeamUser(params: any) {
+  return request({
+    url: "/file-service/file/required/getTeamUser",
+    params: params,
+    method: "get",
+  });
+}
+
+export function updateTeamUser(params: any) {
+  return request({
+    url: "/file-service/file/required/updateTeamUser",
+    params: params,
+    method: "get",
+  });
+}
+
+
 export function transfer(data: any) {
   return request({
     url: "/file-service/file/transfer",

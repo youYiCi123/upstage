@@ -27,6 +27,14 @@ export function depDetails(params: any) {
   });
 }
 
+//本部门同事信息
+export function getColleague() {
+  return request({
+    url: "/upstage-service/dep/getColleague",
+    method: "get"
+  });
+}
+
 //修改部门
 export function updateDep(id: any, data: any) {
   return request({

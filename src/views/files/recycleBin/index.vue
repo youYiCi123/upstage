@@ -5,7 +5,7 @@
             <span style="color:red ; font-weight:bold ">注：删除功能被禁用，被删除的文件将在15天后自动清理</span>
             <el-button size="small" type="primary" @click="batchRecovery()" class="btn-add"  style="margin-left: 15px">批量恢复
             </el-button>
-            <el-button size="small"  type="danger" disabled @click="batchDelete()" class="btn-add" >批量删除
+            <el-button size="small"  type="danger" disabled  @click="batchDelete()" class="btn-add" >批量删除
             </el-button>
 
         </el-card>
@@ -38,7 +38,7 @@
                 </el-table-column>
                 <el-table-column label="操作" width="200" align="center">
                     <template #default="scope">
-                        <el-button size="small" type="danger" @click="handleDelete(scope.row)" >彻底删除
+                        <el-button size="small" type="danger" disabled @click="handleDelete(scope.row)" >彻底删除
                         </el-button>
                         <el-button size="small" type="primary" @click="handleRecover(scope.row)">文件恢复
                         </el-button>
@@ -199,7 +199,7 @@ function timeFormatToHtml(time: string) {
     }
     let date = new Date(time);
     const credentialDate = dayjs(date).format("YYYY-MM-DD")
-    const futureDate = dayjs(date).add(30, "day").format("YYYY-MM-DD")
+    const futureDate = dayjs(date).add(15, "day").format("YYYY-MM-DD")
     const nowDate = dayjs(new Date).format("YYYY-MM-DD")
     const diff = dayjs(futureDate).diff(dayjs(nowDate), 'day');
     var html = credentialDate;
