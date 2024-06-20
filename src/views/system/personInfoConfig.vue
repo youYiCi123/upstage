@@ -3,7 +3,7 @@
         <el-form ref="personalConfigForm" :model="mime" :rules="rules" style="margin-top: 6px;" size="default" label-width="100px">
             <el-form-item label="头像：">
                 <avatar-upload class="avatar" :avatar="mime.icon" :nickname="mime.nickName"
-                    @uploadSuccess="uploadSuccess" disabled></avatar-upload>
+                    @uploadSuccess="uploadSuccess" ></avatar-upload>
             </el-form-item>
             <el-form-item label="姓名：" prop="nickName">
                 <el-input v-model="mime.nickName" style="width: 250px" disabled></el-input>

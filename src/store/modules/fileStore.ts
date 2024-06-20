@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 
 export const useFileStore = defineStore('fileStore', {
     state: () => ({
+        teamFlag:false,
         //企业
         parentId: 1,
         defaultParentId: 1,
@@ -14,6 +15,9 @@ export const useFileStore = defineStore('fileStore', {
         fileTypes: '-1'
     }),
     actions: {
+        setTeamFalg() {
+            this.teamFlag = !this.teamFlag
+        },
         setFileParentId(parentId:number) {
             this.parentId = parentId
         },

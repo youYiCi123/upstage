@@ -2,7 +2,7 @@
     <div class="create-folder-button-content">
         <el-button v-if="roundFlag" :icon="FolderAdd" type="success" :size="size" round
             @click="createFolderDialogVisible = true">
-            新建文件夹
+            新建文件夹/小组
         </el-button>
         <el-button v-if="circleFlag" type="success" :icon="FolderAdd" :size="size" circle
             @click="createFolderDialogVisible = true">
@@ -122,6 +122,7 @@ function doCreateFolder(formEl: FormInstance | undefined) {
             loading.value = true
             createFolder({
                 pageType: props.isDep,
+                teamFlag:fileStore.teamFlag,
                 parentId: props.isDep ? fileStore.parentDepId : fileStore.parentId,
                 folderName: createFolderForm.folderName,
                 folderType: createFolderForm.folderType,

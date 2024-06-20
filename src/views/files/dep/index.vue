@@ -3,7 +3,7 @@
     <div class="file-page-container">
       <el-container>
         <el-aside width="300px" class="folder-aside">
-          <el-input v-model="foldName" :prefix-icon="Search" placeholder="请输入文件夹名称"
+          <el-input ref="step1" v-model="foldName" :prefix-icon="Search" placeholder="请输入小组或文件夹名称"
             style="margin-bottom: 20px"></el-input>
           <el-tree class="filter-tree" ref="treeRef" default-expand-all node-key="id" :current-node-key="currentLivingId"
             highlight-current :props="defaultProps" :data="foldData" :filter-node-method="filterNode"
@@ -11,7 +11,7 @@
             <template #default="{ node, data }">
               <i :class="[
                 node.level == 1 ? 'iconfont icon-kehuguanli' : 'iconfont icon-folder'
-              ]"  style="margin-right: 15px; font-size: 20px; cursor: pointer" />
+              ]" style="margin-right: 15px; font-size: 20px; cursor: pointer" />
               <span>{{ node.label }}</span>
             </template>
           </el-tree>
@@ -31,9 +31,11 @@
                 <span class="line"></span>
               </label>
 
-              <upload-button @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
-              <TaskList></TaskList>
-              <create-folder-button @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
+              <upload-button ref="step2" @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
+              <TaskList ref="step3"></TaskList>
+              <create-folder-button ref="step4" @loadFileList="getList" :is-dep="true" size="default"
+                :round-flag="true" />
+              <el-button type="primary" @click="open = true" size="small">操作指南</el-button>
             </div>
           </el-card>
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
@@ -100,6 +102,9 @@
         <div class="menuItem">
           <share-button :round-flag="true" size="small" :item="rightClickItem">分享给</share-button>
         </div>
+        <div class="menuItem">
+          <delete-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
       </template>
     </template>
   </ul>
@@ -121,6 +126,13 @@
   <el-drawer destroy-on-close append-to-body v-model="drawerVisible" size="30%" :with-header="false">
     <team-user :foldId="foldId"></team-user>
   </el-drawer>
+  <el-tour v-model="open">
+    <el-tour-step :target="step1?.$el" title="文件夹名搜索" description="文件目录层级多时，可实现快速定位，提高查找效率" />
+    <el-tour-step :target="step2?.$el" title="文件上传"
+      description="支持上传Word、EXCEL、PDF、PPT、TXT、视频、音乐等文件，上传前可设置下载时是否添加水印的功能" />
+    <el-tour-step :target="step3?.$el" title="文件传输助手" description="文件上传后自动展开查看文件上传进度" />
+    <el-tour-step :target="step4?.$el" title="新建文件夹" description="可在打开页面位置中创建子文件夹。创建任务小组（本部门或跨部门，限定参与人员），任务小组将呈现在左侧栏中" />
+  </el-tour>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -161,14 +173,20 @@ const foldName = ref("");
 const treeRef = ref();
 const currentLivingId = ref<any>(null);
 //用户点击el-tree后填充foldId,后续获取用户
-const foldId=ref(0);
+const foldId = ref(0);
 //用户搜索文件名
 const fileNameBySerch = ref("");
 //图片
 const showViewer = ref(false);
 const imgUrl = ref<any[]>([]);
 const imgIndex = ref(0);
-
+//新手导航开启状态
+const open = ref(false)
+import type { ButtonInstance } from 'element-plus'
+const step1 = ref<ButtonInstance>()
+const step2 = ref<ButtonInstance>()
+const step3 = ref<ButtonInstance>()
+const step4 = ref<ButtonInstance>()
 //右键菜单
 const menuVisible = ref(false);
 const outsideMenuVisible = ref(false);
@@ -302,11 +320,26 @@ function analysisType(type: any) {
   return tagStr;
 }
 
+// 递归查找根节点
+function findRootNode(currentNode:any){
+  if (currentNode.parent&&currentNode.level>1) {
+    return findRootNode(currentNode.parent);
+  } else {
+    return currentNode;
+  }
+};
+
 //点击el-tree
 function handleNodeClick(item: any, data: any) {
-  if(item.folderType!=0){
-    foldId.value=item.id
-    drawerVisible.value=true
+  if (item.folderType != 0) {
+    foldId.value = item.id
+    drawerVisible.value = true
+  }
+  const rootNode = findRootNode(data)
+  if(rootNode.data.folderType!=0){
+    fileStore.teamFlag = true
+  }else{
+    fileStore.teamFlag = false
   }
   //加载文件
   list({

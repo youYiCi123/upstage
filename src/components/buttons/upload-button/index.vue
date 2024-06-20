@@ -302,8 +302,9 @@ function doMerge(file: any) {
         uploadedSize: panUtil.translateFileSize(file.sizeUploaded()),
         timeRemaining: panUtil.translateTime(file.timeRemaining())
     })
-    merge({
+    merge({//todo
         waterMarkFlag: waterMarkFlag.value,
+        teamFlag:fileStore.teamFlag,
         pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
         filename: uploadTaskItem.filename,
         identifier: uploadTaskItem.target.uniqueIdentifier,

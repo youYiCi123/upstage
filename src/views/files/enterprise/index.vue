@@ -3,7 +3,7 @@
     <div class="file-page-container">
       <el-container>
         <el-aside width="300px" class="folder-aside">
-          <el-input ref="step1" v-model="foldName" :prefix-icon="Search" placeholder="请输入文件夹名称"
+          <el-input  v-model="foldName" :prefix-icon="Search" placeholder="请输入文件夹名称"
             style="margin-bottom: 20px"></el-input>
           <el-tree class="filter-tree" ref="treeRef" default-expand-all node-key="id" :current-node-key="currentLivingId"
             highlight-current :props="defaultProps" :data="foldData" :filter-node-method="filterNode"
@@ -28,11 +28,10 @@
                 <input type="text" v-model="fileNameBySerch" required @keyup.enter.native="searchFileByName" />
                 <span class="line"></span>
               </label>
-              <upload-button ref="step2" @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
+              <upload-button  @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
               <TaskList></TaskList>
-              <create-folder-button ref="step3" @loadFileList="getList" :is-dep="false" size="default"
+              <create-folder-button  @loadFileList="getList" :is-dep="false" size="default"
                 :round-flag="true" />
-              <el-button type="primary" @click="open = true" size="small">操作指南</el-button>
             </div>
           </el-card>
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
@@ -101,11 +100,6 @@
       图标模式
     </div>
   </ul>
-  <el-tour v-model="open">
-    <el-tour-step :target="step1?.$el" title="文件夹名搜索" description="文件目录层级多时，可实现快速定位，提高查找效率" />
-    <el-tour-step :target="step2?.$el" title="文件上传" description="支持上传Word、EXCEL、PDF、PPT、TXT、视频、音乐" />
-    <el-tour-step :target="step3?.$el" title="新建文件夹" description="命名文件请考虑周全，方便后期整理文件方便查找" />
-  </el-tour>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
@@ -128,13 +122,7 @@ import UploadButton from "@/components/buttons/upload-button/index.vue";
 import CreateFolderButton from "@/components/buttons/create-folder-button/index.vue";
 //用户名水印
 const waterMark = ref(userStore.nickName)
-//新手导航开启状态
-const open = ref(false)
-import type { ButtonInstance } from 'element-plus'
-const step1 = ref<ButtonInstance>()
-const step2 = ref<ButtonInstance>()
-const step3 = ref<ButtonInstance>()
-const step4 = ref<ButtonInstance>()
+
 //用户搜索文件夹名称
 const foldName = ref("");
 const treeRef = ref();
@@ -279,6 +267,7 @@ function analysisType(type: any) {
 
 //点击el-tree
 function handleNodeClick(item: any, data: any) {
+  fileStore.teamFlag = false
   //加载文件
   list({
     pageType: panUtil.fileFold.ENTERPRISE,

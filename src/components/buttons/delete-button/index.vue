@@ -50,7 +50,7 @@ function deleteFile() {
     ElMessage.error('请选择要删除的文件')
 }
 function doDeleteFile(fileId: any) {
-    ElMessageBox.confirm('文件删除后将不保存，您确定这样做吗？', '删除文件', {
+    ElMessageBox.confirm('文件删除后将移动至回收站，您确定这样做吗？', '删除文件', {
         confirmButtonText: '删除',
         cancelButtonText: '取消',
         type: 'warning'
