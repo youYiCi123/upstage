@@ -20,7 +20,7 @@
           <el-card :body-style="{ padding: '13px' }">
             <div class="operation-card">
               <div class="breadcrumb-content">
-                <el-breadcrumb :separator-icon="ArrowRight" style="display: inline-block">
+                <el-breadcrumb  style="display: inline-block">
                   <el-breadcrumb-item v-for="(item, index) in breadcrumbStore.depBreadCrumbs" :key="index">
                     <a class="breadcrumb-item-a" @click="goToThis(item.id)" href="#">{{ item.name }}</a>
                   </el-breadcrumb-item>
@@ -30,12 +30,11 @@
                 <input type="text" v-model="fileNameBySerch" required @keyup.enter.native="searchFileByName" />
                 <span class="line"></span>
               </label>
-
               <upload-button ref="step2" @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
               <TaskList ref="step3"></TaskList>
               <create-folder-button ref="step4" @loadFileList="getList" :is-dep="true" size="default"
                 :round-flag="true" />
-              <el-button type="primary" @click="open = true" size="small">操作指南</el-button>
+              <el-button  @click="open = true" size="small">操作指南</el-button>
             </div>
           </el-card>
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
@@ -123,7 +122,7 @@
       图标模式
     </div>
   </ul>
-  <el-drawer destroy-on-close append-to-body v-model="drawerVisible" size="30%" :with-header="false">
+  <el-drawer destroy-on-close append-to-body v-model="drawerVisible" size="20%" :with-header="false">
     <team-user :foldId="foldId"></team-user>
   </el-drawer>
   <el-tour v-model="open">
@@ -137,7 +136,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import { ArrowRight } from "@element-plus/icons-vue";
 import { getFolderTree, list, searchForName } from "@/api/file";
 import CommentButton from "@/components/buttons/comment-button/index.vue";
 import DownloadButton from "@/components/buttons/download-button/index.vue";
@@ -150,7 +148,6 @@ import FileInfoButton from "@/components/buttons/fileInfo-button/index.vue";
 import SetButton from "@/components/buttons/set-button/index.vue";
 import ShareButton from "@/components/buttons/share-button/index.vue";
 import TeamUser from "@/components/team-user/index.vue";
-
 import panUtil from "@/utils/fileUtil";
 import { useRouter, useRoute } from "vue-router"; //vue3路由跳转
 const router = useRouter();
@@ -566,7 +563,7 @@ function openMenu(e: any, item: any) {
 
 .breadcrumb-item-a {
   cursor: pointer !important;
-  color: #409eff !important;
+  /* color: #409eff !important; */
 }
 
 .file-page-container .folder-aside {
@@ -597,7 +594,7 @@ input {
   outline-style: none;
   font-size: 13px;
   color: #333;
-  border: 3px solid #a8a8a8;
+  border: 3px solid #7e7c7c;
   border-radius: 19px;
   padding: 0 8px;
   box-sizing: border-box;
@@ -608,7 +605,7 @@ input {
   width: 3px;
   height: 12px;
   display: block;
-  background-color: #a8a8a8;
+  background-color: #7e7c7c;
   transform: rotate(320deg);
   position: absolute;
   left: 25px;
@@ -693,7 +690,7 @@ input:valid+.line {
 }
 
 .file-page-container .file-container .file-list {
-  height: calc(100vh - 91px);
+  height: calc(100vh - 140px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -772,5 +769,8 @@ input:valid+.line {
 
 .contextmenu .menuItem:hover {
   background: rgb(64, 158, 255);
+}
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+  background-color: #e4e2e5;
 }
 </style>

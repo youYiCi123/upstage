@@ -1,34 +1,62 @@
 <template>
-	<div class="whole">
-		<div class="team-title">小组人员</div>
-		<el-divider />
-		<el-row>
-			<el-col :span="4" class="text-center" v-for="(item, index)  in users">
-				<div @mouseenter="hoverIndex = index" @mouseleave="hoverIndex = -1">
-					<el-avatar v-if="hoverIndex === index" shape="square" size="large" @click="delUser(index)">
-						<el-icon :size="20">
-							<Delete />
-						</el-icon>
-					</el-avatar>
-					<template v-else>
-						<el-avatar v-if="item.icon" shape="square" size="large" :src="item.icon">
-						</el-avatar>
-						<el-avatar v-else shape="square" size="large">
-							<span v-html="avararFormat(item.nickName)"></span>
-						</el-avatar>
-					</template>
-					<div class="name">{{ item.nickName }}</div>
-				</div>
-			</el-col>
-			<el-col :span="4" class="text-center">
-				<el-avatar shape="square" size="large" @click="addUser">
-					<el-icon :size="20">
-						<Plus />
-					</el-icon>
-				</el-avatar>
-			</el-col>
-		</el-row>
-		<el-dialog title="添加成员" v-model="addDialogVisible" width="40%" :append-to-body=true :modal-append-to-body=false
+    <div class="container ">
+        <div class="notice">
+            <div class="rise">
+                <div class="title">团队公告</div>
+                <div class="operation" style="cursor: pointer;" @click="editNoticeFlag=false">
+                    <el-icon :size="20">
+                        <EditPen />
+                    </el-icon>
+                </div>
+            </div>
+            <div class="content">
+                <el-input :rows="6" :disabled="editNoticeFlag" type="textarea" placeholder="添加团队公告 所有成员都可以查看" />
+            </div>
+            <div class="btn-group">
+                <el-button>取消</el-button>
+                <el-button type="primary">确定</el-button>
+            </div>
+        </div>
+        <div class="member">
+            <div class="rise">
+                <div class="title">成员</div>
+                <div class="operation" style="color: #409eff;cursor: pointer;" @click="addUser">
+                    <el-icon :size="19">
+                        <CirclePlusFilled />
+                    </el-icon>
+                    <div>添加成员</div>
+                </div>
+            </div>
+            <div class="content">
+                <el-scrollbar>
+                    <ul class="infoList">
+                    <li v-for="(item, index)  in users" style="margin-bottom: 10px;">
+                        <div class="rank" @mouseenter="hoverIndex = index" @mouseleave="hoverIndex = -1">
+                            <div class="info">
+                                <div class="aratar">
+                                    <el-avatar v-if="item.icon"  size="small" :src="item.icon">
+                                    </el-avatar>
+                                    <el-avatar v-else  size="small">
+                                        <span v-html="avararFormat(item.nickName)"></span>
+                                    </el-avatar>
+                                </div>
+                                <div class="name">{{ item.nickName }}</div>
+                            </div>
+                            <div class="operation" v-show="hoverIndex === index" @click="delUser(index)"> <Delete style="width: 1em; height: 1em; margin-right: 8px ;color: red;" /></div>
+                        </div>
+                    </li>
+                </ul>
+                </el-scrollbar>
+              
+            </div>
+        </div>
+        <div class="team-bottom">
+			<div class="button-group">
+				<el-button  size="large" plain @click="renameTeam">更名</el-button>
+				<el-button size="large" plain @click="delTeam">解散</el-button>
+			</div>
+        </div>
+        <el-dialog title="添加成员" v-model="addDialogVisible" width="40%" :append-to-body=true :modal-append-to-body=false
 			:center=true>
 			<div>
 				<el-form label-width="140px">
@@ -44,7 +72,7 @@
 				<el-button type="primary" @click="submitForm">确 定</el-button>
 			</template>
 		</el-dialog>
-		<el-dialog title="小组重命名" v-model="renameDialogVisible" width="30%" @opened="focusInput()" :append-to-body=true
+        <el-dialog title="小组重命名" v-model="renameDialogVisible" width="30%" @opened="focusInput()" :append-to-body=true
 			:modal-append-to-body=false :center=true>
 			<div>
 				<el-form label-width="100px" :rules="renameRules" ref="renameForm" :model="renameFormData" status-icon
@@ -60,14 +88,8 @@
 				<el-button type="primary" @click="doRenameFile(renameForm)">确 定</el-button>
 			</template>
 		</el-dialog>
-		<div class="team-bottom">
-			<div class="button-group">
-				<el-button type="success" size="large" plain @click="renameTeam">更名</el-button>
-				<el-button type="danger" size="large" plain @click="delTeam">解散</el-button>
-			</div>
-
-		</div>
-	</div>
+    </div>
+    
 </template>
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -76,49 +98,50 @@ import { fetchListWithChildren } from '@/api/dep';
 import { ref, reactive } from 'vue'
 import { getTeamUser, updateFilename, updateTeamUser, deleteFiles } from '@/api/file'
 const props = defineProps({
-	foldId: {
-		type: Number,
-		default: -1
-	},
+    foldId: {
+        type: Number,
+        default: -1
+    },
 })
 
 const renameFormData = reactive({
-	fileId: props.foldId,
-	filename: ''
+    fileId: props.foldId,
+    filename: ''
 })
 
 const filenameRef = ref();
 const renameDialogVisible = ref(false);
+const editNoticeFlag=ref(true)
 const renameForm = ref<FormInstance>();
 /** 验证规则 */
 const renameRules: FormRules = {
-	filename: [
-		{ required: true, message: '请输入新小组名称', trigger: 'blur' }
-	]
+    filename: [
+        { required: true, message: '请输入新小组名称', trigger: 'blur' }
+    ]
 };
 
 function renameTeam() {
-	renameDialogVisible.value = true;
+    renameDialogVisible.value = true;
 }
 
 function delTeam() {
-	ElMessageBox.confirm('小组解散后将不保存，您确定这样做吗？', '解散小组', {
-		confirmButtonText: '删除',
-		cancelButtonText: '取消',
-		type: 'warning'
-	}).then(() => {
-		deleteFiles({ fileId: props.foldId }).then(() => {
-			ElMessage.success('删除成功')
-		}).catch((res: any) => {
-		})
-	}).catch((res) => {
+    ElMessageBox.confirm('小组解散后将不保存，您确定这样做吗？', '解散小组', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        deleteFiles({ fileId: props.foldId }).then(() => {
+            ElMessage.success('删除成功')
+        }).catch((res: any) => {
+        })
+    }).catch((res) => {
 
-	})
+    })
 }
 
 
 function focusInput() {
-	filenameRef.value.focus()
+    filenameRef.value.focus()
 }
 
 const cascaderProps = { multiple: true, emitPath: false }
@@ -133,127 +156,168 @@ const addDialogVisible = ref(false);
 init()
 
 function init() {
-	getTeamUser({ folderId: props.foldId }).then((res) => {
-		users.value = res.data
-	})
+    getTeamUser({ folderId: props.foldId }).then((res) => {
+        users.value = res.data
+    })
 }
 
 function avararFormat(nickname: string) {
-	return nickname.slice(-2)
+    return nickname.slice(-2)
 }
 
 function addUser() {
-	addDialogVisible.value = true
+    addDialogVisible.value = true
 }
 getSendPersonList()
 
 function getSendPersonList() {
-	fetchListWithChildren().then(response => {
-		let list = response.data;
-		personOptions.value = [];
-		for (let i = 0; i < list.length; i++) {
-			let children = [];
-			if (list[i].userRelationList != null && list[i].userRelationList.length > 0) {
-				for (let j = 0; j < list[i].userRelationList.length; j++) {
-					children.push({ label: list[i].userRelationList[j].nickName, value: list[i].userRelationList[j].id });
-				}
-			}
-			personOptions.value.push({ label: list[i].depName, value: list[i].depId, children: children });
-		}
-	});
+    fetchListWithChildren().then(response => {
+        let list = response.data;
+        personOptions.value = [];
+        for (let i = 0; i < list.length; i++) {
+            let children = [];
+            if (list[i].userRelationList != null && list[i].userRelationList.length > 0) {
+                for (let j = 0; j < list[i].userRelationList.length; j++) {
+                    children.push({ label: list[i].userRelationList[j].nickName, value: list[i].userRelationList[j].id });
+                }
+            }
+            personOptions.value.push({ label: list[i].depName, value: list[i].depId, children: children });
+        }
+    });
 }
 
 function delUser(index: number) {
-	ElMessageBox.confirm('是否要移除该用户?', '提示', {
-		confirmButtonText: '确定',
-		cancelButtonText: '取消',
-		type: 'warning'
-	}).then(() => {
-		usersId.value = []
-		users.value.splice(index, 1);
-		users.value.forEach((t: any) => {
-			usersId.value.push(t.id)
-		})
-		updateTeamUser({ folderId: props.foldId, teamUsers: usersId.value.toString() }).then(() => {
-			ElMessage.success('移除成功')
-		}).catch(res => {
-			console.log(res)
-		})
-	}).catch(err => {
-		console.log(err)
-	});
+    ElMessageBox.confirm('是否要移除该用户?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        usersId.value = []
+        users.value.splice(index, 1);
+        users.value.forEach((t: any) => {
+            usersId.value.push(t.id)
+        })
+        updateTeamUser({ folderId: props.foldId, teamUsers: usersId.value.toString() }).then(() => {
+            ElMessage.success('移除成功')
+        }).catch(res => {
+            console.log(res)
+        })
+    }).catch(err => {
+        console.log(err)
+    });
 }
 
 function submitForm() {
-	ElMessageBox.confirm('是否要添加勾选用户?', '提示', {
-		confirmButtonText: '确定',
-		cancelButtonText: '取消',
-		type: 'warning'
-	}).then(() => {
-		usersId.value = []
-		users.value.forEach((t: any) => {
-			usersId.value.push(t.id)
-		})
-		let oldUser = usersId.value.toString() + ',' + selectedPerson.value;
-		updateTeamUser({ folderId: props.foldId, teamUsers: oldUser }).then(() => {
-			ElMessage.success('添加成功')
-			addDialogVisible.value = false
-			init()
-		}).catch(res => {
-			console.log(res)
-		})
-	})
+    ElMessageBox.confirm('是否要添加勾选用户?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        usersId.value = []
+        users.value.forEach((t: any) => {
+            usersId.value.push(t.id)
+        })
+        let oldUser = usersId.value.toString() + ',' + selectedPerson.value;
+        updateTeamUser({ folderId: props.foldId, teamUsers: oldUser }).then(() => {
+            ElMessage.success('添加成功')
+            addDialogVisible.value = false
+            init()
+        }).catch(res => {
+            console.log(res)
+        })
+    })
 }
 
 function doRenameFile(formEl: FormInstance | undefined) {
-	// 表单校验
-	if (!formEl) return;
-	formEl.validate((valid) => {
-		if (valid) {
-			updateFilename({
-				fileId: renameFormData.fileId,
-				newFilename: renameFormData.filename
-			}).then(() => {
-				renameDialogVisible.value = false
-				ElMessage.success('重命名成功')
-			}).catch((res: any) => {
-			})
-		}
-	})
+    // 表单校验
+    if (!formEl) return;
+    formEl.validate((valid) => {
+        if (valid) {
+            updateFilename({
+                fileId: renameFormData.fileId,
+                newFilename: renameFormData.filename
+            }).then(() => {
+                renameDialogVisible.value = false
+                ElMessage.success('重命名成功')
+            }).catch((res: any) => {
+            })
+        }
+    })
 }
-
 </script>
 <style scoped  lang="scss" >
-.whole {
-	height: 100%;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
+.container {
+    height: calc(100% - 20px);
+    display: flex;
+    /* 使用flex布局 */
+    flex-direction: column;
+    .rise {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        line-height: 14px;
+        margin-bottom: 10px;
+        margin-top: 5px;
+        .title {
+            font-weight: bold;
+        }
+
+        .operation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .notice {
+        /* 设置背景颜色 */
+        height: 27%;
+        margin-bottom: 30px;
+
+        .btn-group {
+            float: right;
+            padding-top: 10px;
+        }
+
+    }
+
+    .member {
+        // height: 50%;
+
+        .content {
+            .infoList {
+                height: 350px;
+                list-style-type: none;
+                cursor: pointer;
+                    .rank {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    
+                    .info {
+                        display: flex;
+                        align-items: start;
+                        .name{
+                            padding-left: 5px;
+                            font-size: 13px;
+                        }
+                    }
+                }
+                .rank:hover{
+                    transition: all .3s ease-in-out;
+                    background-color: #f0f3f6;
+                }
+            }
+        }
+    }
 }
 
-.el-divider--horizontal {
-	margin: 15px 0;
+.el-avatar {
+    font-size: 10px;
 }
-
-.team-title {
-	font-size: 16px;
-	font-weight: 600;
-}
-
-.text-center {
-	cursor: pointer;
-	text-align: center;
-
-	.name {
-		margin-top: 5px;
-		color: darkgrey;
-		margin-bottom: 15px;
-	}
-}
-
-.text-center:hover {}
-
 .team-bottom {
+    // margin-bottom: 10px;
 	flex: 1;
 	display: flex;
 	justify-content: center;
@@ -274,4 +338,5 @@ function doRenameFile(formEl: FormInstance | undefined) {
 		width: 180px;
 	}
 
-}</style>
+}
+</style>

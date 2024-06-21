@@ -18,7 +18,7 @@
           <el-card :body-style="{ padding: '13px' }">
             <div class="operation-card">
               <div class="breadcrumb-content">
-                <el-breadcrumb :separator-icon="ArrowRight" style="display: inline-block">
+                <el-breadcrumb style="display: inline-block">
                   <el-breadcrumb-item v-for="(item, index) in breadcrumbStore.breadCrumbs" :key="index">
                     <a class="breadcrumb-item-a" @click="goToThis(item.id)" href="#">{{ item.name }}</a>
                   </el-breadcrumb-item>
@@ -104,7 +104,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import { ArrowRight } from "@element-plus/icons-vue";
 import { getFolderTree, list, searchForName } from "@/api/file";
 import panUtil from "@/utils/fileUtil";
 import { useRouter } from "vue-router"; //vue3路由跳转
@@ -494,7 +493,6 @@ function openMenu(e: MouseEvent, item: any) {
 
 .breadcrumb-item-a {
   cursor: pointer !important;
-  color: #409eff !important;
 }
 
 .file-page-container .folder-aside {
@@ -526,7 +524,7 @@ input {
   outline-style: none;
   font-size: 13px;
   color: #333;
-  border: 3px solid #a8a8a8;
+  border: 3px solid #7e7c7c;
   border-radius: 19px;
   padding: 0 8px;
   box-sizing: border-box;
@@ -537,7 +535,7 @@ input {
   width: 3px;
   height: 12px;
   display: block;
-  background-color: #a8a8a8;
+  background-color: #7e7c7c;
   transform: rotate(320deg);
   position: absolute;
   left: 25px;
@@ -583,7 +581,7 @@ input:valid+.line {
 }
 
 .file-page-container .file-container .file-list {
-  height: calc(100vh - 91px);
+  height: calc(100vh - 140px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

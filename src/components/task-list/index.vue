@@ -74,7 +74,7 @@
                     </el-table>
                 </div>
                 <template #reference>
-                    <el-button type="warning" round @click="taskStore.changeViewFlag" size="default"
+                    <el-button @click="taskStore.changeViewFlag" size="default"
                         :icon="Sort"></el-button>
                 </template>
             </el-popover>

@@ -1,6 +1,6 @@
 <template>
     <div class="upload-button-content">
-        <el-button v-if="roundFlag" type="primary" :icon="Upload" id="uploadButton" :size="size" round @click="uploadDialogVisible = true">
+        <el-button v-if="roundFlag" :icon="Upload" id="uploadButton" :size="size"  @click="uploadDialogVisible = true">
             上传
         </el-button>
         <el-button v-if="circleFlag" size="size" :icon="Upload" id="uploadButton" circle>

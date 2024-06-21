@@ -1,6 +1,6 @@
 <template>
     <div class="create-folder-button-content">
-        <el-button v-if="roundFlag" :icon="FolderAdd" type="success" :size="size" round
+        <el-button v-if="roundFlag" :icon="FolderAdd"  :size="size" 
             @click="createFolderDialogVisible = true">
             新建文件夹/小组
         </el-button>
