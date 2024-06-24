@@ -10,11 +10,11 @@
                 </div>
             </div>
             <div class="content">
-                <el-input :rows="6" :disabled="editNoticeFlag" type="textarea" placeholder="添加团队公告 所有成员都可以查看" />
+                <el-input :rows="6" v-model="noticeContent.notice" :disabled="editNoticeFlag" resize="none" type="textarea" placeholder="添加团队公告 所有成员都可以查看" />
             </div>
             <div class="btn-group">
                 <el-button>取消</el-button>
-                <el-button type="primary">确定</el-button>
+                <el-button type="primary" @click="submitNotice">确定</el-button>
             </div>
         </div>
         <div class="member">
@@ -96,7 +96,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { fetchListWithChildren } from '@/api/dep';
 import { ref, reactive } from 'vue'
-import { getTeamUser, updateFilename, updateTeamUser, deleteFiles } from '@/api/file'
+import { getTeamUser, updateFilename, updateTeamUser, deleteFiles,getNotice,editNotice } from '@/api/file'
 const props = defineProps({
     foldId: {
         type: Number,
@@ -112,6 +112,10 @@ const renameFormData = reactive({
 const filenameRef = ref();
 const renameDialogVisible = ref(false);
 const editNoticeFlag=ref(true)
+
+const noticeContent= reactive({
+    notice:""
+})
 const renameForm = ref<FormInstance>();
 /** 验证规则 */
 const renameRules: FormRules = {
@@ -160,6 +164,12 @@ function init() {
         users.value = res.data
     })
 }
+initNotice()
+function initNotice(){
+    getNotice({teamId:props.foldId}).then((res)=>{
+        noticeContent.notice= res.data.notice
+    })
+}
 
 function avararFormat(nickname: string) {
     return nickname.slice(-2)
@@ -206,7 +216,19 @@ function delUser(index: number) {
         console.log(err)
     });
 }
-
+function submitNotice(){
+    ElMessageBox.confirm('是否要提交该公告?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        editNotice({teamId:props.foldId,notice:noticeContent.notice}).then(() => {
+            ElMessage.success('提交成功')
+        }).catch(res => {
+            console.log(res)
+        })
+    })
+}
 function submitForm() {
     ElMessageBox.confirm('是否要添加勾选用户?', '提示', {
         confirmButtonText: '确定',
@@ -217,8 +239,8 @@ function submitForm() {
         users.value.forEach((t: any) => {
             usersId.value.push(t.id)
         })
-        let oldUser = usersId.value.toString() + ',' + selectedPerson.value;
-        updateTeamUser({ folderId: props.foldId, teamUsers: oldUser }).then(() => {
+        const mergedArray = mergeArrays(usersId.value,selectedPerson.value).toString();
+        updateTeamUser({ folderId: props.foldId, teamUsers: mergedArray }).then(() => {
             ElMessage.success('添加成功')
             addDialogVisible.value = false
             init()
@@ -226,6 +248,13 @@ function submitForm() {
             console.log(res)
         })
     })
+}
+
+function mergeArrays<T>(array1: T[], array2: T[]): T[] {
+    // 创建一个Set以自动移除重复的元素
+    const mergedSet = new Set<T>([...array1, ...array2]);
+    // 将Set转换回数组并返回
+    return Array.from(mergedSet);
 }
 
 function doRenameFile(formEl: FormInstance | undefined) {

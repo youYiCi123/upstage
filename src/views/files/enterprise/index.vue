@@ -1,5 +1,4 @@
 <template>
-  <el-watermark :content=waterMark>
     <div class="file-page-container">
       <el-container>
         <el-aside width="300px" class="folder-aside">
@@ -34,6 +33,7 @@
                 :round-flag="true" />
             </div>
           </el-card>
+          <el-watermark :content=waterMark>
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
             <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
               @contextmenu.prevent.stop="openMenu($event, item)">
@@ -45,10 +45,10 @@
             }
               " :url-list="imgUrl" />
           </div>
+        </el-watermark>
         </div>
       </el-container>
     </div>
-  </el-watermark>
   <!-- 右键菜单部分 -->
   <ul v-show="menuVisible" :style="{
     left: position.left + 'px',

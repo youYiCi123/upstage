@@ -77,6 +77,13 @@
                 :page-size="paginationData.pageSize" :page-sizes="paginationData.pageSizes" :total="total">
             </el-pagination>
         </div>
+        <el-dialog title="驳回并删除" v-model="rejectDialogVisible" width="30%">
+            <el-input type="textarea" :rows="3" maxlength="30" show-word-limit v-model="reason.content" placeholder="请填写驳回理由" ></el-input>
+            <template #footer>
+                <el-button @click="rejectDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="defineDelete">确 定</el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
@@ -103,7 +110,12 @@ const imgIndex = ref(0);
 const multipleSelection = ref<any[]>([])
 //用于多/全选后的存放文件id的数组
 const multipleSelectionId = ref<number[]>([])
-
+const rejectDialogVisible = ref(false);
+const reason = reactive({
+    id: '',
+    content: ''
+});
+const batchDelFlag = ref(false);
 let listQuery = reactive({
     keyword: '',
     fileType:''
@@ -321,41 +333,37 @@ function batchPass() {
 }
 
 function batchDelete() {
-  ElMessageBox.confirm('是否要确认?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    handleBatchDelete(multipleSelectionId.value).then(response => {
-      ElMessage({
-        type: 'success',
-        message: '删除成功!'
-      });
-      getList();
-    })
-  }).catch(() => {
-    ElMessage({
-      type: 'info',
-      message: '取消删除'
-    });
-  });
+    batchDelFlag.value=true
+    rejectDialogVisible.value=true
 }
 
 function handleDelete(row: any) {
-    ElMessageBox.confirm('是否要删除该文件', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-    }).then(() => {
-        deleteFile(row.fileId).then(response => {
+    batchDelFlag.value=false    
+    reason.id=row.fileId
+    rejectDialogVisible.value=true
+}
+
+function defineDelete(){
+    if(batchDelFlag.value){
+        handleBatchDelete({multipleSelectionId:multipleSelectionId.value.toString(),reason:reason.content}).then(response => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功!'
+            });
+            rejectDialogVisible.value=false
+            getList();
+        })
+    }else{
+        deleteFile({id:reason.id,reason:reason.content}).then(response => {
             ElMessage({
                 message: '删除成功',
                 type: 'success',
                 duration: 1000
             });
+            rejectDialogVisible.value=false
             getList();
         });
-    }).catch(() => { });
+    }
 }
 
 function handlePass(row: any) {

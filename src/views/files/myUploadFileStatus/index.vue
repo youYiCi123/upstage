@@ -26,6 +26,11 @@
         </el-card>
         <div class="table-container">
             <el-table ref="adminTable" :data="list" style="width: 100%;" stripe v-loading="listLoading" border>
+                <el-table-column type="expand">
+                    <template #default="props">
+                            <p style="margin-left: 50px;">驳回原因: <span style="color: #f56c6c;">{{ props.row.reason }}</span></p>
+                    </template>
+                </el-table-column>
                 <el-table-column label="文件" align="center">
                     <template #default="scope">{{ scope.row.fileName }}</template>
                 </el-table-column>
@@ -37,7 +42,7 @@
                 <el-table-column label="状态" width="200" align="center">
                     <template #default="scope">
                         <el-tag :type=colorByType(scope.row.status)>
-                            <span v-html="statusFormat(scope.row.status)"></span>   
+                            <span v-html="statusFormat(scope.row.status)"></span>
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -62,7 +67,7 @@ const userStore = useUserStore(pinia);
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
 const listQuery = reactive({
-    keyword:'',
+    keyword: '',
     date: []
 })
 const listLoading = ref(false);
@@ -70,7 +75,7 @@ const list = ref<any[]>([])  //所有日志信息
 const total = ref(0);  ////数量
 
 function handleResetSearch() {
-    listQuery.keyword='';
+    listQuery.keyword = '';
     listQuery.date = [];
 }
 
@@ -91,7 +96,7 @@ function timeFormat(time: string) {
     return dayjs(date).format("YYYY-MM-DD HH:mm:ss")
 }
 
-function colorByType(type: number){
+function colorByType(type: number) {
     switch (type) {
         case 0:
             return "warning";
@@ -99,7 +104,7 @@ function colorByType(type: number){
             return "success";
         case 2:
             return "danger";
-        }
+    }
 }
 
 function statusFormat(status: number) {
@@ -108,13 +113,13 @@ function statusFormat(status: number) {
     }
     switch (status) { //0 待审核  1 审核通过  2 审核未通过/已删除
         case 0:
-        return '待审核';
+            return '待审核';
         case 1:
-        return '审核通过';
+            return '审核通过';
         case 2:
-        return '审核未通过/已删除';
+            return '审核未通过/已删除';
         default:
-        return '未知';
+            return '未知';
     }
 }
 
@@ -124,7 +129,7 @@ function getList() {
         dateStr = listQuery.date.toString();
     }
     listLoading.value = true;  //todo
-    getMyUploadFileStatus({ date: dateStr,keyword:listQuery.keyword, userId: userStore.id, pageNum: paginationData.currentPage, pageSize: paginationData.pageSize }).then(response => {
+    getMyUploadFileStatus({ date: dateStr, keyword: listQuery.keyword, userId: userStore.id, pageNum: paginationData.currentPage, pageSize: paginationData.pageSize }).then(response => {
         listLoading.value = false;
         list.value = response.data.list;
         total.value = response.data.total;

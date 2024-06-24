@@ -6,14 +6,14 @@
                     <img class="logo-inner" src="@/assets/images/login-logo.png" alt="404">
                 </div>
                 <div class="introduce">
-                    <div class="title">天一生物共享平台</div>
-                    <div class="version">(v1.0)</div>
+                    <div class="title" style="font-family: 优设标题黑;">天一生物共享平台</div>
+                    <div class="version" style="font-family: 优设标题黑;">(v1.0)</div>
                 </div>
-                <div class="enterprise">合肥天一生物技术研究所有限责任公司</div>
+                <div class="enterprise" style="font-family: 优设标题黑;">合肥天一生物技术研究所有限责任公司</div>
             </div>
             <div class="right-side">
                 <div class="login-form">
-                    <div class="login-top">登 录</div>
+                    <div class="login-top" style="font-family: 优设标题黑;">登 录</div>
                     <div class="login-body">
                         <el-form ref="loginFormRef" autoComplete="on" :model="loginForm" :rules="loginRules">
                             <el-form-item prop="username">
@@ -159,7 +159,6 @@ initWindow()
     /* 同时实现水平垂直居中 */
     // background-color: blue;
     .overlay {
-        font-family: 优设标题黑;
         border-radius: 20px;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
         width: 950px;

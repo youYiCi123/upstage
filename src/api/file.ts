@@ -95,11 +95,11 @@ export function deleteFiles(params: any) {
 }
 
 //批量删除文件 审核
-export function handleBatchDelete(data:any) {
+export function handleBatchDelete(params:any) {
   return request({
     url: '/file-service/file/delete/batch',
     method: 'post',
-    data: data
+    params: params
   })
 }
 
@@ -112,10 +112,11 @@ export function handleBatchPass(data:any) {
   })
 }
 
-export function deleteFile(id: any) {
+export function deleteFile(params: any) {
   return request({
-    url: "/file-service/file/delete/fileById/" + id,
-    method: "get",
+    url: "/file-service/file/delete/fileById",
+    method: "post",
+    params:params
   });
 }
 //删除文件--回收站页面
@@ -181,6 +182,22 @@ export function updateTeamUser(params: any) {
     method: "get",
   });
 }
+
+export function getNotice(params: any) {
+  return request({
+    url: "/file-service/file/required/getNotice",
+    params: params,
+    method: "get",
+  });
+}
+export function editNotice(params: any) {
+  return request({
+    url: "/file-service/file/required/editNotice",
+    params: params,
+    method: "post",
+  });
+}
+
 
 
 export function transfer(data: any) {

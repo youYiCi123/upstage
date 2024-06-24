@@ -1,5 +1,5 @@
 <template>
-  <el-watermark :content=waterMark>
+  
     <div class="file-page-container">
       <el-container>
         <el-aside width="300px" class="folder-aside">
@@ -37,6 +37,7 @@
               <el-button  @click="open = true" size="small">操作指南</el-button>
             </div>
           </el-card>
+          <el-watermark :content=waterMark>
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
             <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
               @contextmenu.prevent.stop="openMenu($event, item)">
@@ -48,10 +49,11 @@
             }
               " :url-list="imgUrl" />
           </div>
+        </el-watermark>
         </div>
       </el-container>
     </div>
-  </el-watermark>
+  
   <!-- item右键菜单 -->
   <ul v-show="menuVisible" :style="{
     left: position.left + 'px',
@@ -274,6 +276,7 @@ function getList() {
   }).then((response) => {
     fileList.value = response.data;
   });
+  getFoldTree()
 }
 getList();
 

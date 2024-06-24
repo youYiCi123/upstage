@@ -84,22 +84,16 @@ export const asyncRouterMap: RouteRecordRaw[] = [
     redirect: "/fold/enterpriseFiles",
     children: [
       {
-        path: "enterpriseFiles",
-        name: "enterpriseFiles",
-        component: () => import("@/views/files/enterprise/index.vue"),
-        meta: { title: "企业文件" },
-      },
-      {
         path: "depFiles",
         name: "depFiles",
         component: () => import("@/views/files/dep/index.vue"),
         meta: { title: "部门文件" },
       },
       {
-        path: "verifyEnterprise",
-        name: "verifyEnterprise",
-        component: () => import("@/views/files/verifyEnterprise/index.vue"),
-        meta: { title: "企业审核" },
+        path: "enterpriseFiles",
+        name: "enterpriseFiles",
+        component: () => import("@/views/files/enterprise/index.vue"),
+        meta: { title: "企业文件" },
       },
       {
         path: "verifyDep",
@@ -107,6 +101,13 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         component: () => import("@/views/files/verifyDep/index.vue"),
         meta: { title: "部门审核" },
       },
+      {
+        path: "verifyEnterprise",
+        name: "verifyEnterprise",
+        component: () => import("@/views/files/verifyEnterprise/index.vue"),
+        meta: { title: "企业审核" },
+      },
+
       {
         path: "myUploadFileStatus",
         name: "myUploadFileStatus",

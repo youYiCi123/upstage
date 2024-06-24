@@ -12,7 +12,7 @@
             <div>
                 <el-form label-width="150px" :rules="createFolderRules" ref="createFolderRef" :model="createFolderForm"
                     status-icon @submit.native.prevent>
-                    <el-form-item label="文件夹名称" prop="folderName">
+                    <el-form-item label="文件夹名称：" prop="folderName">
                         <el-input type="text" ref="folderName" @keyup.enter.native="doCreateFolder(createFolderRef)"
                             v-model="createFolderForm.folderName" autocomplete="off" />
                     </el-form-item>
