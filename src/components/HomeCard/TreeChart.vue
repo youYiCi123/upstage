@@ -97,7 +97,7 @@ function initChart() {
         orient: 'LR', // 树图中正交布局的方向，'LR','RL','TB','BT'，只有布局是正交时才生效
         edgeShape: 'curve', // 树图边的形状，有曲线curve和折线polyline两种，只有正交布局下生效
         roam: false, // 是否开启鼠标缩放或平移，默认false
-        initialTreeDepth: 2, // 树图初始的展开层级（深度），根节点是0，不设置时全部展开
+        initialTreeDepth: 1, // 树图初始的展开层级（深度），根节点是0，不设置时全部展开
         // symbol: 'arrow', // 标记的图形，默认是emptyCircle;circle,rect,roundRect,triangle,diamond,pin,arrow,none
         // symbolRotate: 270, // 配合arrow图形使用效果较好
         symbolSize: 10, // 大于0时是圆圈，等于0时不展示，标记的大小

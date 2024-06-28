@@ -8,7 +8,7 @@
         </div>
         <div style="overflow: hidden;clear: both;line-height: normal;">
             <div style="display: flex;padding-top: 10px;" class="home_tab_content">
-                <div style="display: flex;" class="home_app_item" v-for="(item, index) in iconArrs" @click="writeSurvey()">
+                <div style="display: flex;" class="home_app_item" v-for="(item, index) in iconArrs" @click="writeSurvey(index)">
                     <img :src="item.imgUrl">
                     <div>{{ item.content }}</div>
                 </div>
@@ -27,14 +27,23 @@ const props = defineProps({
     }
 })
 
-function writeSurvey() {
-    router.push({ path: '/research/tempSubmit',query:{ tempId: props.tempId} });
+function writeSurvey(index:number) {
+    if(index==0){
+        router.push({ path: '/research/tempSubmit',query:{ tempId: props.tempId} });
+    }else{
+        window.open('http://39.101.138.67:89/', '_blank')
+    }
+   
 }
 
 const iconArrs = [{
     imgUrl: require('@/assets/images/home_img/问卷计划.png'),
     content: '调查问卷',
     routeUrl: '/research/tempSubmit'
+},{
+    imgUrl: require('@/assets/images/home_img/网站建站.png'),
+    content: '天一官网',
+    routeUrl: 'http://39.101.138.67:89/'
 }]
 
 </script>

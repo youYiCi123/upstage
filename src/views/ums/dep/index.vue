@@ -102,7 +102,7 @@
           <el-table-column label="姓名" width="157" align="center">
             <template #default="scope">{{ scope.row.nickName }}</template>
           </el-table-column>
-          <el-table-column label="手机号" width="270" align="center">
+          <el-table-column label="账号" width="270" align="center">
             <template #default="scope">{{ scope.row.username }}</template>
           </el-table-column>
           <el-table-column label="职务" width="300" align="center">

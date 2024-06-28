@@ -74,8 +74,7 @@
         <div class="menuItem">
           <set-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
-        <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
-          " class="menuItem">
+        <div  class="menuItem">
           <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
         <div class="menuItem">
@@ -100,9 +99,9 @@
           " class="menuItem">
           <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
-        <div class="menuItem">
+        <!-- <div class="menuItem">
           <share-button :round-flag="true" size="small" :item="rightClickItem">分享给</share-button>
-        </div>
+        </div> -->
         <div class="menuItem">
           <delete-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
