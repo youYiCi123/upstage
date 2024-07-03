@@ -1,46 +1,45 @@
 <template>
-  
-    <div class="file-page-container">
-      <el-container>
-        <el-aside width="300px" class="folder-aside">
-          <el-input ref="step1" v-model="foldName" :prefix-icon="Search" placeholder="请输入小组或文件夹名称"
-            style="margin-bottom: 20px"></el-input>
-          <el-tree class="filter-tree" ref="treeRef" default-expand-all node-key="id" :current-node-key="currentLivingId"
-            highlight-current :props="defaultProps" :data="foldData" :filter-node-method="filterNode"
-            @node-click="handleNodeClick">
-            <template #default="{ node, data }">
-              <i :class="[
-                node.level == 1 ? 'iconfont icon-kehuguanli' : 'iconfont icon-folder'
-              ]" style="margin-right: 15px; font-size: 20px; cursor: pointer" />
-              <span>{{ node.label }}</span>
-            </template>
-          </el-tree>
-        </el-aside>
-        <div class="file-container">
-          <el-card :body-style="{ padding: '13px' }">
-            <div class="operation-card">
-              <div class="breadcrumb-content">
-                <el-breadcrumb  style="display: inline-block">
-                  <el-breadcrumb-item v-for="(item, index) in breadcrumbStore.depBreadCrumbs" :key="index">
-                    <a class="breadcrumb-item-a" @click="goToThis(item.id)" href="#">{{ item.name }}</a>
-                  </el-breadcrumb-item>
-                </el-breadcrumb>
-              </div>
-              <label>
-                <input type="text" v-model="fileNameBySerch" required @keyup.enter.native="searchFileByName" />
-                <span class="line"></span>
-              </label>
-              <upload-button ref="step2" @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
-              <TaskList ref="step3"></TaskList>
-              <create-folder-button ref="step4" @loadFileList="getList" :is-dep="true" size="default"
-                :round-flag="true" />
-              <el-button  @click="open = true" size="small">操作指南</el-button>
+  <div class="file-page-container">
+    <el-container>
+      <el-aside width="300px" class="folder-aside">
+        <el-input ref="step1" v-model="foldName" :prefix-icon="Search" placeholder="请输入小组或文件夹名称"
+          style="margin-bottom: 20px"></el-input>
+        <el-tree class="filter-tree" ref="treeRef" default-expand-all node-key="id" :current-node-key="currentLivingId"
+          highlight-current :props="defaultProps" :data="foldData" :filter-node-method="filterNode"
+          @node-click="handleNodeClick">
+          <template #default="{ node, data }">
+            <i :class="[
+              node.level == 1 ? 'iconfont icon-kehuguanli' : 'iconfont icon-folder'
+            ]" style="margin-right: 15px; font-size: 20px; cursor: pointer" />
+            <span>{{ node.label }}</span>
+          </template>
+        </el-tree>
+      </el-aside>
+      <div class="file-container">
+        <el-card :body-style="{ padding: '13px' }">
+          <div class="operation-card">
+            <div class="breadcrumb-content">
+              <el-breadcrumb style="display: inline-block">
+                <el-breadcrumb-item v-for="(item, index) in breadcrumbStore.depBreadCrumbs" :key="index">
+                  <a class="breadcrumb-item-a" @click="goToThis(item.id)" href="#">{{ item.name }}</a>
+                </el-breadcrumb-item>
+              </el-breadcrumb>
             </div>
-          </el-card>
-          <el-watermark :content=waterMark>
-          <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
+            <label>
+              <input type="text" v-model="fileNameBySerch" required @keyup.enter.native="searchFileByName" />
+              <span class="line"></span>
+            </label>
+            <upload-button ref="step2" @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
+            <TaskList ref="step3"></TaskList>
+            <create-folder-button ref="step4" @loadFileList="getList" :is-dep="true" size="default" :round-flag="true" />
+            <el-button @click="open = true" size="small">操作指南</el-button>
+          </div>
+        </el-card>
+        <el-watermark :content=waterMark>
+          <div :class="isImg ? 'file-list bigImg' : 'file-list col'" ref="selectArea" id="select-area" class="select-area"
+            @contextmenu.prevent="openOutSideMenu($event)">
             <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
-              @contextmenu.prevent.stop="openMenu($event, item)">
+              @contextmenu.prevent.stop="openMenu($event, item)" :key="index" :data-id="item.fileId">
               <el-image :src="analysisType(item.fileType)" class="img" fit="fill"></el-image>
               <div class="file-name">{{ item.filename }}</div>
             </div>
@@ -50,10 +49,10 @@
               " :url-list="imgUrl" />
           </div>
         </el-watermark>
-        </div>
-      </el-container>
-    </div>
-  
+      </div>
+    </el-container>
+  </div>
+
   <!-- item右键菜单 -->
   <ul v-show="menuVisible" :style="{
     left: position.left + 'px',
@@ -74,7 +73,7 @@
         <div class="menuItem">
           <set-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
-        <div  class="menuItem">
+        <div class="menuItem">
           <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
         <div class="menuItem">
@@ -133,10 +132,33 @@
     <el-tour-step :target="step3?.$el" title="文件传输助手" description="文件上传后自动展开查看文件上传进度" />
     <el-tour-step :target="step4?.$el" title="新建文件夹" description="可在打开页面位置中创建子文件夹。创建任务小组（本部门或跨部门，限定参与人员），任务小组将呈现在左侧栏中" />
   </el-tour>
+
+  <el-dialog title="文件批量操作" v-model="multiplyDialogVisible" width="25%">
+    <div class="table-container">
+      <el-table ref="newsTable" :data="multiplyFileList" style="width: 100%;" border>
+        <el-table-column label="文件名" width="340">
+          <template #default="scope">
+            <span style="cursor:pointer;">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="100" align="center" fixed="right">
+          <template #default="scope">
+            <el-button :icon="Delete" type="danger" circle @click="removeItem(scope.$index)">
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <template #footer>
+      <el-button @click="multiplyDialogVisible = false">取 消</el-button>
+      <el-button type="danger">批量删除({{ multiplyFileList.length }})</el-button>
+      <el-button type="primary">批量下载({{ multiplyFileList.length }})</el-button>
+    </template>
+  </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
-import { Search } from "@element-plus/icons-vue";
+import { ref, onMounted, watch, onUnmounted } from "vue";
+import { Search, Delete } from "@element-plus/icons-vue";
 import { getFolderTree, list, searchForName } from "@/api/file";
 import CommentButton from "@/components/buttons/comment-button/index.vue";
 import DownloadButton from "@/components/buttons/download-button/index.vue";
@@ -177,6 +199,7 @@ const fileNameBySerch = ref("");
 //图片
 const showViewer = ref(false);
 const imgUrl = ref<any[]>([]);
+const multiplyFileList = ref<any[]>([]);
 const imgIndex = ref(0);
 //新手导航开启状态
 const open = ref(false)
@@ -188,6 +211,7 @@ const step4 = ref<ButtonInstance>()
 //右键菜单
 const menuVisible = ref(false);
 const outsideMenuVisible = ref(false);
+const multiplyDialogVisible = ref(false);
 const position = ref({
   top: 0,
   left: 0,
@@ -320,8 +344,8 @@ function analysisType(type: any) {
 }
 
 // 递归查找根节点
-function findRootNode(currentNode:any){
-  if (currentNode.parent&&currentNode.level>1) {
+function findRootNode(currentNode: any) {
+  if (currentNode.parent && currentNode.level > 1) {
     return findRootNode(currentNode.parent);
   } else {
     return currentNode;
@@ -335,9 +359,9 @@ function handleNodeClick(item: any, data: any) {
     drawerVisible.value = true
   }
   const rootNode = findRootNode(data)
-  if(rootNode.data.folderType!=0){
+  if (rootNode.data.folderType != 0) {
     fileStore.teamFlag = true
-  }else{
+  } else {
     fileStore.teamFlag = false
   }
   //加载文件
@@ -556,6 +580,128 @@ function openMenu(e: any, item: any) {
   position.value.left = e.pageX;
   rightClickItem.value = item;
 }
+
+const selectArea = ref<HTMLDivElement | null>(null);
+
+const onMouseDown = (event: MouseEvent) => {
+  // 仅限鼠标左击
+  if (event.button !== 0) return;
+
+  let selList: HTMLElement[] = [];
+  let fileNodes = selectArea.value!.getElementsByClassName("item");
+  for (let i = 0; i < fileNodes.length; i++) {
+    if (fileNodes[i].classList.contains("item")) {
+      fileNodes[i].classList.remove("seled"); // 清除所有已选中的样式
+      selList.push(fileNodes[i] as HTMLElement);
+    }
+  }
+  const container = document.getElementById('select-area');
+  let isSelect = true;
+  let startX = event.clientX;
+  let startY = event.clientY;
+  let selDiv: HTMLDivElement | null = document.createElement("div");
+  selDiv.style.cssText = `
+    position:absolute;
+    width:0px;
+    height:0px;
+    font-size:0px;
+    margin:0px;
+    padding:0px;
+    border:1px dashed #0099FF;
+    background-color:#C3D5ED;
+    z-index:1000;
+    opacity:0.6;
+    display:none;
+  `;
+  selDiv.id = "selectDiv";
+  document.body.appendChild(selDiv)
+  let _x: number | null = null;
+  let _y: number | null = null;
+  clearEventBubble(event);
+
+  const onMouseMove = (ee: MouseEvent) => {
+    if (isSelect) {
+      if (selDiv!.style.display === "none") {
+        selDiv!.style.display = "";
+      }
+      _x = ee.clientX;
+      _y = ee.clientY;
+      selDiv!.style.left = `${Math.min(_x, startX)}px`;
+      selDiv!.style.top = `${Math.min(_y, startY)}px`;
+      selDiv!.style.width = `${Math.abs(_x - startX)}px`;
+      selDiv!.style.height = `${Math.abs(_y - startY)}px`;
+      let _l = selDiv!.offsetLeft - container!.getBoundingClientRect().left;
+      let _t = selDiv!.offsetTop - container!.getBoundingClientRect().top;
+      let _w = selDiv!.offsetWidth;
+      let _h = selDiv!.offsetHeight;
+      for (let i = 0; i < selList.length; i++) {
+        let element = selList[i];
+        let sl = element.offsetWidth + element.offsetLeft;
+        let st = element.offsetHeight + element.offsetTop;
+        if (sl > _l && st > _t && element.offsetLeft < _l + _w && element.offsetTop < _t + _h) {
+          if (!element.classList.contains("seled")) {
+            element.classList.add("seled");
+          }
+        } else {
+          if (element.classList.contains("seled")) {
+            element.classList.remove("seled");
+          }
+        }
+
+      }
+    }
+    clearEventBubble(ee);
+  };
+
+  const onMouseUp = () => {
+    isSelect = false;
+    if (selDiv && selDiv.style.display !== "none") {
+      document.body.removeChild(selDiv);
+      showSelDiv(selList);
+    }
+    selList = [];
+    _x = null;
+    _y = null;
+    selDiv = null;
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
+
+onMounted(() => {
+  selectArea.value!.addEventListener('mousedown', onMouseDown);
+});
+
+// onUnmounted(() => {
+//   selectArea.value!.removeEventListener('mousedown', onMouseDown);
+// });
+
+function clearEventBubble(evt: Event) {
+  evt.stopPropagation();
+  evt.preventDefault();
+}
+
+function showSelDiv(arr: HTMLElement[]) {
+  multiplyFileList.value = []
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].classList.contains("seled")) {
+      var elements = arr[i].getElementsByClassName('file-name')
+      multiplyFileList.value.push({ id: arr[i].dataset.id, name: (elements[0] as HTMLElement).innerHTML })
+    }
+  }
+  if(multiplyFileList.value.length!=0){
+    multiplyDialogVisible.value = true
+  }
+}
+
+function removeItem(index: number) {
+  multiplyFileList.value.splice(index, 1)[0]
+}
+
 </script>
 <style scoped>
 .breadcrumb-content {
@@ -772,7 +918,17 @@ input:valid+.line {
 .contextmenu .menuItem:hover {
   background: rgb(64, 158, 255);
 }
+
 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
   background-color: #e4e2e5;
+}
+
+.seled {
+  border: 1px solid #6183ed;
+  background-color: #D6DFF7;
+}
+
+#out {
+  position: relative;
 }
 </style>

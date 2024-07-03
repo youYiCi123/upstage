@@ -19,8 +19,9 @@ function init() {
     let filename = route.params.filename;
     //使用kkfileview预览文档
     var url = panUtil.getPreviewUrl(fileId,userName) + '&fullfilename=' + filename;
-    showPath.value = 'http://localhost:8012/onlinePreview?url=' + encodeURIComponent(Base64.encode(url))+'&watermarkTxt='+userName;
-    // showPath.value = 'https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent(Base64.encode(url))+'&watermarkTxt='+userName;
+    // showPath.value = 'http://localhost:8012/onlinePreview?url=' + encodeURIComponent(Base64.encode(url))+'&watermarkTxt='+userName;
+    showPath.value = 'https://view.officeapps.live.com/op/view.aspx?src=' + url;
+    // showPath.value = 'http://view.xdocin.com/xdoc?_xdoc=' + encodeURIComponent(url)+'&watermarkTxt='+userName;
 }
 
 onMounted(() => {

@@ -1,6 +1,6 @@
 <template>
     <div class="upload-button-content">
-        <el-button v-if="roundFlag" :icon="Upload" id="uploadButton" :size="size"  @click="uploadDialogVisible = true">
+        <el-button v-if="roundFlag" :icon="Upload" id="uploadButton" :size="size" @click="uploadDialogVisible = true">
             上传
         </el-button>
         <el-button v-if="circleFlag" size="size" :icon="Upload" id="uploadButton" circle>
@@ -27,21 +27,20 @@
             </el-dialog>
             <el-dialog title="文件预览列表" v-model="previewDialogVisible" width="30%" center>
                 <div class="table-container">
-                    <el-table ref="newsTable" :data="previewFileList"  style="width: 100%;" border>
-                    <el-table-column label="文件名" width="440">
-                        <template #default="scope">
-                            <span style="cursor:pointer;">{{ scope.row.name }}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="操作" width="100" align="center" fixed="right">
-                        <template #default="scope">
-                            <el-button :icon="Delete" type="danger" circle @click="removeItem(scope.$index)">
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                    <el-table ref="newsTable" :data="previewFileList" style="width: 100%;" border>
+                        <el-table-column label="文件名" width="340">
+                            <template #default="scope">
+                                <span style="cursor:pointer;">{{ scope.row.name }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作" width="100" align="center" fixed="right">
+                            <template #default="scope">
+                                <el-button :icon="Delete" type="danger" circle @click="removeItem(scope.$index)">
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </div>
-
                 <template #footer>
                     <el-button @click="previewDialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="sureUpload">确 定({{ previewFileList.length }})</el-button>
@@ -64,7 +63,7 @@ import pinia from '@/store/index'
 import { useFileStore } from "@/store/modules/fileStore";
 import { useTaskStore } from "@/store/modules/taskStore";
 import {
-    Delete,Upload
+    Delete, Upload
 } from '@element-plus/icons-vue'
 const taskStore = useTaskStore(pinia);
 const fileStore = useFileStore(pinia);
@@ -212,66 +211,66 @@ function uploadComplete() {
 function sureUpload() {
     previewDialogVisible.value = false
     const parentId = props.isDep ? fileStore.parentDepId : fileStore.parentId
-            previewFileList.value.forEach((f: any) => {
-                f.pause()
-                if (f.size > panUtil.getMaxFileSize()) {
-                    throw new Error('文件：' + f.name + '大小超过了最大上传文件的限制（' + panUtil.translateFileSize(panUtil.getMaxFileSize()) + '）')
-                }
-                let taskItem = {
-                    target: f,
-                    filename: f.name,
-                    fileSize: panUtil.translateFileSize(f.size),
-                    uploadedSize: panUtil.translateFileSize(0),
-                    status: panUtil.fileStatus.PARSING.code,
-                    statusText: panUtil.fileStatus.PARSING.text,
-                    timeRemaining: panUtil.translateTime(Number.POSITIVE_INFINITY),
-                    speed: panUtil.translateSpeed(f.averageSpeed),
-                    percentage: 0,
-                    parentId: new String(parentId)
-                }
-                // 添加
-                taskStore.add(taskItem)
-                MD5(f.file, (e: any, md5: any) => {
-                    f['uniqueIdentifier'] = md5
-                    f.resume()
-                    taskStore.updateStatus({
-                        filename: f.name,
-                        status: panUtil.fileStatus.WAITING.code,
-                        statusText: panUtil.fileStatus.WAITING.text
-                    })
-                    // secUpload({ //秒传功能取消，避免相同文件在多个文件夹中出现
-                    //     pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
-                    //     filename: f.name,
-                    //     identifier: md5,
-                    //     parentId: parentId
-                    // }).then((res) => {
-                    //     if (res.code === 200 && res.message===null) {
-                    //         ElMessage.success('文件：' + f.name + ' 上传完成')
-                    //         f.cancel()
-                    //         taskStore.remove(f.name)
-                    //         emit('loadFileList')
-                    //         if (uploader.files.length === 0) {
-                    //             taskStore.updateViewFlag(false)
-                    //         }
-                    //     } else {
-                    //         f.resume()
-                    //         taskStore.updateStatus({
-                    //             filename: f.name,
-                    //             status: panUtil.fileStatus.WAITING.code,
-                    //             statusText: panUtil.fileStatus.WAITING.text
-                    //         })
-                    //     }
-                    // }).catch(() => {
-                    //     f.resume()
-                    //     taskStore.updateStatus({
-                    //         filename: f.name,
-                    //         status: panUtil.fileStatus.WAITING.code,
-                    //         statusText: panUtil.fileStatus.WAITING.text
-                    //     })
-                    // })
-                })
+    previewFileList.value.forEach((f: any) => {
+        f.pause()
+        if (f.size > panUtil.getMaxFileSize()) {
+            throw new Error('文件：' + f.name + '大小超过了最大上传文件的限制（' + panUtil.translateFileSize(panUtil.getMaxFileSize()) + '）')
+        }
+        let taskItem = {
+            target: f,
+            filename: f.name,
+            fileSize: panUtil.translateFileSize(f.size),
+            uploadedSize: panUtil.translateFileSize(0),
+            status: panUtil.fileStatus.PARSING.code,
+            statusText: panUtil.fileStatus.PARSING.text,
+            timeRemaining: panUtil.translateTime(Number.POSITIVE_INFINITY),
+            speed: panUtil.translateSpeed(f.averageSpeed),
+            percentage: 0,
+            parentId: new String(parentId)
+        }
+        // 添加
+        taskStore.add(taskItem)
+        MD5(f.file, (e: any, md5: any) => {
+            f['uniqueIdentifier'] = md5
+            f.resume()
+            taskStore.updateStatus({
+                filename: f.name,
+                status: panUtil.fileStatus.WAITING.code,
+                statusText: panUtil.fileStatus.WAITING.text
             })
-            taskStore.updateViewFlag(true)
+            // secUpload({ //秒传功能取消，避免相同文件在多个文件夹中出现
+            //     pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
+            //     filename: f.name,
+            //     identifier: md5,
+            //     parentId: parentId
+            // }).then((res) => {
+            //     if (res.code === 200 && res.message===null) {
+            //         ElMessage.success('文件：' + f.name + ' 上传完成')
+            //         f.cancel()
+            //         taskStore.remove(f.name)
+            //         emit('loadFileList')
+            //         if (uploader.files.length === 0) {
+            //             taskStore.updateViewFlag(false)
+            //         }
+            //     } else {
+            //         f.resume()
+            //         taskStore.updateStatus({
+            //             filename: f.name,
+            //             status: panUtil.fileStatus.WAITING.code,
+            //             statusText: panUtil.fileStatus.WAITING.text
+            //         })
+            //     }
+            // }).catch(() => {
+            //     f.resume()
+            //     taskStore.updateStatus({
+            //         filename: f.name,
+            //         status: panUtil.fileStatus.WAITING.code,
+            //         statusText: panUtil.fileStatus.WAITING.text
+            //     })
+            // })
+        })
+    })
+    taskStore.updateViewFlag(true)
 }
 function uploadError(rootFile: any, file: any, message: any, chunk: any) {
     taskStore.updateStatus({
@@ -304,7 +303,7 @@ function doMerge(file: any) {
     })
     merge({//todo
         waterMarkFlag: waterMarkFlag.value,
-        teamFlag:fileStore.teamFlag,
+        teamFlag: fileStore.teamFlag,
         pageType: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE,
         filename: uploadTaskItem.filename,
         identifier: uploadTaskItem.target.uniqueIdentifier,
@@ -329,8 +328,8 @@ function doMerge(file: any) {
 }
 
 function removeItem(index: number) {
-  const file = previewFileList.value.splice(index, 1)[0]
-  uploader.removeFile(file)
+    const file = previewFileList.value.splice(index, 1)[0]
+    uploader.removeFile(file)
 }
 
 onMounted(() => {
@@ -341,8 +340,8 @@ onMounted(() => {
 </script>
 
 <style>
-.table-container{
-    max-height:340px;
+.table-container {
+    max-height: 340px;
     overflow-y: auto;
 }
 
