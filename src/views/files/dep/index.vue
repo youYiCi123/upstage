@@ -39,7 +39,8 @@
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" ref="selectArea" id="select-area" class="select-area"
             @contextmenu.prevent="openOutSideMenu($event)">
             <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
-              @contextmenu.prevent.stop="openMenu($event, item)" :key="index" :data-id="item.fileId">
+              @contextmenu.prevent.stop="openMenu($event, item)" :key="index" :data-id="item.fileId"
+              :data-wf="item.waterMaterFlag" :data-ff="item.folderFlag">
               <el-image :src="analysisType(item.fileType)" class="img" fit="fill"></el-image>
               <div class="file-name">{{ item.filename }}</div>
             </div>
@@ -134,7 +135,9 @@
   </el-tour>
 
   <el-dialog title="文件批量操作" v-model="multiplyDialogVisible" width="25%">
-    <span style="color: #f56c6c;font-size: 13px;" v-show="multiplyFileList.length>5"><el-icon><Warning /></el-icon>为减轻服务器压力，文件数量请不要超过5个</span>
+    <span style="color: #f56c6c;font-size: 13px;" v-show="multiplyFileList.length > 5"><el-icon>
+        <Warning />
+      </el-icon>为减轻服务器压力，文件数量请不要超过5个</span>
     <div class="table-container">
       <el-table ref="newsTable" :data="multiplyFileList" style="width: 100%;" border>
         <el-table-column label="文件名" width="340">
@@ -152,8 +155,10 @@
     </div>
     <template #footer>
       <el-button @click="multiplyDialogVisible = false">取 消</el-button>
-      <el-button type="danger" @click="handleDeleteFiles" :disabled="multiplyFileList.length>5">批量删除({{ multiplyFileList.length }})</el-button>
-      <el-button type="primary" @click="handleDownloadFiles" :disabled="multiplyFileList.length>5">批量下载({{ multiplyFileList.length }})</el-button>
+      <el-button type="danger" @click="handleDeleteFiles" :disabled="multiplyFileList.length > 5">批量删除({{
+        multiplyFileList.length }})</el-button>
+      <el-button type="primary" @click="handleDownloadFiles" :disabled="multiplyFileList.length > 5">批量下载({{
+        multiplyFileList.length }})</el-button>
     </template>
   </el-dialog>
 </template>
@@ -691,7 +696,19 @@ function showSelDiv(arr: HTMLElement[]) {
   multiplyFileList.value = []
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].classList.contains("seled")) {
-      var elements = arr[i].getElementsByClassName('file-name')
+      if (arr[i].dataset.ff === "1") {
+        ElMessage.error('文件夹不支持批量操作')
+        return
+      }
+      if(arr[i].dataset.wf === "1"){
+        ElMessage.error('水印文件不支持批量操作')
+        return
+      }
+    }
+  }
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].classList.contains("seled")) {
+    var elements = arr[i].getElementsByClassName('file-name')
       multiplyFileList.value.push({ id: arr[i].dataset.id, name: (elements[0] as HTMLElement).innerHTML })
     }
   }
@@ -721,31 +738,31 @@ function handleDeleteFiles() {
 
 function handleDownloadFiles() {
   multiplyDialogVisible.value = false
-  doDownLoads(multiplyFileList.value,"", 0)
+  doDownLoads(multiplyFileList.value, "", 0)
 }
 
-function doDownload(item: any,waterMark:any) {
-    let url = panUtil.getUrlPrefix() + '/file/download?fileId=' + item.id+
-    '&userId='+userStore.id+'&waterMark='+waterMark,
-        filename = item.name,
-        link = document.createElement('a')
-    link.style.display = 'none'
-    link.href = url
-    link.setAttribute('download', filename)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+function doDownload(item: any, waterMark: any) {
+  let url = panUtil.getUrlPrefix() + '/file/download?fileId=' + item.id +
+    '&userId=' + userStore.id + '&waterMark=' + waterMark,
+    filename = item.name,
+    link = document.createElement('a')
+  link.style.display = 'none'
+  link.href = url
+  link.setAttribute('download', filename)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
-function doDownLoads(items: any,waterMark:any, i: number) {
-    if (items.length === i) {
-        return
-    }
-    setTimeout(function () {
-        doDownload(items[i],waterMark);
-        i++
-        doDownLoads(items,waterMark, i)
-    }, 500);
+function doDownLoads(items: any, waterMark: any, i: number) {
+  if (items.length === i) {
+    return
+  }
+  setTimeout(function () {
+    doDownload(items[i], waterMark);
+    i++
+    doDownLoads(items, waterMark, i)
+  }, 500);
 }
 
 
@@ -976,5 +993,4 @@ input:valid+.line {
 
 #out {
   position: relative;
-}
-</style>
+}</style>
