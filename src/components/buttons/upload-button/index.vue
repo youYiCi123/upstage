@@ -26,6 +26,7 @@
                 </div>
             </el-dialog>
             <el-dialog title="文件预览列表" v-model="previewDialogVisible" width="30%" center>
+                <span style="color: #f56c6c;font-size: 13px;" v-show="previewFileList.length>5"><el-icon><Warning /></el-icon>为减轻服务器压力，文件数量请不要超过5个</span>
                 <div class="table-container">
                     <el-table ref="newsTable" :data="previewFileList" style="width: 100%;" border>
                         <el-table-column label="文件名" width="340">
@@ -43,7 +44,7 @@
                 </div>
                 <template #footer>
                     <el-button @click="previewDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="sureUpload">确 定({{ previewFileList.length }})</el-button>
+                    <el-button type="primary" @click="sureUpload" :disabled="previewFileList.length>5">确 定({{ previewFileList.length }})</el-button>
                 </template>
             </el-dialog>
         </div>

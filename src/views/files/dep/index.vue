@@ -134,6 +134,7 @@
   </el-tour>
 
   <el-dialog title="文件批量操作" v-model="multiplyDialogVisible" width="25%">
+    <span style="color: #f56c6c;font-size: 13px;" v-show="multiplyFileList.length>5"><el-icon><Warning /></el-icon>为减轻服务器压力，文件数量请不要超过5个</span>
     <div class="table-container">
       <el-table ref="newsTable" :data="multiplyFileList" style="width: 100%;" border>
         <el-table-column label="文件名" width="340">
@@ -151,15 +152,15 @@
     </div>
     <template #footer>
       <el-button @click="multiplyDialogVisible = false">取 消</el-button>
-      <el-button type="danger">批量删除({{ multiplyFileList.length }})</el-button>
-      <el-button type="primary">批量下载({{ multiplyFileList.length }})</el-button>
+      <el-button type="danger" @click="handleDeleteFiles" :disabled="multiplyFileList.length>5">批量删除({{ multiplyFileList.length }})</el-button>
+      <el-button type="primary" @click="handleDownloadFiles" :disabled="multiplyFileList.length>5">批量下载({{ multiplyFileList.length }})</el-button>
     </template>
   </el-dialog>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch, onUnmounted } from "vue";
 import { Search, Delete } from "@element-plus/icons-vue";
-import { getFolderTree, list, searchForName } from "@/api/file";
+import { getFolderTree, list, searchForName, handleMultiplyDelete } from "@/api/file";
 import CommentButton from "@/components/buttons/comment-button/index.vue";
 import DownloadButton from "@/components/buttons/download-button/index.vue";
 import RenameButton from "@/components/buttons/rename-button/index.vue";
@@ -170,6 +171,7 @@ import TransferButton from "@/components/buttons/transfer-button/index.vue";
 import FileInfoButton from "@/components/buttons/fileInfo-button/index.vue";
 import SetButton from "@/components/buttons/set-button/index.vue";
 import ShareButton from "@/components/buttons/share-button/index.vue";
+import { ElMessage } from 'element-plus';
 import TeamUser from "@/components/team-user/index.vue";
 import panUtil from "@/utils/fileUtil";
 import { useRouter, useRoute } from "vue-router"; //vue3路由跳转
@@ -199,7 +201,7 @@ const fileNameBySerch = ref("");
 //图片
 const showViewer = ref(false);
 const imgUrl = ref<any[]>([]);
-const multiplyFileList = ref<any[]>([]);
+const multiplyFileList = ref<any>([]);
 const imgIndex = ref(0);
 //新手导航开启状态
 const open = ref(false)
@@ -693,7 +695,7 @@ function showSelDiv(arr: HTMLElement[]) {
       multiplyFileList.value.push({ id: arr[i].dataset.id, name: (elements[0] as HTMLElement).innerHTML })
     }
   }
-  if(multiplyFileList.value.length!=0){
+  if (multiplyFileList.value.length != 0) {
     multiplyDialogVisible.value = true
   }
 }
@@ -701,6 +703,50 @@ function showSelDiv(arr: HTMLElement[]) {
 function removeItem(index: number) {
   multiplyFileList.value.splice(index, 1)[0]
 }
+
+//文件批量删除
+function handleDeleteFiles() {
+  handleMultiplyDelete(multiplyFileList.value).then(response => {
+    ElMessage({
+      type: 'success',
+      message: '删除成功!'
+    });
+    multiplyDialogVisible.value = false
+    getList();
+  }).catch(() => {
+    multiplyDialogVisible.value = false
+    getList();
+  })
+}
+
+function handleDownloadFiles() {
+  doDownLoads(multiplyFileList.value,"", 0)
+}
+
+function doDownload(item: any,waterMark:any) {
+    let url = panUtil.getUrlPrefix() + '/file/download?fileId=' + item.id+
+    '&userId='+userStore.id+'&waterMark='+waterMark,
+        filename = item.name,
+        link = document.createElement('a')
+    link.style.display = 'none'
+    link.href = url
+    link.setAttribute('download', filename)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+}
+
+function doDownLoads(items: any,waterMark:any, i: number) {
+    if (items.length === i) {
+        return
+    }
+    setTimeout(function () {
+        doDownload(items[i],waterMark);
+        i++
+        doDownLoads(items,waterMark, i)
+    }, 500);
+}
+
 
 </script>
 <style scoped>
@@ -924,7 +970,6 @@ input:valid+.line {
 }
 
 .seled {
-  border: 1px solid #6183ed;
   background-color: #D6DFF7;
 }
 

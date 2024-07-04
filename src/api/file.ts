@@ -94,6 +94,15 @@ export function deleteFiles(params: any) {
   });
 }
 
+//批量删除文件 文件预览页
+export function handleMultiplyDelete(data:any) {
+  return request({
+    url: '/file-service/file/delete/multiply',
+    method: 'post',
+    data: data
+  })
+}
+
 //批量删除文件 审核
 export function handleBatchDelete(params:any) {
   return request({
