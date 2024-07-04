@@ -720,6 +720,7 @@ function handleDeleteFiles() {
 }
 
 function handleDownloadFiles() {
+  multiplyDialogVisible.value = false
   doDownLoads(multiplyFileList.value,"", 0)
 }
 
