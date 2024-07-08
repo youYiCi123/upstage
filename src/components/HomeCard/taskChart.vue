@@ -31,7 +31,7 @@ function writeSurvey(index:number) {
     if(index==0){
         router.push({ path: '/research/tempSubmit',query:{ tempId: props.tempId} });
     }else{
-        window.open('http://39.101.138.67:89/', '_blank')
+        // window.open('http://39.101.138.67:89/', '_blank')
     }
    
 }

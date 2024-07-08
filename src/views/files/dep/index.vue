@@ -77,14 +77,14 @@
         <div class="menuItem">
           <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
-        <div class="menuItem">
+        <!-- <div class="menuItem">
           <transfer-to-enter-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-        </div>
+        </div> -->
         <!-- <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
               " class="menuItem">
               <copy-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true"
                 :item="rightClickItem" />
-    </div> -->
+        </div> -->
         <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
           " class="menuItem">
           <transfer-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true"
@@ -95,8 +95,7 @@
         </div>
       </template>
       <template v-else>
-        <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
-          " class="menuItem">
+        <div class="menuItem">
           <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
         <!-- <div class="menuItem">
@@ -701,7 +700,8 @@ function showSelDiv(arr: HTMLElement[]) {
         return
       }
       if(arr[i].dataset.wf === "1"){
-        ElMessage.error('水印文件不支持批量操作')
+        var elements = arr[i].getElementsByClassName('file-name')
+        ElMessage.error((elements[0] as HTMLElement).innerHTML+'为水印文件不支持批量操作')
         return
       }
     }
@@ -902,7 +902,7 @@ input:valid+.line {
 }
 
 .file-page-container .file-container .file-list {
-  height: calc(100vh - 140px);
+  height: calc(100vh - 91px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
