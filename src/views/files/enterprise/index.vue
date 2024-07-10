@@ -1,39 +1,37 @@
 <template>
-    <div class="file-page-container">
-      <el-container>
-        <el-aside width="300px" class="folder-aside">
-          <el-input  v-model="foldName" :prefix-icon="Search" placeholder="请输入文件夹名称"
-            style="margin-bottom: 20px"></el-input>
-          <el-tree class="filter-tree" ref="treeRef" default-expand-all node-key="id" :current-node-key="currentLivingId"
-            highlight-current :props="defaultProps" :data="foldData" :filter-node-method="filterNode"
-            @node-click="handleNodeClick">
-            <template #default="{ node, data }">
-              <i class="iconfont icon-folder" style="margin-right: 15px; font-size: 20px; cursor: pointer" />
-              <span>{{ node.label }}</span>
-            </template>
-          </el-tree>
-        </el-aside>
-        <div class="file-container">
-          <el-card :body-style="{ padding: '13px' }">
-            <div class="operation-card">
-              <div class="breadcrumb-content">
-                <el-breadcrumb style="display: inline-block">
-                  <el-breadcrumb-item v-for="(item, index) in breadcrumbStore.breadCrumbs" :key="index">
-                    <a class="breadcrumb-item-a" @click="goToThis(item.id)" href="#">{{ item.name }}</a>
-                  </el-breadcrumb-item>
-                </el-breadcrumb>
-              </div>
-              <label>
-                <input type="text" v-model="fileNameBySerch" required @keyup.enter.native="searchFileByName" />
-                <span class="line"></span>
-              </label>
-              <upload-button  @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
-              <TaskList></TaskList>
-              <create-folder-button  @loadFileList="getList" :is-dep="false" size="default"
-                :round-flag="true" />
+  <div class="file-page-container">
+    <el-container>
+      <el-aside width="300px" class="folder-aside">
+        <el-input v-model="foldName" :prefix-icon="Search" placeholder="请输入文件夹名称" style="margin-bottom: 20px"></el-input>
+        <el-tree class="filter-tree" ref="treeRef" default-expand-all node-key="id" :current-node-key="currentLivingId"
+          highlight-current :props="defaultProps" :data="foldData" :filter-node-method="filterNode"
+          @node-click="handleNodeClick">
+          <template #default="{ node, data }">
+            <i class="iconfont icon-folder" style="margin-right: 15px; font-size: 20px; cursor: pointer" />
+            <span>{{ node.label }}</span>
+          </template>
+        </el-tree>
+      </el-aside>
+      <div class="file-container">
+        <el-card :body-style="{ padding: '13px' }">
+          <div class="operation-card">
+            <div class="breadcrumb-content">
+              <el-breadcrumb style="display: inline-block">
+                <el-breadcrumb-item v-for="(item, index) in breadcrumbStore.breadCrumbs" :key="index">
+                  <a class="breadcrumb-item-a" @click="goToThis(item.id)" href="#">{{ item.name }}</a>
+                </el-breadcrumb-item>
+              </el-breadcrumb>
             </div>
-          </el-card>
-          <el-watermark :content=waterMark>
+            <label>
+              <input type="text" v-model="fileNameBySerch" required @keyup.enter.native="searchFileByName" />
+              <span class="line"></span>
+            </label>
+            <upload-button @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
+            <TaskList></TaskList>
+            <create-folder-button @loadFileList="getList" :is-dep="false" size="default" :round-flag="true" />
+          </div>
+        </el-card>
+        <el-watermark :content=waterMark>
           <div :class="isImg ? 'file-list bigImg' : 'file-list col'" @contextmenu.prevent="openOutSideMenu($event)">
             <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
               @contextmenu.prevent.stop="openMenu($event, item)">
@@ -46,44 +44,60 @@
               " :url-list="imgUrl" />
           </div>
         </el-watermark>
-        </div>
-      </el-container>
-    </div>
+      </div>
+    </el-container>
+  </div>
   <!-- 右键菜单部分 -->
   <ul v-show="menuVisible" :style="{
     left: position.left + 'px',
     top: position.top + 'px',
     display: menuVisible ? 'block' : 'none',
   }" class="contextmenu">
-    <div class="menuItem">
-      <file-info-button :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div class="menuItem">
-      <download-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div class="menuItem">
-      <comment-button :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div class="menuItem">
-      <set-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <div v-if="userStore.roles.findIndex((item) => item == '超级管理员') != -1
-      " class="menuItem">
-      <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
-    <!-- <div v-if="userStore.roles.findIndex((item) => item == '超级管理员') != -1
+    <template v-if="rightClickItem">
+      <template v-if="!rightClickItem.folderFlag">
+        <div class="menuItem">
+          <file-info-button :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div class="menuItem">
+          <download-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div class="menuItem">
+          <comment-button :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div class="menuItem" v-if="!arrayIncludes(ignoreNumbers,rightClickItem.fileType)">
+          <set-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <div v-if="userStore.roles.findIndex((item) => item == '超级管理员') != -1
+          " class="menuItem">
+          <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <!-- <div v-if="userStore.roles.findIndex((item) => item == '超级管理员') != -1
               " class="menuItem">
               <copy-button @loadFileList="getList" size="small" :is-dep="false" :round-flag="true"
                 :item="rightClickItem" />
-            </div> -->
-    <div v-if="userStore.roles.findIndex((item) => item == '超级管理员') != -1
-      " class="menuItem">
-      <transfer-button @loadFileList="getList" size="small" :is-dep="false" :round-flag="true" :item="rightClickItem" />
-    </div>
-    <div v-if="userStore.roles.findIndex((item) => item == '超级管理员') != -1
-      " class="menuItem">
-      <delete-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
-    </div>
+        </div> -->
+        <div v-if="userStore.roles.findIndex((item) => item == '超级管理员') != -1
+          " class="menuItem">
+          <transfer-button @loadFileList="getList" size="small" :is-dep="false" :round-flag="true"
+            :item="rightClickItem" />
+        </div>
+        <div v-if="userStore.roles.findIndex((item) => item == '超级管理员') != -1
+          " class="menuItem">
+          <delete-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+      </template>
+      <template v-else>
+        <div class="menuItem">
+          <rename-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+        <!-- <div class="menuItem">
+          <share-button :round-flag="true" size="small" :item="rightClickItem">分享给</share-button>
+        </div> -->
+        <div class="menuItem">
+          <delete-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
+        </div>
+      </template>
+    </template>
   </ul>
   <!-- 外部右键菜单 -->
   <ul v-show="outsideMenuVisible" :style="{
@@ -107,6 +121,16 @@ import { Search } from "@element-plus/icons-vue";
 import { getFolderTree, list, searchForName } from "@/api/file";
 import panUtil from "@/utils/fileUtil";
 import { useRouter } from "vue-router"; //vue3路由跳转
+import CommentButton from "@/components/buttons/comment-button/index.vue";
+import DownloadButton from "@/components/buttons/download-button/index.vue";
+import RenameButton from "@/components/buttons/rename-button/index.vue";
+import DeleteButton from "@/components/buttons/delete-button/index.vue";
+import TransferToEnterButton from "@/components/buttons/transferToEnter-button/index.vue";
+import CopyButton from "@/components/buttons/copy-button/index.vue";
+import TransferButton from "@/components/buttons/transfer-button/index.vue";
+import FileInfoButton from "@/components/buttons/fileInfo-button/index.vue";
+import SetButton from "@/components/buttons/set-button/index.vue";
+import ShareButton from "@/components/buttons/share-button/index.vue";
 const router = useRouter();
 import pinia from "@/store/index";
 import { useFileStore } from "@/store/modules/fileStore";
@@ -132,7 +156,11 @@ const fileNameBySerch = ref("");
 const showViewer = ref(false);
 const imgUrl = ref<any[]>([]);
 const imgIndex = ref(0);
+const ignoreNumbers = [2, 3, 6, 8, 9] //无需基础设置的文件类型数组
 
+function arrayIncludes(array: any, number: any) {
+  return array.includes(number);
+}
 //右键菜单
 const menuVisible = ref(false);
 const position = ref({
@@ -581,7 +609,7 @@ input:valid+.line {
 }
 
 .file-page-container .file-container .file-list {
-  height: calc(100vh - 140px);
+  height: calc(100vh - 141px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

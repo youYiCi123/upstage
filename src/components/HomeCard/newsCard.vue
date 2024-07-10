@@ -1,7 +1,7 @@
 <template>
     <div class="chart-wrapper">
         <el-table ref="newsTable" :data="props.newsList" style="width: 100%;" border>
-            <el-table-column label="公告标题" width="280" show-overflow-tooltip align="center">
+            <el-table-column label="公告标题"  show-overflow-tooltip align="center">
                 <template #default="scope">
                     <el-button  @click="handleSelectNews(scope.row)" type="success" size="small" text>{{ scope.row.theme }}</el-button>    
                 </template>

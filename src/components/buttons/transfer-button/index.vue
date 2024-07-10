@@ -5,21 +5,24 @@
         </el-button>
         <el-button v-if="circleFlag" :icon="DocumentCopy" :size="size" circle @click="transferFile">
         </el-button>
-        <el-dialog title="移动文件"  v-model="treeDialogVisible" @open="loadTreeData" @closed="resetTreeData" width="30%"
+        <el-dialog title="移动文件" v-model="treeDialogVisible" @open="loadTreeData" @closed="resetTreeData" width="30%"
             :append-to-body=true :modal-append-to-body=false :center=true>
+            <span style="color: #f56c6c;font-size: 13px; padding-left: 10px;"><el-icon>
+                    <Warning />
+                </el-icon>文件将移动到选定文件夹中公开，请谨慎操作</span>
+                <el-divider />
             <div class="tree-content">
-                <el-tree class="tree" :data="treeData" empty-text="暂无文件夹数据" highlight-current ref="tree">
-                    <template class="custom-tree-node"  #default="{ node, data }">
-                        <i class="iconfont  icon-folder"
-                            style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
+                <el-tree class="tree" :data="treeData" empty-text="暂无文件夹数据" highlight-current ref="tree" accordion>
+                    <template class="custom-tree-node" #default="{ node, data }">
+                        <i class="iconfont  icon-folder" style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
                         <span>{{ node.label }}</span>
                     </template>
                 </el-tree>
             </div>
-            <span slot="footer" class="dialog-footer">
+            <template #footer>
                 <el-button @click="treeDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="doChoseTreeNodeCallBack" :loading="loading">确 定</el-button>
-            </span>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -27,7 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { transfer, getFolderTree } from '../../../api/file'
-import { ElMessage,ElTree } from 'element-plus';
+import { ElMessage, ElTree } from 'element-plus';
 import { DocumentCopy } from '@element-plus/icons-vue'
 import panUtil from '@/utils/fileUtil'
 import pinia from '@/store/index'
@@ -82,12 +85,12 @@ function doTransferFile(targetParentId: any) {
     transfer({
         fileIds: fileIds,
         targetParentId: targetParentId
-    }).then(()=>{
+    }).then(() => {
         loading.value = false
         treeDialogVisible.value = false
         ElMessage.success('文件移动成功')
         emit('loadFileList')
-    }).catch((res:any)=>{
+    }).catch((res: any) => {
         loading.value = false
         ElMessage.error(res.message)
     })
@@ -109,9 +112,9 @@ function resetTreeData() {
 }
 
 function loadTreeData() {
-    getFolderTree({ fileRootId: props.isDep?panUtil.fileFold.DEP:panUtil.fileFold.ENTERPRISE }).then((res)=>{
+    getFolderTree({ fileRootId: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE }).then((res) => {
         treeData.value = res.data
-    }).catch((res)=>{
+    }).catch((res) => {
         ElMessage.error(res.message)
     })
 }
@@ -137,5 +140,8 @@ function loadTreeData() {
 .tree-content .tree {
     height: 100%;
     overflow: auto;
+}
+.el-divider--horizontal {
+    margin: 10px 0;
 }
 </style>

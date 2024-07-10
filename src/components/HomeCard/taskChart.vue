@@ -31,7 +31,7 @@ function writeSurvey(index:number) {
     if(index==0){
         router.push({ path: '/research/tempSubmit',query:{ tempId: props.tempId} });
     }else{
-        // window.open('http://39.101.138.67:89/', '_blank')
+        window.open('http://120.55.69.236:8072/', '_blank')
     }
    
 }
@@ -42,8 +42,8 @@ const iconArrs = [{
     routeUrl: '/research/tempSubmit'
 },{
     imgUrl: require('@/assets/images/home_img/网站建站.png'),
-    content: '天一官网',
-    routeUrl: 'http://39.101.138.67:89/'
+    content: '新版官网',
+    routeUrl: 'http://120.55.69.236:8072/'
 }]
 
 </script>

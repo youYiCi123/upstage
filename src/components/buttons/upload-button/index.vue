@@ -69,7 +69,7 @@ import {
 const taskStore = useTaskStore(pinia);
 const fileStore = useFileStore(pinia);
 
-const waterMarkFlag = ref(false)
+const waterMarkFlag = ref(true)
 const props = defineProps({
     isDep: {
         type: Boolean,

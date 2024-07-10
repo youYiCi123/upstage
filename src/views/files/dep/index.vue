@@ -40,7 +40,7 @@
             @contextmenu.prevent="openOutSideMenu($event)">
             <div class="item" v-for="(item, index) in fileList" @click="viewFile(item)"
               @contextmenu.prevent.stop="openMenu($event, item)" :key="index" :data-id="item.fileId"
-              :data-wf="item.waterMaterFlag" :data-ff="item.folderFlag">
+              :data-wf="item.waterMaterFlag" :data-ff="item.folderFlag" :data-ft="item.fileType">
               <el-image :src="analysisType(item.fileType)" class="img" fit="fill"></el-image>
               <div class="file-name">{{ item.filename }}</div>
             </div>
@@ -71,7 +71,7 @@
         <div class="menuItem">
           <comment-button :round-flag="true" size="small" :item="rightClickItem" />
         </div>
-        <div class="menuItem">
+        <div class="menuItem" v-if="!arrayIncludes(ignoreNumbers,rightClickItem.fileType)">
           <set-button @loadFileList="getList" :round-flag="true" size="small" :item="rightClickItem" />
         </div>
         <div class="menuItem">
@@ -85,8 +85,7 @@
               <copy-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true"
                 :item="rightClickItem" />
         </div> -->
-        <div v-if="userStore.roles.findIndex((item) => item == '部门负责人') != -1
-          " class="menuItem">
+        <div class="menuItem">
           <transfer-button @loadFileList="getList" size="small" :is-dep="true" :round-flag="true"
             :item="rightClickItem" />
         </div>
@@ -132,7 +131,6 @@
     <el-tour-step :target="step3?.$el" title="文件传输助手" description="文件上传后自动展开查看文件上传进度" />
     <el-tour-step :target="step4?.$el" title="新建文件夹" description="可在打开页面位置中创建子文件夹。创建任务小组（本部门或跨部门，限定参与人员），任务小组将呈现在左侧栏中" />
   </el-tour>
-
   <el-dialog title="文件批量操作" v-model="multiplyDialogVisible" width="25%">
     <span style="color: #f56c6c;font-size: 13px;" v-show="multiplyFileList.length > 5"><el-icon>
         <Warning />
@@ -192,6 +190,14 @@ import TaskList from "@/components/task-list/index.vue";
 import UploadButton from "@/components/buttons/upload-button/index.vue";
 import CreateFolderButton from "@/components/buttons/create-folder-button/index.vue";
 import { ElButton } from "element-plus";
+
+const ignoreNumbers=[2, 3, 6, 8, 9] //无需基础设置的文件类型数组
+const ignoreStrs=['2', '3', '6', '8', '9'] //无需基础设置的文件类型数组
+
+function arrayIncludes(array:any, number:any) {
+  return array.includes(number);
+}
+
 //用户名水印
 const waterMark = ref(userStore.nickName)
 //用户搜索文件夹名称
@@ -699,16 +705,16 @@ function showSelDiv(arr: HTMLElement[]) {
         ElMessage.error('文件夹不支持批量操作')
         return
       }
-      if(arr[i].dataset.wf === "1"){
+      if (arr[i].dataset.wf === "1" && !['2', '3', '6', '8', '9'].includes(arr[i].dataset.ft)) {
         var elements = arr[i].getElementsByClassName('file-name')
-        ElMessage.error((elements[0] as HTMLElement).innerHTML+'为水印文件不支持批量操作')
+        ElMessage.error((elements[0] as HTMLElement).innerHTML + '为水印文件不支持批量操作')
         return
       }
     }
   }
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].classList.contains("seled")) {
-    var elements = arr[i].getElementsByClassName('file-name')
+      var elements = arr[i].getElementsByClassName('file-name')
       multiplyFileList.value.push({ id: arr[i].dataset.id, name: (elements[0] as HTMLElement).innerHTML })
     }
   }
@@ -902,7 +908,7 @@ input:valid+.line {
 }
 
 .file-page-container .file-container .file-list {
-  height: calc(100vh - 91px);
+  height: calc(100vh - 141px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -993,4 +999,5 @@ input:valid+.line {
 
 #out {
   position: relative;
-}</style>
+}
+</style>
