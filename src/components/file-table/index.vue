@@ -159,7 +159,7 @@ function showImg(row: any) {
     let t = 0
     for (let i = 0, iLength = fileList.value.length; i < iLength; ++i) {
         if (fileList.value[i].fileType === 7) {
-            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId))
+            imgUrl.value.push(panUtil.getPreviewUrl(fileList.value[i].fileId,''))
             if (fileList.value[i].fileId === row.fileId) {
                 imgIndex.value = t
             }

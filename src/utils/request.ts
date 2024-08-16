@@ -8,7 +8,7 @@ const service = axios.create({
   // baseURL: process.env.BASE_API, // api的base_url8085
   baseURL:'http://localhost:8079/',
   timeout: 15000 // 请求超时时间
-})
+}) 
 
 // 处理  类型“AxiosResponse<any, any>”上不存在属性“errorinfo”。ts(2339) 脑壳疼！关键一步。
 declare module "axios" {

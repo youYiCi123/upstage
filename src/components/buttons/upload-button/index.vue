@@ -19,6 +19,11 @@
                         </div>
                     </div>
                 </div>
+                <div style="text-align: center;">
+                    <span style="color: #f56c6c;font-size: 13px; padding-left: 10px;"><el-icon>
+                            <Warning />
+                        </el-icon>水印功能仅支持：pdf、图片等格式，请按需上传<br>（无法编辑word、ppt、xls等格式）</span>
+                </div>
                 <div style="text-align: center">
                     <el-switch v-model="waterMarkFlag" class="ml-2" inline-prompt size="large"
                         style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949" active-text="开启水印"
@@ -26,7 +31,9 @@
                 </div>
             </el-dialog>
             <el-dialog title="文件预览列表" v-model="previewDialogVisible" width="30%" center>
-                <span style="color: #f56c6c;font-size: 13px;" v-show="previewFileList.length>5"><el-icon><Warning /></el-icon>为减轻服务器压力，文件数量请不要超过5个</span>
+                <span style="color: #f56c6c;font-size: 13px;" v-show="previewFileList.length > 15"><el-icon>
+                        <Warning />
+                    </el-icon>为减轻服务器压力，文件数量请不要超过15个</span>
                 <div class="table-container">
                     <el-table ref="newsTable" :data="previewFileList" style="width: 100%;" border>
                         <el-table-column label="文件名" width="340">
@@ -44,7 +51,8 @@
                 </div>
                 <template #footer>
                     <el-button @click="previewDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="sureUpload" :disabled="previewFileList.length>5">确 定({{ previewFileList.length }})</el-button>
+                    <el-button type="primary" @click="sureUpload" :disabled="previewFileList.length > 15">确 定({{
+                        previewFileList.length }})</el-button>
                 </template>
             </el-dialog>
         </div>
@@ -353,8 +361,8 @@ onMounted(() => {
 
 .upload-content {
     width: 100%;
-    height: 300px;
-    line-height: 300px;
+    height: 260px;
+    line-height: 260px;
     display: flex;
     justify-content: center;
 }
@@ -390,5 +398,4 @@ onMounted(() => {
     display: block;
     height: 30px;
     line-height: 30px;
-}
-</style>
+}</style>

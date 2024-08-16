@@ -12,7 +12,8 @@
                     @submit.native.prevent>
                     <el-form-item label="文件名称" prop="filename">
                         <el-input type="text" ref="filenameRef" @keyup.enter.native="doRenameFile(renameForm)"
-                            v-model="renameFormData.filename" autocomplete="off" />
+                            v-model="nameWithoutExtension" autocomplete="off">
+                            <template #append v-if="!props.item.folderFlag">{{ fileExtension }}</template></el-input>
                     </el-form-item>
                 </el-form>
             </div>
@@ -25,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive,computed } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import { Reading } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
@@ -60,6 +61,8 @@ const renameRules: FormRules = {
         { required: true, message: '请输入新文件名称', trigger: 'blur' }
     ]
 };
+const nameWithoutExtension = ref(''); // 文件名前缀
+const fileExtension = ref(''); // 文件后缀
 
 const filenameRef = ref();
 
@@ -70,10 +73,22 @@ const renameFormData = reactive({
 const renameDialogVisible = ref(false);
 const loading = ref(false);
 
+function updateNameAndExtension() {
+  if (props.item.folderFlag) {
+    nameWithoutExtension.value = renameFormData.filename;
+    fileExtension.value = '';
+  } else {
+    const parts = renameFormData.filename.split('.');
+    nameWithoutExtension.value = parts.slice(0, -1).join('.');
+    fileExtension.value = '.' + parts.pop();
+  }
+}
+
 function renameFile() {
     if (props.item) {
         renameFormData.fileId = props.item.fileId
         renameFormData.filename = props.item.filename
+        updateNameAndExtension();
         renameDialogVisible.value = true
         return
     }
@@ -88,6 +103,7 @@ function renameFile() {
     let item = fileStore.multipleSelection[0]
     renameFormData.fileId = item.fileId
     renameFormData.filename = item.filename
+    updateNameAndExtension();
     renameDialogVisible.value = true
 }
 function doRenameFile(formEl: FormInstance | undefined) {
@@ -98,7 +114,7 @@ function doRenameFile(formEl: FormInstance | undefined) {
             loading.value = true
             updateFilename({
                 fileId: renameFormData.fileId,
-                newFilename: renameFormData.filename
+                newFilename: nameWithoutExtension.value+fileExtension.value
             }).then(()=>{
                 loading.value = false
                 renameDialogVisible.value = false

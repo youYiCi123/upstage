@@ -16,10 +16,10 @@
                     </template>
                 </el-tree>
             </div>
-            <span slot="footer" class="dialog-footer">
+            <template #footer>
                 <el-button @click="treeDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="doChoseTreeNodeCallBack" :loading="loading">确 定</el-button>
-            </span>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -65,7 +65,7 @@ const tree = ref<InstanceType<typeof ElTree>>()
 
 function transferFile() {
     if (!props.item && (!fileStore.multipleSelection || fileStore.multipleSelection.length == 0)) {
-        ElMessage.error('请选择要移动的文件')
+        ElMessage.error('请选择要共享的文件')
         return
     }
     treeDialogVisible.value = true
@@ -87,7 +87,7 @@ function doTransferFile(targetParentId: any) {
     }).then(()=>{
         loading.value = false
         treeDialogVisible.value = false
-        ElMessage.success('文件移动成功')
+        ElMessage.success('文件共享成功')
         emit('loadFileList')
     }).catch((res:any)=>{
         loading.value = false

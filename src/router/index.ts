@@ -317,6 +317,12 @@ export const asyncRouterMap: RouteRecordRaw[] = [
         component: () => import("@/views/system/personInfoConfig.vue"),
         meta: { title: "个人信息" },
       },
+      {
+        path: "onlineUser",
+        name: "onlineUser",
+        component: () => import("@/views/system/onlineUser.vue"),
+        meta: { title: "在线用户" },
+      },
     ],
   },
   {

@@ -44,6 +44,7 @@
                         <el-tag :type=colorByType(scope.row.status)>
                             <span v-html="statusFormat(scope.row.status)"></span>
                         </el-tag>
+                        <el-button v-if="scope.row.status==0" size="small" type="danger" style="margin-left: 10px;" @click="handleWithdraw(scope.row)">撤回</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -58,7 +59,8 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, watch } from "vue";
-import { getMyUploadFileStatus } from '@/api/file';
+import { ElMessage} from 'element-plus';
+import { getMyUploadFileStatus,deleteFile} from '@/api/file';
 import { usePagination } from "@/hooks/usePagination";
 import dayjs from "dayjs";
 import pinia from "@/store/index";
@@ -86,6 +88,17 @@ function handleSearchList() {
 
 function setDate(value: any) {
     listQuery.date = value
+}
+
+function handleWithdraw(row: any){
+    deleteFile({id:row.fileId,reason:""}).then(response => {
+            ElMessage({
+                message: '删除成功',
+                type: 'success',
+                duration: 1000
+            });
+            getList();
+    });
 }
 
 function timeFormat(time: string) {

@@ -9,12 +9,14 @@
             :append-to-body=true :modal-append-to-body=false :center=true>
             <span style="color: #f56c6c;font-size: 13px; padding-left: 10px;"><el-icon>
                     <Warning />
-                </el-icon>文件将移动到选定文件夹中公开，请谨慎操作</span>
-                <el-divider />
+                </el-icon>仅允许在该团队下进行文件的移动</span>
+            <el-divider />
             <div class="tree-content">
                 <el-tree class="tree" :data="treeData" empty-text="暂无文件夹数据" highlight-current ref="tree" accordion>
                     <template class="custom-tree-node" #default="{ node, data }">
-                        <i class="iconfont  icon-folder" style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
+                        <i :class="[
+                            node.level == 1 ? 'iconfont icon-kehuguanli' : 'iconfont icon-folder'
+                        ]" style="margin-right: 15px; font-size: 20px; cursor: pointer;" />
                         <span>{{ node.label }}</span>
                     </template>
                 </el-tree>
@@ -113,11 +115,27 @@ function resetTreeData() {
 
 function loadTreeData() {
     getFolderTree({ fileRootId: props.isDep ? panUtil.fileFold.DEP : panUtil.fileFold.ENTERPRISE }).then((res) => {
-        treeData.value = res.data
+        const result = findSubtree(res.data, props.item.parentId);
+        treeData.value = result ? [result] : [];
     }).catch((res) => {
         ElMessage.error(res.message)
     })
 }
+
+const findSubtree = (nodes: any, targetNodeId: number) => {
+    for (const node of nodes) {
+        if (node.id === targetNodeId) {
+            return node;
+        }
+        if (node.children) {
+            const result = findSubtree(node.children, targetNodeId);
+            if (result) {
+                return node;
+            }
+        }
+    }
+    return null;
+};
 
 </script>
 
@@ -141,6 +159,7 @@ function loadTreeData() {
     height: 100%;
     overflow: auto;
 }
+
 .el-divider--horizontal {
     margin: 10px 0;
 }

@@ -629,7 +629,7 @@ input:valid+.line {
   -ms-flex-direction: column;
   flex-direction: column;
   padding: 5px;
-  height: 150px;
+  height: 160px;
   width: 130px;
 }
 
@@ -693,10 +693,10 @@ input:valid+.line {
   text-align: center;
   font-size: 14px;
   color: #606266;
-  height: 20px;
+  height: 40px;
   overflow: hidden;
   width: 120px;
-  white-space: nowrap;
+  /* white-space: nowrap; */
   text-overflow: ellipsis;
 }
 

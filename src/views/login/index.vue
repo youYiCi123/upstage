@@ -135,8 +135,8 @@ function initWindow() {
     getCode(); //获取验证码
     loginForm.username = getCookie("username");
     loginForm.password = getCookie("password");
-    if (loginForm.username === undefined || loginForm.username == null || loginForm.username === '') {
-        loginForm.username = 'admin';
+    if (loginForm.username === undefined || loginForm.username == null) {
+        loginForm.username = '';
     }
     if (loginForm.password === undefined || loginForm.password == null) {
         loginForm.password = '';

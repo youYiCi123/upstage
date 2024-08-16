@@ -42,7 +42,10 @@
                                 </div>
                                 <div class="name">{{ item.nickName }}</div>
                             </div>
-                            <div class="operation" v-show="hoverIndex === index" @click="delUser(index)"> <Delete style="width: 1em; height: 1em; margin-right: 8px ;color: red;" /></div>
+                            <div class="operation" v-show="hoverIndex === index" >
+                                <span ><Finished style="width: 1em; height: 1em; margin-right: 10px ;color: #78bb7b;"/> </span>
+                                <span @click="delUser(index)"><Delete style="width: 1em; height: 1em; margin-right: 8px ;color: red;" /></span>
+                            </div>
                         </div>
                     </li>
                 </ul>
