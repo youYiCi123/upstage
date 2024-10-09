@@ -3,14 +3,15 @@
         <div class="notice">
             <div class="rise">
                 <div class="title">团队公告</div>
-                <div class="operation" style="cursor: pointer;" @click="editNoticeFlag=false">
+                <div class="operation" style="cursor: pointer;" @click="editNoticeFlag = false">
                     <el-icon :size="20">
                         <EditPen />
                     </el-icon>
                 </div>
             </div>
             <div class="content">
-                <el-input :rows="6" v-model="noticeContent.notice" :disabled="editNoticeFlag" resize="none" type="textarea" placeholder="添加团队公告 所有成员都可以查看" />
+                <el-input :rows="4" v-model="noticeContent.notice" :disabled="editNoticeFlag" resize="none" type="textarea"
+                    placeholder="添加团队公告 所有成员都可以查看" />
             </div>
             <div class="btn-group">
                 <el-button>取消</el-button>
@@ -30,76 +31,109 @@
             <div class="content">
                 <el-scrollbar>
                     <ul class="infoList">
-                    <li v-for="(item, index)  in users" style="margin-bottom: 10px;">
-                        <div class="rank" @mouseenter="hoverIndex = index" @mouseleave="hoverIndex = -1">
-                            <div class="info">
-                                <div class="aratar">
-                                    <el-avatar v-if="item.icon"  size="small" :src="item.icon">
-                                    </el-avatar>
-                                    <el-avatar v-else  size="small">
-                                        <span v-html="avararFormat(item.nickName)"></span>
-                                    </el-avatar>
+                        <li v-for="(item, index)  in users" style="margin-bottom: 10px;">
+                            <div class="rank" @mouseenter="hoverIndex = index" @mouseleave="hoverIndex = -1">
+                                <div class="info">
+                                    <div class="aratar">
+                                        <el-avatar v-if="item.icon" size="small" :src="item.icon">
+                                        </el-avatar>
+                                        <el-avatar v-else size="small">
+                                            <span v-html="avararFormat(item.nickName)"></span>
+                                        </el-avatar>
+                                    </div>
+                                    <div class="name">{{ item.nickName }}</div>
                                 </div>
-                                <div class="name">{{ item.nickName }}</div>
+                                <div class="operation" v-show="hoverIndex === index">
+                                    <span @click="editUser(item.id, item.nickName)">
+                                        <Finished style="width: 1em; height: 1em; margin-right: 10px ;color: #78bb7b;" />
+                                    </span>
+                                    <span @click="delUser(index)">
+                                        <Delete style="width: 1em; height: 1em; margin-right: 8px ;color: red;" />
+                                    </span>
+                                </div>
                             </div>
-                            <div class="operation" v-show="hoverIndex === index" >
-                                <span ><Finished style="width: 1em; height: 1em; margin-right: 10px ;color: #78bb7b;"/> </span>
-                                <span @click="delUser(index)"><Delete style="width: 1em; height: 1em; margin-right: 8px ;color: red;" /></span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
                 </el-scrollbar>
-              
+
             </div>
         </div>
         <div class="team-bottom">
-			<div class="button-group">
-				<el-button  size="large" plain @click="renameTeam">更名</el-button>
-				<el-button size="large" plain @click="delTeam">解散</el-button>
-			</div>
+            <div class="button-group">
+                <el-button size="large" plain @click="renameTeam">更名</el-button>
+                <el-button size="large" plain @click="delTeam">解散</el-button>
+            </div>
         </div>
         <el-dialog title="添加成员" v-model="addDialogVisible" width="40%" :append-to-body=true :modal-append-to-body=false
-			:center=true>
-			<div>
-				<el-form label-width="140px">
-					<el-form-item label="选择人员：">
-						<el-cascader clearable v-model="selectedPerson" :options="personOptions" style="width: 250px"
-							:props="cascaderProps">
-						</el-cascader>
-					</el-form-item>
-				</el-form>
-			</div>
-			<template #footer>
-				<el-button @click="addDialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="submitForm">确 定</el-button>
-			</template>
-		</el-dialog>
+            :center=true>
+            <div>
+                <el-form label-width="140px">
+                    <el-form-item label="选择人员：">
+                        <el-cascader clearable v-model="selectedPerson" :options="personOptions" style="width: 250px"
+                            :props="cascaderProps">
+                        </el-cascader>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <template #footer>
+                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+            </template>
+        </el-dialog>
         <el-dialog title="小组重命名" v-model="renameDialogVisible" width="30%" @opened="focusInput()" :append-to-body=true
-			:modal-append-to-body=false :center=true>
-			<div>
-				<el-form label-width="100px" :rules="renameRules" ref="renameForm" :model="renameFormData" status-icon
-					@submit.native.prevent>
-					<el-form-item label="小组名称" prop="filename">
-						<el-input type="text" ref="filenameRef" @keyup.enter.native="doRenameFile(renameForm)"
-							v-model="renameFormData.filename" autocomplete="off" />
-					</el-form-item>
-				</el-form>
-			</div>
-			<template #footer>
-				<el-button @click="renameDialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="doRenameFile(renameForm)">确 定</el-button>
-			</template>
-		</el-dialog>
+            :modal-append-to-body=false :center=true>
+            <div>
+                <el-form label-width="100px" :rules="renameRules" ref="renameForm" :model="renameFormData" status-icon
+                    @submit.native.prevent>
+                    <el-form-item label="小组名称" prop="filename">
+                        <el-input type="text" ref="filenameRef" @keyup.enter.native="doRenameFile(renameForm)"
+                            v-model="renameFormData.filename" autocomplete="off" />
+                    </el-form-item>
+                </el-form>
+            </div>
+            <template #footer>
+                <el-button @click="renameDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="doRenameFile(renameForm)">确 定</el-button>
+            </template>
+        </el-dialog>
+
+        <el-dialog :title="'权限设置（' + authFormData.userName + ')'" v-model="authDialogVisible" width="30%"
+            :append-to-body=true :modal-append-to-body=false :center=true>
+            <div>
+                <el-form ref="authForm" :model="authFormData" label-width="140px">
+                    <el-form-item label="允许上传文件：">
+                        <el-radio-group v-model="authFormData.uploadFileFlag">
+                            <el-radio-button label="允许" value=1 />
+                            <el-radio-button label="不允许" value=0 />
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="允许移动文件：">
+                        <el-radio-group v-model="authFormData.moveFileFlag">
+                            <el-radio-button label="允许" value=1 />
+                            <el-radio-button label="不允许" value=0 />
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="人员身份设置：">
+                        <el-radio-group v-model="authFormData.fileManageFlag">
+                            <el-radio-button label="文件管理员" value=1 />
+                            <el-radio-button label="普通用户" value=0 />
+                        </el-radio-group>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <template #footer>
+                <el-button @click="authDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="doAuthFile()">确 定</el-button>
+            </template>
+        </el-dialog>
     </div>
-    
 </template>
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { fetchListWithChildren } from '@/api/dep';
 import { ref, reactive } from 'vue'
-import { getTeamUser, updateFilename, updateTeamUser, deleteFiles,getNotice,editNotice } from '@/api/file'
+import { getTeamUser, updateFilename, updateTeamUser, deleteFiles, getNotice, editNotice, doAuth, getAuth } from '@/api/file'
 const props = defineProps({
     foldId: {
         type: Number,
@@ -112,12 +146,24 @@ const renameFormData = reactive({
     filename: ''
 })
 
+const authFormData = reactive({
+    id: 0,
+    fileId: props.foldId,
+    userId: 0,
+    userName: '',
+    fileManageFlag: 0,
+    moveFileFlag: 1,
+    uploadFileFlag: 1
+})
+
+const authForm = ref();
 const filenameRef = ref();
 const renameDialogVisible = ref(false);
-const editNoticeFlag=ref(true)
+const editNoticeFlag = ref(true)
+const authDialogVisible = ref(false);
 
-const noticeContent= reactive({
-    notice:""
+const noticeContent = reactive({
+    notice: ""
 })
 const renameForm = ref<FormInstance>();
 /** 验证规则 */
@@ -168,9 +214,9 @@ function init() {
     })
 }
 initNotice()
-function initNotice(){
-    getNotice({teamId:props.foldId}).then((res)=>{
-        noticeContent.notice= res.data.notice
+function initNotice() {
+    getNotice({ teamId: props.foldId }).then((res) => {
+        noticeContent.notice = res.data.notice
     })
 }
 
@@ -199,6 +245,34 @@ function getSendPersonList() {
     });
 }
 
+function editUser(userId: number, userName: string) {
+    authFormData.userId = userId
+    authFormData.userName = userName
+    getAuth({ fileId: authFormData.fileId, userId: authFormData.userId }).then((res) => {
+        if (res.data) {
+            authFormData.id = res.data.id
+            authFormData.fileManageFlag = res.data.fileManageFlag
+            authFormData.moveFileFlag = res.data.moveFileFlag
+            authFormData.uploadFileFlag = res.data.uploadFileFlag
+        } else {
+            authFormData.id = 0
+            authFormData.fileManageFlag = 0
+            authFormData.moveFileFlag = 1
+            authFormData.uploadFileFlag = 1
+        }
+    })
+    authDialogVisible.value = true
+}
+
+function doAuthFile() {
+    doAuth(authFormData).then(() => {
+        ElMessage.success('提交成功')
+        authDialogVisible.value = false
+    }).catch(res => {
+        console.log(res)
+    })
+}
+
 function delUser(index: number) {
     ElMessageBox.confirm('是否要移除该用户?', '提示', {
         confirmButtonText: '确定',
@@ -219,13 +293,13 @@ function delUser(index: number) {
         console.log(err)
     });
 }
-function submitNotice(){
+function submitNotice() {
     ElMessageBox.confirm('是否要提交该公告?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-        editNotice({teamId:props.foldId,notice:noticeContent.notice}).then(() => {
+        editNotice({ teamId: props.foldId, notice: noticeContent.notice }).then(() => {
             ElMessage.success('提交成功')
         }).catch(res => {
             console.log(res)
@@ -242,7 +316,7 @@ function submitForm() {
         users.value.forEach((t: any) => {
             usersId.value.push(t.id)
         })
-        const mergedArray = mergeArrays(usersId.value,selectedPerson.value).toString();
+        const mergedArray = mergeArrays(usersId.value, selectedPerson.value).toString();
         updateTeamUser({ folderId: props.foldId, teamUsers: mergedArray }).then(() => {
             ElMessage.success('添加成功')
             addDialogVisible.value = false
@@ -283,6 +357,7 @@ function doRenameFile(formEl: FormInstance | undefined) {
     display: flex;
     /* 使用flex布局 */
     flex-direction: column;
+
     .rise {
         display: flex;
         align-items: center;
@@ -291,6 +366,7 @@ function doRenameFile(formEl: FormInstance | undefined) {
         line-height: 14px;
         margin-bottom: 10px;
         margin-top: 5px;
+
         .title {
             font-weight: bold;
         }
@@ -319,24 +395,27 @@ function doRenameFile(formEl: FormInstance | undefined) {
 
         .content {
             .infoList {
-                height: 350px;
+                height: 300px;
                 list-style-type: none;
                 cursor: pointer;
-                    .rank {
+
+                .rank {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    
+
                     .info {
                         display: flex;
                         align-items: start;
-                        .name{
+
+                        .name {
                             padding-left: 5px;
                             font-size: 13px;
                         }
                     }
                 }
-                .rank:hover{
+
+                .rank:hover {
                     transition: all .3s ease-in-out;
                     background-color: #f0f3f6;
                 }
@@ -348,27 +427,28 @@ function doRenameFile(formEl: FormInstance | undefined) {
 .el-avatar {
     font-size: 10px;
 }
+
 .team-bottom {
     // margin-bottom: 10px;
-	flex: 1;
-	display: flex;
-	justify-content: center;
-	align-items: flex-end;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 
-	.button-group {
-		display: flex;
-		flex-direction: column;
-		/* 改为列方向排列 */
-		justify-content: center;
-		align-items: center;
-		margin-bottom: 15px;
-	}
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        /* 改为列方向排列 */
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+    }
 
-	button {
-		margin: 10px 10px;
-		/* Adjust this value to change the space between the buttons */
-		width: 180px;
-	}
+    button {
+        margin: 10px 10px;
+        /* Adjust this value to change the space between the buttons */
+        width: 180px;
+    }
 
 }
 </style>

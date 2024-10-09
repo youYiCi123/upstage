@@ -1,4 +1,5 @@
 import router from './router'
+import { ref } from "vue";
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css'// Progress 进度条样式
 import { ElMessage } from 'element-plus';
@@ -8,11 +9,16 @@ import { useUserStore } from "@/store/modules/userStore";
 import { usePermissionStore } from "@/store/modules/permissionStore";
 const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
-
+const ua = navigator.userAgent.toLowerCase()
+const weChatFlag = ref(false);
+weChatFlag.value = ua.match(/micromessenger/i) != null
+  if (weChatFlag.value) {
+    ElMessage.error('该网站不支持微信游览器，请使用其他浏览器访问。');
+  }
   const UserStore = useUserStore(pinia);
   const PermissionStore = usePermissionStore(pinia);
   NProgress.start()
-  if (getToken()) {
+  if (getToken()&&!weChatFlag.value) {
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it

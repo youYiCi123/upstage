@@ -16,7 +16,7 @@ export function login(username:string, password:string,code:string,uuid:string) 
 export function getInfo() {
   return request({
     url: '/upstage-service/admin/info',
-    method: 'get',
+    method: 'get'
   })
 }
 //验证码

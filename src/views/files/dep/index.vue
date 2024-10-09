@@ -152,9 +152,9 @@
     </div>
     <template #footer>
       <el-button @click="multiplyDialogVisible = false">取 消</el-button>
-      <el-button type="danger" @click="handleDeleteFiles" :disabled="multiplyFileList.length > 5">批量删除({{
+      <el-button type="danger" @click="handleDeleteFiles" :disabled="(multiplyFileList.length > 5)||userStore.id=='1'">批量删除({{
         multiplyFileList.length }})</el-button>
-      <el-button type="primary" @click="handleDownloadFiles" :disabled="multiplyFileList.length > 5">批量下载({{
+      <el-button type="primary" @click="handleDownloadFiles" :disabled="(multiplyFileList.length > 5)||userStore.id=='1'">批量下载({{
         multiplyFileList.length }})</el-button>
     </template>
   </el-dialog>
@@ -371,6 +371,7 @@ function handleNodeClick(item: any, data: any) {
     drawerVisible.value = true
   }
   const rootNode = findRootNode(data)
+  fileStore.topFileId=rootNode.data.id
   if (rootNode.data.folderType != 0) {
     fileStore.teamFlag = true
   } else {
@@ -413,7 +414,7 @@ function goToThis(id: any) {
     currentLivingId.value = id;
     // 重点: 设置树节点渲染
     treeRef.value.setCurrentKey(id);
-    // 加载文件
+
     list({
       pageType: panUtil.fileFold.DEP,
       parentId: id,
@@ -426,6 +427,9 @@ function goToThis(id: any) {
 
 //点击查看文件
 function viewFile(item: any) {
+  if(userStore.id=='1'&&item.fileType!=0){
+    return;
+  }
   switch (item.fileType) {
     case 0:
       goInFolder(item);
@@ -468,6 +472,7 @@ function goInFolder(item: any) {
     name: item.filename,
   };
   breadcrumbStore.addDepItem(breadItem);
+  fileStore.topFileId=breadcrumbStore.depBreadCrumbs[0].id
   //el-tree设置选中
   currentLivingId.value = item.fileId;
 }
@@ -587,10 +592,12 @@ function openOutSideMenu(e: any) {
   position.value.left = e.pageX;
 }
 function openMenu(e: any, item: any) {
+  if(userStore.id!='1'){
   menuVisible.value = true;
   position.value.top = e.pageY;
   position.value.left = e.pageX;
   rightClickItem.value = item;
+  }
 }
 
 const selectArea = ref<HTMLDivElement | null>(null);
@@ -669,7 +676,9 @@ const onMouseDown = (event: MouseEvent) => {
     isSelect = false;
     if (selDiv && selDiv.style.display !== "none") {
       document.body.removeChild(selDiv);
-      showSelDiv(selList);
+      if(Math.abs(_x - startX)>30||Math.abs(_y - startY)>30){
+        showSelDiv(selList);
+      }
     }
     selList = [];
     _x = null;
@@ -928,7 +937,7 @@ input:valid+.line {
   -ms-flex-direction: column;
   flex-direction: column;
   padding: 5px;
-  height: 160px;
+  height: 170px;
   width: 130px;
 }
 
@@ -941,8 +950,8 @@ input:valid+.line {
 }
 
 .file-page-container .file-container .bigImg .item .img {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
 }
 
 .el-image__inner {
@@ -951,9 +960,9 @@ input:valid+.line {
 
 .file-page-container .file-container .bigImg .item .file-name {
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
   color: #606266;
-  height: 40px;
+  height: 60px;
   overflow: hidden;
   width: 120px;
   /* white-space: nowrap; */

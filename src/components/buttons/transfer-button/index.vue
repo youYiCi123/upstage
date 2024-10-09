@@ -85,6 +85,7 @@ function doTransferFile(targetParentId: any) {
         fileIds = fileIdArr.join('__,__')
     }
     transfer({
+        topFileId:fileStore.topFileId,
         fileIds: fileIds,
         targetParentId: targetParentId
     }).then(() => {

@@ -184,6 +184,23 @@ export function getTeamUser(params: any) {
   });
 }
 
+
+export function getAuth(params: any) {
+  return request({
+    url: "/file-service/file/required/getUserFileAuth",
+    params: params,
+    method: "get",
+  });
+}
+
+export function doAuth(data: any) {
+  return request({
+    url: "/file-service/file/required/doUserFileAuth",
+    data: data,
+    method: "post",
+  });
+}
+
 export function updateTeamUser(params: any) {
   return request({
     url: "/file-service/file/required/updateTeamUser",

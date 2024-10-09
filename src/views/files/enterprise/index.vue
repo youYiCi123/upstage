@@ -629,7 +629,7 @@ input:valid+.line {
   -ms-flex-direction: column;
   flex-direction: column;
   padding: 5px;
-  height: 160px;
+  height: 170px;
   width: 130px;
 }
 
@@ -665,7 +665,7 @@ input:valid+.line {
 .file-page-container .file-container .col .item .file-name {
   text-align: left;
   line-height: 35px;
-  font-size: 14px;
+  font-size: 12px;
   color: #606266;
   height: 35px;
   overflow: hidden;
@@ -681,8 +681,8 @@ input:valid+.line {
 }
 
 .file-page-container .file-container .bigImg .item .img {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
 }
 
 .el-image__inner {
@@ -691,9 +691,9 @@ input:valid+.line {
 
 .file-page-container .file-container .bigImg .item .file-name {
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
   color: #606266;
-  height: 40px;
+  height: 60px;
   overflow: hidden;
   width: 120px;
   /* white-space: nowrap; */
